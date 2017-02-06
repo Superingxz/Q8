@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.0"
+    defaultConfig {
+        applicationId "com.xologood.q8pad"
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0.0.0"
+        multiDexEnabled true
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        android {}
+        wandoujia {}
+        baidu {}
+        qihu360 {}
+        xiaomi{}
+        huawei{}
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [CHANNEL_VALUE: name]
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                def fileName = "千里码Q8_${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
+                output.outputFile = new File(outputFile.parent, fileName)
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile project(':MEditText')
+    compile project(':mvpframework')
+    compile 'com.kelin.scrollablepanel:library:1.0.0'
+    compile project(':ZxingLibrary')
+}

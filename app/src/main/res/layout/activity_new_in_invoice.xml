@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aaron="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/new_in_invoice_ll"
+    android:orientation="vertical"
+    aaron:layout_scrollFlags="scroll|enterAlways">
+
+    <com.xologood.q8pad.view.TitileView
+        android:id="@+id/title_view"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <com.mview.medittext.view.QpadEditText
+            android:id="@+id/InvNumber"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/common_layout_middle"
+            android:background="@drawable/btn_layout_off_bg"
+            android:paddingLeft="@dimen/common_padding5"
+            android:paddingRight="@dimen/common_padding5"
+            aaron:fieldEnabled="true"
+            aaron:fieldTitle="产品入库单号："
+            aaron:fieldType="String" />
+
+
+        <com.mview.medittext.view.QpadEditText
+            android:id="@+id/InvTime"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/common_layout_middle"
+            android:background="@drawable/btn_layout_off_bg"
+            android:paddingLeft="@dimen/common_padding5"
+            android:paddingRight="@dimen/common_padding5"
+            aaron:fieldEnabled="true"
+            aaron:fieldTitle="开单时间："
+            aaron:fieldType="String" />
+
+        <com.mview.medittext.view.QpadEditText
+            android:id="@+id/wareHouse"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/common_layout_middle"
+            android:background="@drawable/btn_layout_off_bg"
+            android:paddingLeft="@dimen/common_padding5"
+            android:paddingRight="@dimen/common_padding5"
+            aaron:fieldEnabled="true"
+            aaron:fieldTitle="产品入库仓库："
+            aaron:fieldType="Select" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <com.mview.medittext.view.QpadEditText
+                android:id="@+id/produceName"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/common_layout_middle"
+                android:background="@drawable/btn_layout_off_bg"
+                android:paddingLeft="@dimen/common_padding5"
+                android:paddingRight="@dimen/common_padding5"
+                aaron:fieldEnabled="true"
+                aaron:fieldTitle="产品名称："
+                aaron:fieldType="Select"></com.mview.medittext.view.QpadEditText>
+
+            <Button
+                android:id="@+id/queryName"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="查询" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <com.mview.medittext.view.QpadEditText
+                android:id="@+id/addProduceBatch"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/common_layout_middle"
+                android:background="@drawable/btn_layout_off_bg"
+                android:paddingLeft="@dimen/common_padding5"
+                android:paddingRight="@dimen/common_padding5"
+                aaron:fieldEnabled="true"
+                aaron:fieldTitle="产品批次添加："
+                aaron:fieldType="String"/>
+
+            <Button
+                android:id="@+id/saveBatch"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="保存" />
+        </LinearLayout>
+
+        <com.mview.medittext.view.QpadEditText
+            android:id="@+id/produceBatch"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/common_layout_middle"
+            android:background="@drawable/btn_layout_off_bg"
+            android:paddingLeft="@dimen/common_padding5"
+            android:paddingRight="@dimen/common_padding5"
+            aaron:fieldEnabled="true"
+            aaron:fieldTitle="产品批次："
+            aaron:fieldType="Select" />
+
+        <!--<com.mview.medittext.view.QpadEditText-->
+            <!--android:id="@+id/expectedQty"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="@dimen/common_layout_middle"-->
+            <!--android:background="@drawable/btn_layout_off_bg"-->
+            <!--android:paddingLeft="@dimen/common_padding5"-->
+            <!--android:paddingRight="@dimen/common_padding5"-->
+            <!--aaron:fieldEnabled="true"-->
+            <!--aaron:fieldTitle="产品入库数量："-->
+            <!--aaron:fieldType="String" />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/common_padding5"
+            android:paddingRight="@dimen/common_padding5"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="产品入库数量："
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                />
+            <EditText
+                android:id="@+id/expectedQty"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/common_layout_middle"
+                android:inputType="number"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <com.mview.medittext.view.QpadEditText
+                android:id="@+id/standardUnit"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/common_layout_middle"
+                android:background="@drawable/btn_layout_off_bg"
+                android:paddingLeft="@dimen/common_padding5"
+                android:paddingRight="@dimen/common_padding5"
+                aaron:fieldEnabled="true"
+                aaron:fieldTitle="单位："
+                aaron:fieldType="Select" />
+
+            <Button
+                android:id="@+id/saveNnit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="保存" />
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/lv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dividerHeight="3dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+            </ListView>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/commit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="确定完成" />
+
+</LinearLayout>

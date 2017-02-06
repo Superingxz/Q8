@@ -1,0 +1,341 @@
+package com.xologood.q8pad.ui.inlibrary.newininvoice;
+
+import com.xologood.mvpframework.base.BaseModel;
+import com.xologood.mvpframework.base.BasePresenter;
+import com.xologood.mvpframework.base.BaseView;
+import com.xologood.q8pad.bean.BaseResponse;
+import com.xologood.q8pad.bean.InvoiceingDetailVo;
+import com.xologood.q8pad.bean.InvoicingBean;
+import com.xologood.q8pad.bean.Product;
+import com.xologood.q8pad.bean.ProductBatch;
+import com.xologood.q8pad.bean.ProportionConversion;
+import com.xologood.q8pad.bean.StandardUnit;
+import com.xologood.q8pad.bean.Warehouse;
+
+import java.util.List;
+import java.util.Map;
+
+import rx.Observable;
+
+/**
+ * Created by Administrator on 17-1-3.
+ */
+
+public interface NewInInvoiceContract {
+    public interface Model extends BaseModel {
+
+        /**
+         * 保存入库/出库主表
+         *
+         * @param options
+         * @return
+         */
+        Observable<BaseResponse<InvoicingBean>> insertInv(Map<String, String> options);
+
+        /**
+         * 保存入库/出库主表2
+         *
+         * @param SysKey
+         * @param InvNumber
+         * @return
+         */
+        Observable<BaseResponse<InvoicingBean>> insertInv2(String SysKey,String InvNumber);
+
+        /**
+         * 获取单位比例
+         *
+         * @param id    产品id
+         * @param Bunit 单位id
+         * @param count 预计数量
+         * @return
+         */
+        Observable<BaseResponse<ProportionConversion>> GetProportionConversion(String id, String Bunit, String count);
+
+        Observable<BaseResponse<String>> GetProportionConversionString(String id, String Bunit, String count);
+
+
+        Observable<BaseResponse<List<Warehouse>>> GetWareHouseList(String ComKey, String IsUse);
+
+        Observable<BaseResponse<List<Product>>> GetProductList(String SysKey, String IsUse);
+
+        Observable<BaseResponse<List<ProductBatch>>> GetProductBatchByProductId(String ProductId);
+
+        Observable<BaseResponse<List<StandardUnit>>> GetStandardUnitByProductId(String ProductId, String SysKey);
+
+        Observable<BaseResponse<String>> InsertProductBatch(String BatchNO,
+                                                            String ProductId,
+                                                            String SysKey,
+                                                            String ProductDate,
+                                                            String CreationBy);
+
+        /**
+         * 验证入库明细
+         *
+         * @param Id          明细id  写死0
+         * @param InvId       单号id
+         * @param ProductId   产品id
+         * @param Batch       批次id
+         * @param ActualQty   实际数量
+         * @param ExpectedQty 预计数量
+         * @param ComKey      机构唯一标识
+         * @param SysKey      系统唯一标识
+         * @return
+         */
+        Observable<BaseResponse<InvoiceingDetailVo>> GetInvoiceDetail(String Id,
+                                                                      String InvId,
+                                                                      String ProductId,
+                                                                      String Batch,
+                                                                      String ActualQty,
+                                                                      String ExpectedQty,
+                                                                      String ComKey,
+                                                                      String SysKey);
+
+        /**
+         * 增加入库明细
+         *
+         * @param Id          明细id  写死0
+         * @param InvId       单号id
+         * @param ProductId   产品id
+         * @param Batch       批次id
+         * @param ActualQty   实际数量
+         * @param ExpectedQty 预计数量
+         * @param ComKey      机构唯一标识
+         * @param SysKey      系统唯一标识
+         * @return
+         */
+        Observable<BaseResponse<InvoiceingDetailVo>> InsertInvoiceDetail(String Id,
+                                                                         String InvId,
+                                                                         String ProductId,
+                                                                         String Batch,
+                                                                         String ActualQty,
+                                                                         String ExpectedQty,
+                                                                         String ComKey,
+                                                                         String SysKey);
+
+        /**
+         * 更新入库明细
+         *
+         * @param Id          明细id  写死0
+         * @param InvId       单号id
+         * @param ProductId   产品id
+         * @param Batch       批次id
+         * @param ActualQty   实际数量
+         * @param ExpectedQty 预计数量
+         * @param ComKey      机构唯一标识
+         * @param SysKey      系统唯一标识
+         * @return
+         */
+        Observable<BaseResponse<InvoiceingDetailVo>> UpdateInvoiceDetail(String Id,
+                                                                         String InvId,
+                                                                         String ProductId,
+                                                                         String Batch,
+                                                                         String ActualQty,
+                                                                         String ExpectedQty,
+                                                                         String ComKey,
+                                                                         String SysKey
+        );
+
+        /**
+         * 确认提交
+         *
+         * @param invId    入库单号id
+         * @param userId   用户id
+         * @param userName 用户名
+         * @return
+         */
+        Observable<BaseResponse<String>> CompleteSave(String invId,
+                                                      String userId,
+                                                      String userName
+        );
+
+    }
+
+
+    interface View extends BaseView {
+        /**
+         * 保存入库主表回调
+         *
+         * @param invoicingBean
+         */
+        void insertInv(InvoicingBean invoicingBean);
+
+        /**
+         * 保存入库主表回调
+         *
+         * @param invoicingBean
+         */
+        void insertInv2(InvoicingBean invoicingBean);
+
+        /**
+         * 获取到单位比例
+         *
+         * @param proportionConversion
+         */
+        void SetProportionConversion(ProportionConversion proportionConversion);
+
+        void SetProportionConversion(String proportionConversion);
+
+        /**
+         * 初始化列表
+         */
+        void SetWareHouseList(List<Warehouse> warehouseList);
+
+        void SetProductList(List<Product> productList);
+
+        void SetProductBatch(List<ProductBatch> productBatchList);
+
+        void SetStandardUnitByProductId(List<StandardUnit> standardUnitList);
+
+        /**
+         * 添加批次回调
+         *
+         * @param msg
+         */
+        void InsertProductBatch(String msg);
+
+        void InsertProductBatchFailed(String msg);
+
+
+        //入库明细方法
+
+        /**
+         * 验证入库明细成功回调
+         */
+        void GetInvoiceDetailSuccess(int Id);
+
+        /**
+         * 增加入库明细成功回调
+         *
+         * @param Id
+         */
+        void InsertInvoiceDetailSuccess(int Id);
+
+        void UpdateInvoiceDetailSuccess(int Id);
+
+        /**
+         * 确定提交成功
+         */
+        void CompleteSaveSuccess(String msg);
+
+    }
+
+    abstract class Presenter extends BasePresenter<Model, View> {
+
+        /**
+         * 保存入库/出库主表
+         *
+         * @param options
+         * @return
+         */
+        public abstract void insertInv(Map<String, String> options);
+
+        public abstract void insertInv(String SysKey,String InvNumber);
+        /**
+         * 获取单位比例
+         *
+         * @param id    产品id
+         * @param Bunit 单位id
+         * @param count 预计数量
+         * @return
+         */
+        public abstract void GetProportionConversion(String id, String Bunit, String count);
+
+        public abstract void GetProportionConversionString(String id, String Bunit, String count);
+
+        public abstract void GetWareHouseList(String ComKey, String IsUse);
+
+        public abstract void GetProductList(String SysKey, String IsUse);
+
+        public abstract void GetProductBatchByProductId(String ProductId);
+
+        public abstract void GetStandardUnitByProductId(String ProductId, String SysKey);
+
+        public abstract void InsertProductBatch(String BatchNO,
+                                                String ProductId,
+                                                String SysKey,
+                                                String ProductDate,
+                                                String CreationBy);
+
+        /**
+         * 验证入库明细
+         *
+         * @param Id          明细id  写死0
+         * @param InvId       单号id
+         * @param ProductId   产品id
+         * @param Batch       批次id
+         * @param ActualQty   实际数量
+         * @param ExpectedQty 预计数量
+         * @param ComKey      机构唯一标识
+         * @param SysKey      系统唯一标识
+         * @return
+         */
+        public abstract void GetInvoiceDetail(String Id,
+                                              String InvId,
+                                              String ProductId,
+                                              String Batch,
+                                              String ActualQty,
+                                              String ExpectedQty,
+                                              String ComKey,
+                                              String SysKey);
+
+        /**
+         * 增加入库明细
+         *
+         * @param Id          明细id  写死0
+         * @param InvId       单号id
+         * @param ProductId   产品id
+         * @param Batch       批次id
+         * @param ActualQty   实际数量
+         * @param ExpectedQty 预计数量
+         * @param ComKey      机构唯一标识
+         * @param SysKey      系统唯一标识
+         * @return
+         */
+        public abstract void InsertInvoiceDetail(String Id,
+                                                 String InvId,
+                                                 String ProductId,
+                                                 String Batch,
+                                                 String ActualQty,
+                                                 String ExpectedQty,
+                                                 String ComKey,
+                                                 String SysKey);
+
+        /**
+         * 更新入库明细
+         *
+         * @param Id          明细id  写死0
+         * @param InvId       单号id
+         * @param ProductId   产品id
+         * @param Batch       批次id
+         * @param ActualQty   实际数量
+         * @param ExpectedQty 预计数量
+         * @param ComKey      机构唯一标识
+         * @param SysKey      系统唯一标识
+         * @return
+         */
+        public abstract void UpdateInvoiceDetail(String Id,
+                                                 String InvId,
+                                                 String ProductId,
+                                                 String Batch,
+                                                 String ActualQty,
+                                                 String ExpectedQty,
+                                                 String ComKey,
+                                                 String SysKey
+        );
+
+        /**
+         * 确认提交
+         *
+         * @param invId    入库单号id
+         * @param userId   用户id
+         * @param userName 用户名
+         * @return
+         */
+        public abstract void CompleteSave(String invId,
+                                          String userId,
+                                          String userName
+        );
+
+
+    }
+}

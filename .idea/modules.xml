@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CustomDialog/CustomDialog.iml" filepath="$PROJECT_DIR$/CustomDialog/CustomDialog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MEditText/MEditText.iml" filepath="$PROJECT_DIR$/MEditText/MEditText.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Q8PAD.iml" filepath="$PROJECT_DIR$/Q8PAD.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ZxingLibrary/ZxingLibrary.iml" filepath="$PROJECT_DIR$/ZxingLibrary/ZxingLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mvpframework/mvpframework.iml" filepath="$PROJECT_DIR$/mvpframework/mvpframework.iml" />
+    </modules>
+  </component>
+</project>

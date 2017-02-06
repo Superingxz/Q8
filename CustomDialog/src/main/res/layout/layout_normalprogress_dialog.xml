@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_setup_bg"
+    android:orientation="vertical" >
+
+    <com.mview.customdialog.view.LoadingProgressView
+        android:id="@+id/loadingprogress_view"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp"
+        app:lpvs_animAutostart="false"
+        app:lpvs_indeterminate="true"
+        app:lpvs_thickness="4dp" />
+
+    <TextView
+        android:id="@+id/loadingprogress_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="加载中..."
+        android:textColor="@color/common_left_edittext_textcolor"
+        android:textSize="14sp" />
+
+</LinearLayout>

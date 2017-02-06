@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="change_color_button">
+        <attr name="hintString" format="string" />
+        <attr name="hintTextColor" format="reference" />
+        <attr name="textColor" format="reference" />
+        <attr name="hintDrawable" format="reference" />
+        <attr name="drawable" format="reference" />
+        <attr name="textEnabled" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="kingteller_edittext">
+        <attr name="fieldName" format="reference|string" />
+        <attr name="fieldType">
+            <enum name="String" value="1" />
+            <enum name="Number" value="2" />
+            <enum name="DateTime" value="3" />
+            <enum name="Date" value="4" />
+            <enum name="Time" value="5" />
+            <enum name="Select" value="6" />
+            <enum name="Dialog" value="7" />
+            <enum name="DateTimePD" value="8"/>
+        </attr>
+        <attr name="fieldValue" format="reference|string" />
+        <attr name="fieldOp">
+            <enum name="QUERY_TYPE_EQ" value="0" />
+            <enum name="QUERY_TYPE_LIKE" value="1" />
+            <enum name="EQ" value="2" />
+            <enum name="NOT_EQ" value="3" />
+            <enum name="LESS_THAN" value="4" />
+            <enum name="LESS_EQ_THAN" value="5" />
+            <enum name="LARGE_THAN" value="6" />
+            <enum name="LARGE_EQ_THAN" value="7" />
+            <enum name="LARGE_LESS" value="8" />
+            <enum name="LARGE_LESS_EQ" value="9" />
+            <enum name="LIKE" value="10" />
+            <enum name="LLIKE" value="11" />
+            <enum name="RLIKE" value="12" />
+            <enum name="ISNOT" value="13" />
+            <enum name="IN" value="14" />
+        </attr>
+
+        <attr name="fieldTitle" format="reference|string" />
+        <attr name="fieldRequested" format="boolean" />
+        <attr name="fieldHint" format="reference|string" />
+        <attr name="fieldText" format="reference|string" />
+        <attr name="fieldBindData" format="reference" />
+        <attr name="fieldEnabled" format="boolean" />
+        <attr name="fieldLines" format="integer" />
+        <attr name="fieldTextSize" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="base_tab">
+        <attr name="dividerColor" format="color|reference" />
+        <attr name="dividerHeight" format="reference" />
+        <attr name="isTop" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="StyledDialogs">
+        <attr name="sdlDialogStyle" format="reference" />
+        <attr name="sdlTitleTextStyle" format="reference" />
+        <attr name="sdlMessageTextStyle" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="DialogStyle">
+        <attr name="dialogBackground" format="reference" />
+        <attr name="DialogTitleTextColor" format="color|reference" />
+        <attr name="titleSeparatorColor" format="color|reference" />
+        <attr name="messageTextColor" format="color|reference" />
+        <attr name="buttonTextColor" format="color|reference" />
+        <attr name="buttonSeparatorColor" format="color|reference" />
+        <attr name="buttonBackgroundColorNormal" format="color|reference" />
+        <attr name="buttonBackgroundColorPressed" format="color|reference" />
+        <attr name="buttonBackgroundColorFocused" format="color|reference" />
+    </declare-styleable>
+
+    <!-- 通用Loading -->
+    <declare-styleable name="LoadingProgressViewStyle">
+        <attr name="lpvs_progress" format="float" />
+        <attr name="lpvs_maxProgress" format="float" />
+        <attr name="lpvs_animDuration" format="integer" />
+        <attr name="lpvs_animSwoopDuration" format="integer" />
+        <attr name="lpvs_animSyncDuration" format="integer" />
+        <attr name="lpvs_color" format="color"/>
+        <attr name="lpvs_thickness" format="dimension"/>
+        <attr name="lpvs_indeterminate" format="boolean" />
+        <attr name="lpvs_animAutostart" format="boolean" />
+        <attr name="lpvs_animSteps" format="integer" />
+    </declare-styleable>
+
+    <!-- 日历 -->
+    <declare-styleable name="MaterialCalendarView">
+        <attr name="mcv_dateTextAppearance" format="reference"/>
+        <attr name="mcv_weekDayTextAppearance" format="reference"/>
+        <attr name="mcv_headerTextAppearance" format="reference"/>
+
+        <attr name="mcv_arrowColor" format="color"/>
+        <attr name="mcv_leftArrowMask" format="reference"/>
+        <attr name="mcv_rightArrowMask" format="reference"/>
+        <attr name="mcv_selectionColor" format="color"/>
+
+        <attr name="mcv_showOtherDates" format="integer">
+            <flag name="none" value="0" />
+            <flag name="other_months" value="1" />
+            <flag name="out_of_range" value="2" />
+            <flag name="decorated_disabled" value="4" />
+            <flag name="defaults" value="4" />
+            <flag name="all" value="7" />
+        </attr>
+        <attr name="mcv_weekDayLabels" format="reference" />
+        <attr name="mcv_monthLabels" format="reference" />
+        <attr name="mcv_tileSize" format="dimension"/>
+        <attr name="mcv_firstDayOfWeek" format="enum">
+            <enum name="sunday" value="1" />
+            <enum name="monday" value="2" />
+            <enum name="tuesday" value="3" />
+            <enum name="wednesday" value="4" />
+            <enum name="thursday" value="5" />
+            <enum name="friday" value="6" />
+            <enum name="saturday" value="7" />
+        </attr>
+    </declare-styleable>
+
+</resources>

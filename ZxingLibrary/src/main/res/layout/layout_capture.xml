@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:oncon="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <SurfaceView
+        android:id="@+id/preview_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:screenOrientation="portrait" />
+
+    <com.xologood.zxing.view.ViewfinderView
+        android:id="@+id/viewfinder_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:background="#641E1E1E"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp" >
+
+        <Button
+            android:id="@+id/capture_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center"
+            android:background="@drawable/btn_back_arrow"
+            android:minHeight="@null"
+            android:minWidth="@null" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="二维码扫描"
+            android:textColor="#FFFFFF"
+            android:textSize="18.0dip" />
+
+        <Button
+            android:id="@+id/Button01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center"
+            android:background="@drawable/btn_back_arrow"
+            android:minHeight="@null"
+            android:minWidth="@null"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/capture_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <Button
+                    android:id="@+id/capture_btn_qrcode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="#641E1E1E"
+                    android:drawableLeft="@drawable/ic_captuer_qrcode_nomal"
+                    android:minHeight="@null"
+                    android:minWidth="@null"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="6dp"
+                    android:text="输入二维码"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <Button
+                    android:id="@+id/capture_btn_picture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="#641E1E1E"
+                    android:drawableLeft="@drawable/ic_captuer_picture_nomal"
+                    android:minHeight="@null"
+                    android:minWidth="@null"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="6dp"
+                    android:text="从相册找"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#641E1E1E"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/capture_tex_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp"
+                android:textColor="#EE7600"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" >
+
+                <RelativeLayout
+                    android:id="@+id/capture_relayout_smewm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+
+                    <Button
+                        android:id="@+id/capture_btn_ewm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/btn_capture_ewm"
+                        android:clickable="false"
+                        android:minHeight="@null"
+                        android:minWidth="@null" />
+
+                    <TextView
+                        android:id="@+id/capture_tex_ewm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/capture_btn_ewm"
+                        android:layout_centerHorizontal="true"
+                        android:text="扫描二维码"
+                        android:textColor="#ffffff" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/capture_relayout_smtxm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+
+                    <Button
+                        android:id="@+id/capture_btn_txm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/btn_capture_txm"
+                        android:clickable="false"
+                        android:minHeight="@null"
+                        android:minWidth="@null" />
+
+                    <TextView
+                        android:id="@+id/capture_tex_txm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/capture_btn_txm"
+                        android:layout_centerHorizontal="true"
+                        android:text="扫描条形码"
+                        android:textColor="#ffffff" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/capture_relayout_dksgd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" >
+
+                    <Button
+                        android:id="@+id/capture_btn_sgd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/btn_capture_sgd"
+                        android:clickable="false"
+                        android:minHeight="@null"
+                        android:minWidth="@null" />
+
+                    <TextView
+                        android:id="@+id/capture_tex_sgd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/capture_btn_sgd"
+                        android:layout_centerHorizontal="true"
+                        android:text="闪光灯"
+                        android:textColor="#ffffff" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

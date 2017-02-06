@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="positive_button" type="id"/>
+    <item name="neutral_button" type="id"/>
+    <item name="negative_button" type="id"/>
+    <!-- 二维码 -->
+    <item name="decode" type="id"/>
+    <item name="decode_failed" type="id"/>
+    <item name="decode_succeeded" type="id"/>
+    <item name="launch_product_query" type="id"/>
+    <item name="quit" type="id"/>
+    <item name="restart_preview" type="id"/>
+    <item name="return_scan_result" type="id"/>
+    
+ 	<!-- 日历 -->
+    <item name="mcv_pager" type="id"/>
+</resources>

@@ -1,0 +1,325 @@
+package com.xologood.q8pad.ui.inlibrary.newininvoice;
+
+import android.util.Log;
+
+import com.xologood.mvpframework.util.helper.RxSchedulers;
+import com.xologood.q8pad.bean.BaseResponse;
+import com.xologood.q8pad.bean.InvoiceingDetailVo;
+import com.xologood.q8pad.bean.InvoicingBean;
+import com.xologood.q8pad.bean.Product;
+import com.xologood.q8pad.bean.ProductBatch;
+import com.xologood.q8pad.bean.ProportionConversion;
+import com.xologood.q8pad.bean.StandardUnit;
+import com.xologood.q8pad.bean.Warehouse;
+
+import java.util.List;
+import java.util.Map;
+
+import rx.functions.Action1;
+
+/**
+ * Created by Administrator on 17-1-3.
+ */
+
+public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
+
+    private static final String TAG = "Superingxz";
+
+
+    @Override
+    public void onStart() {
+
+    }
+
+    /**
+     * 保存入库主表
+     * @param options
+     */
+    @Override
+    public void insertInv(Map<String, String> options) {
+        mRxManager.add(mModel.insertInv(options)
+                .compose(RxSchedulers.<BaseResponse<InvoicingBean>>io_main())
+                .subscribe(new Action1<BaseResponse<InvoicingBean>>() {
+                    @Override
+                    public void call(BaseResponse<InvoicingBean> response) {
+                       mView.insertInv(response.getData());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                      //  ToastUitl.showLong("保存入库主表异常失败！");
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void insertInv(String SysKey, String InvNumber) {
+        mRxManager.add(mModel.insertInv2(SysKey,InvNumber)
+                               .compose(RxSchedulers.<BaseResponse<InvoicingBean>>io_main())
+                               .subscribe(new Action1<BaseResponse<InvoicingBean>>() {
+                                   @Override
+                                   public void call(BaseResponse<InvoicingBean> invoicingBeanBaseResponse) {
+                                       mView.insertInv2(invoicingBeanBaseResponse.getData());
+                                   }
+                               }, new Action1<Throwable>() {
+                                   @Override
+                                   public void call(Throwable throwable) {
+
+
+                                   }
+                               }));
+    }
+
+    @Override
+    public void GetProportionConversion(String id, String Bunit, String count) {
+        mRxManager.add(mModel.GetProportionConversion(id,Bunit,count)
+                             .compose(RxSchedulers.<BaseResponse<ProportionConversion>>io_main())
+                             .subscribe(new Action1<BaseResponse<ProportionConversion>>() {
+                                 @Override
+                                 public void call(BaseResponse<ProportionConversion> proportionConversion) {
+                                        mView.SetProportionConversion(proportionConversion.getData());
+                                 }
+                             }, new Action1<Throwable>() {
+                                 @Override
+                                 public void call(Throwable throwable) {
+
+                                 }
+                             })
+        );
+    }
+
+    @Override
+    public void GetProportionConversionString(String id, String Bunit, String count) {
+        mRxManager.add(mModel.GetProportionConversionString(id,Bunit,count)
+                  .compose(RxSchedulers.<BaseResponse<String>>io_main())
+                  .subscribe(new Action1<BaseResponse<String>>() {
+                      @Override
+                      public void call(BaseResponse<String> stringBaseResponse) {
+                          Log.i(TAG, "call: GetProportionConversionString");
+                        mView.SetProportionConversion(stringBaseResponse.getData());
+                          Log.i(TAG, "call: "+stringBaseResponse.getData());
+                      }
+                  }, new Action1<Throwable>() {
+                      @Override
+                      public void call(Throwable throwable) {
+
+                      }
+                  }));
+    }
+
+    @Override
+    public void GetWareHouseList(String ComKey, String IsUse) {
+        mRxManager.add(mModel.GetWareHouseList(ComKey,IsUse)
+                .compose(RxSchedulers.<BaseResponse<List<Warehouse>>>io_main())
+                .subscribe(new Action1<BaseResponse<List<Warehouse>>>() {
+                    @Override
+                    public void call(BaseResponse<List<Warehouse>> listBaseResponse) {
+                        mView.SetWareHouseList(listBaseResponse.getData());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void GetProductList(String SysKey, String IsUse) {
+        mRxManager.add(mModel.GetProductList(SysKey, IsUse)
+                .compose(RxSchedulers.<BaseResponse<List<Product>>>io_main())
+                .subscribe(new Action1<BaseResponse<List<Product>>>() {
+                    @Override
+                    public void call(BaseResponse<List<Product>> listBaseResponse) {
+                        mView.SetProductList(listBaseResponse.getData());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                })
+        );
+
+    }
+
+    @Override
+    public void GetProductBatchByProductId(String ProductId) {
+        mRxManager.add(mModel.GetProductBatchByProductId(ProductId)
+                .compose(RxSchedulers.<BaseResponse<List<ProductBatch>>>io_main())
+                .subscribe(new Action1<BaseResponse<List<ProductBatch>>>() {
+                    @Override
+                    public void call(BaseResponse<List<ProductBatch>> listBaseResponse) {
+                        mView.SetProductBatch(listBaseResponse.getData());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                })
+        );
+
+    }
+
+    @Override
+    public void GetStandardUnitByProductId(String ProductId, String SysKey) {
+        mRxManager.add( mModel.GetStandardUnitByProductId(ProductId,SysKey)
+                .compose(RxSchedulers.<BaseResponse<List<StandardUnit>>>io_main())
+                .subscribe(new Action1<BaseResponse<List<StandardUnit>>>() {
+                    @Override
+                    public void call(BaseResponse<List<StandardUnit>> listBaseResponse) {
+                        mView.SetStandardUnitByProductId(listBaseResponse.getData());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                })
+        );
+    }
+
+
+    @Override
+    public void InsertProductBatch(String BatchNO, String ProductId, String SysKey, String ProductDate, String CreationBy) {
+        mRxManager.add(mModel.InsertProductBatch(BatchNO,ProductId,SysKey,ProductDate,CreationBy)
+                  .compose(RxSchedulers.<BaseResponse<String>>io_main())
+                  .subscribe(new Action1<BaseResponse<String>>() {
+                      @Override
+                      public void call(BaseResponse<String> stringBaseResponse) {
+                            mView.InsertProductBatch(stringBaseResponse.getData());
+                      }
+                  }, new Action1<Throwable>() {
+                      @Override
+                      public void call(Throwable throwable) {
+                          mView.InsertProductBatchFailed("添加异常失败！");
+                      }
+                  })
+        );
+    }
+
+    /**
+     * 验证入库明细
+     * @param Id            明细id  写死0
+     * @param InvId         单号id
+     * @param ProductId     产品id
+     * @param Batch         批次id
+     * @param ActualQty     实际数量
+     * @param ExpectedQty   预计数量
+     * @param ComKey        机构唯一标识
+     * @param SysKey        系统唯一标识
+     * @return
+     */
+    @Override
+    public void GetInvoiceDetail(String Id,
+                                 String InvId,
+                                 String ProductId,
+                                 String Batch,
+                                 String ActualQty,
+                                 String ExpectedQty,
+                                 String ComKey,
+                                 String SysKey) {
+        mRxManager.add(mModel.GetInvoiceDetail(Id,InvId,ProductId,Batch,ActualQty,ExpectedQty,ComKey,SysKey)
+                        .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
+                        .subscribe(new Action1<BaseResponse<InvoiceingDetailVo>>() {
+                            @Override
+                            public void call(BaseResponse<InvoiceingDetailVo> invoiceDetailBaseResponse) {
+                                int id = invoiceDetailBaseResponse.getData().getId();
+                                mView.GetInvoiceDetailSuccess(id);
+
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                               // mView.GetInvoiceDetailSuccess(throwable.getCause().getMessage());
+                            }
+                        })
+        );
+    }
+
+    @Override
+    public void InsertInvoiceDetail(String Id,
+                                    String InvId,
+                                    String ProductId,
+                                    String Batch,
+                                    String ActualQty,
+                                    String ExpectedQty,
+                                    String ComKey,
+                                    String SysKey) {
+        mRxManager.add(mModel.InsertInvoiceDetail(Id,
+                                                  InvId,
+                                                  ProductId,
+                                                  Batch,
+                                                  ActualQty,
+                                                  ExpectedQty,
+                                                  ComKey,
+                                                  SysKey)
+                             .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
+                             .subscribe(new Action1<BaseResponse<InvoiceingDetailVo>>() {
+                                 @Override
+                                 public void call(BaseResponse<InvoiceingDetailVo> invoiceingDetailVoBaseResponse) {
+                                        mView.InsertInvoiceDetailSuccess(invoiceingDetailVoBaseResponse.getData().getId());
+                                 }
+                             }, new Action1<Throwable>() {
+                                 @Override
+                                 public void call(Throwable throwable) {
+
+                                 }
+                             })
+        );
+    }
+
+    @Override
+    public void UpdateInvoiceDetail(String Id,
+                                    String InvId,
+                                    String ProductId,
+                                    String Batch,
+                                    String ActualQty,
+                                    String ExpectedQty,
+                                    String ComKey,
+                                    String SysKey
+                                   ) {
+        mRxManager.add(mModel.UpdateInvoiceDetail(Id,
+                                                  InvId,
+                                                  ProductId,
+                                                  Batch,
+                                                  ActualQty,
+                                                  ExpectedQty,
+                                                  ComKey,
+                                                  SysKey)
+                              .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
+                              .subscribe(new Action1<BaseResponse<InvoiceingDetailVo>>() {
+                                  @Override
+                                  public void call(BaseResponse<InvoiceingDetailVo> invoiceingDetailVoBaseResponse) {
+                                        mView.UpdateInvoiceDetailSuccess(invoiceingDetailVoBaseResponse.getData().getId());
+                                  }
+                              }, new Action1<Throwable>() {
+                                  @Override
+                                  public void call(Throwable throwable) {
+
+                                  }
+                              })
+        );
+    }
+
+    @Override
+    public void CompleteSave(String invId, String userId, String userName) {
+        mRxManager.add(mModel.CompleteSave(invId,userId,userName)
+                .compose(RxSchedulers.<BaseResponse<String>>io_main())
+                .subscribe(new Action1<BaseResponse<String>>() {
+                    @Override
+                    public void call(BaseResponse<String> stringBaseResponse) {
+                        mView.CompleteSaveSuccess(stringBaseResponse.getData());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                })
+        );
+    }
+}

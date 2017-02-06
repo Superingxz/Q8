@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <shape  android:shape="rectangle">
+            <!-- 圆角  按钮四个圆角       	radius:半径 -->
+            <corners android:radius="5dp"/>
+            <!--填充-->
+            <solid android:color="@android:color/white"/>
+        </shape>
+    </item>
+</selector>

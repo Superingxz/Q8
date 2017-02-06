@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/SDL.Group">
+	<TextView
+		android:id="@+id/title"
+		style="?attr/sdlTitleTextStyle"/>
+
+	<View
+		android:id="@+id/titleDivider"
+		style="@style/SDL.TitleSeparator"/>
+
+	<LinearLayout
+		android:id="@+id/content"
+		style="@style/SDL.Group"/>
+</LinearLayout>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="change_color_button">
+        <attr name="hintString" format="string" />
+        <attr name="hintTextColor" format="reference" />
+        <attr name="textColor" format="reference" />
+        <attr name="hintDrawable" format="reference" />
+        <attr name="drawable" format="reference" />
+        <attr name="textEnabled" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="kingteller_edittext">
+        <attr name="fieldName" format="reference|string" />
+        <attr name="fieldType">
+            <enum name="String" value="1" />
+            <enum name="Number" value="2" />
+            <enum name="DateTime" value="3" />
+            <enum name="Date" value="4" />
+            <enum name="Time" value="5" />
+            <enum name="Select" value="6" />
+            <enum name="Dialog" value="7" />
+            <enum name="DateTimePD" value="8"/>
+        </attr>
+        <attr name="fieldValue" format="reference|string" />
+        <attr name="fieldOp">
+            <enum name="QUERY_TYPE_EQ" value="0" />
+            <enum name="QUERY_TYPE_LIKE" value="1" />
+            <enum name="EQ" value="2" />
+            <enum name="NOT_EQ" value="3" />
+            <enum name="LESS_THAN" value="4" />
+            <enum name="LESS_EQ_THAN" value="5" />
+            <enum name="LARGE_THAN" value="6" />
+            <enum name="LARGE_EQ_THAN" value="7" />
+            <enum name="LARGE_LESS" value="8" />
+            <enum name="LARGE_LESS_EQ" value="9" />
+            <enum name="LIKE" value="10" />
+            <enum name="LLIKE" value="11" />
+            <enum name="RLIKE" value="12" />
+            <enum name="ISNOT" value="13" />
+            <enum name="IN" value="14" />
+        </attr>
+
+        <attr name="fieldTitle" format="reference|string" />
+        <attr name="fieldRequested" format="boolean" />
+        <attr name="fieldHint" format="reference|string" />
+        <attr name="fieldText" format="reference|string" />
+        <attr name="fieldBindData" format="reference" />
+        <attr name="fieldEnabled" format="boolean" />
+        <attr name="fieldLines" format="integer" />
+        <attr name="fieldTextSize" format="integer"/>
+    </declare-styleable>
+
+    <declare-styleable name="base_tab">
+        <attr name="dividerColor" format="color|reference" />
+        <attr name="dividerHeight" format="reference" />
+        <attr name="isTop" format="boolean" />
+    </declare-styleable>
+
+
+
+</resources>
