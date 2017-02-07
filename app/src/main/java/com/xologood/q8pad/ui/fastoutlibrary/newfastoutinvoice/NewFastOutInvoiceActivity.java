@@ -123,6 +123,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
 
     private int invId;  //快捷出库单据id (1.旧的2.新的重新获取)
     private List<BarCodeLog> mBarCodeLogList;
+    private int SuccessCount;
 
     @Override
     public int getLayoutId() {
@@ -229,16 +230,25 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
             String ewm_num = data.getStringExtra("ewm_num");
             String ewm_type = data.getStringExtra("ewm_type");
             if (rbAdd.isChecked()) {
-                smm.add(ewm_num);
-                smmAdapter.notifyDataSetChanged();
-                information.setText(ewm_num+"添加成功！");
+                if (!smm.contains(ewm_num)) {
+                    smm.add(ewm_num);
+                    smmAdapter.notifyDataSetChanged();
+                    information.setText(ewm_num + "添加成功！");
+                } else {
+                    ToastUitl.showShort("此条码已经扫描，请重新扫码！");
+                }
             } else if (rbDelete.isChecked() && smm.contains(ewm_num)) {
                 smm.remove(ewm_num);
                 smmAdapter.notifyDataSetChanged();
                 information.setText(ewm_num+"删除成功！");
             }
-            count.setText("已扫描"+smm.size()+"条");
-            ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
+            if (smm.size() > 0) {
+                count.setVisibility(View.VISIBLE);
+                count.setText("已扫描" + smm.size() + "条");
+            } else {
+                count.setVisibility(View.GONE);
+            }
+           // ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
         }
     }
 
@@ -332,6 +342,15 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                 IsUpload = true;
             }*/
             IsUpload = true;
+
+            SuccessCount = GetSuccessCount(barCodeLogList);
+            if (SuccessCount > 0) {
+                count.setVisibility(View.VISIBLE);
+                count.setText("已扫描" + SuccessCount + "条");
+            } else {
+                count.setVisibility(View.GONE);
+            }
+
             ScanBarCodeAdpater scanBarCodeAdpater = new ScanBarCodeAdpater(barCodeLogList, mContext);
             View layout_scanbarcode_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_scanbarcode_dialog, null);
             final AlertDialog barCodeLogDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
@@ -372,20 +391,20 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
     @OnClick(R.id.saveBatch)
     public void setSaveBatch(View view) {
         String addProductBatch = addProduceBatch.getFieldText();
-        if (QpadJudgeUtils.isEmpty(addProductBatch)) {
-            final NormalDialog IsEmpty_ProductBatch_Dialog = new NormalDialog(mContext);
-            QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_ProductBatch_Dialog, "请选择批次！", new OnBtnClickL() {
-                @Override
-                public void onBtnClick() {
-                    IsEmpty_ProductBatch_Dialog.dismiss();
-                }
-            });
-        } else if (QpadJudgeUtils.isEmpty(mProductName)) {
+        if (QpadJudgeUtils.isEmpty(mProductName)) {
             final NormalDialog IsEmpty_ProductName_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_ProductName_Dialog, "请选择产品！", new OnBtnClickL() {
                 @Override
                 public void onBtnClick() {
                     IsEmpty_ProductName_Dialog.dismiss();
+                }
+            });
+        }else if (QpadJudgeUtils.isEmpty(addProductBatch)) {
+            final NormalDialog IsEmpty_ProductBatch_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_ProductBatch_Dialog, "请填写批次！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsEmpty_ProductBatch_Dialog.dismiss();
                 }
             });
         } else {
@@ -525,7 +544,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
     public void setCommit(View view) {
         if (!IsUpload) {
             final NormalDialog IsUpload_Dialog = new NormalDialog(mContext);
-            QPadPromptDialogUtils.showOnePromptDialog(IsUpload_Dialog, "请上传！", new OnBtnClickL() {
+            QPadPromptDialogUtils.showOnePromptDialog(IsUpload_Dialog, "请上传条码！", new OnBtnClickL() {
                 @Override
                 public void onBtnClick() {
                     IsUpload_Dialog.dismiss();

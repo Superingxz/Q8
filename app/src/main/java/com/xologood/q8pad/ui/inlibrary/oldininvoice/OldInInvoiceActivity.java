@@ -9,6 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mview.customdialog.view.dialog.NormalDialog;
+import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
+import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
+import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.bean.common.CommonSelectData;
 import com.mview.medittext.utils.QpadJudgeUtils;
 import com.mview.medittext.view.QpadEditText;
@@ -21,6 +25,7 @@ import com.xologood.q8pad.adapter.NewInInvoiceAdpter;
 import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.InvoicingDetail;
+import com.xologood.q8pad.ui.inlibrary.newininvoice.NewInInvoiceActivity;
 import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.ui.scan.ScanActivity;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
@@ -79,11 +84,13 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
     private List<InvoicingDetail> mInvoicingDetailList;
     private Invoice mInvoice;
 
+    private InvoicingBean mInvoicingBean;
+
     private int mActualQty;
 
     private String mInvId;
-
     private boolean IsSelect = false;//是否选择已有
+    private List<InvoicingDetail> invoicingDetailList;
 
     @Override
     public int getLayoutId() {
@@ -179,10 +186,10 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
         if (invoice != null) {
             IsSelect = true;
             mInvoice = invoice;
-            InvoicingBean invoicingBean = invoice.getInvoicing();
-            List<InvoicingDetail> invoicingDetailList = invoice.getInvoicingDetail();
+            mInvoicingBean = invoice.getInvoicing();
+            invoicingDetailList = invoice.getInvoicingDetail();
 
-            SetInvoicingBean(invoicingBean);
+            SetInvoicingBean(mInvoicingBean);
 
             mInvoicingDetailList.clear();
             mInvoicingDetailList.addAll(invoicingDetailList);
@@ -246,12 +253,84 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
 
     @OnClick(R.id.commit)
     public void commit(View view) {
-        if (IsSelect) {
-            Intent intent = new Intent(OldInInvoiceActivity.this, InvoicingDetailActivity.class);
-            intent.putExtra("invId", mInvId);
-            startActivity(intent);
-            finish();
+        if (!IsSelect) {
+            final NormalDialog IsSelect_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsSelect_Dialog, "未选择！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsSelect_Dialog.dismiss();
+                }
+            });
+            return;
         }
+        if (mInvoicingDetailList.size() <= 0) {
+            final NormalDialog IsNoDetail_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showTwoPromptDialog(IsNoDetail_Dialog, "此单据没有明细，请先添加明细！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsNoDetail_Dialog.dismiss();
+                }
+            }, new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    //添加明细
+                    if (mInvoicingBean != null) {
+                        Intent intent = new Intent(OldInInvoiceActivity.this, NewInInvoiceActivity.class);
+                        intent.putExtra("IsOld", true);
+                        intent.putExtra("InvNumber", mInvoicingBean.getInvNumber());
+                        intent.putExtra("InvDate", mInvoicingBean.getInvDate());
+                        intent.putExtra("WarehouseId", mInvoicingBean.getReceivingWarehouseId());
+                        startActivity(intent);
+                    }
+                    IsNoDetail_Dialog.dismiss();
+                }
+            });
+            return;
+        }
+        if (IsZero(mInvoicingDetailList)) {
+            final NormalDialog IsZero_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsZero_Dialog, "预计数量或者实际数量为0，不能确认完成！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsZero_Dialog.dismiss();
+                }
+            });
+            return;
+        }
+        Intent intent = new Intent(OldInInvoiceActivity.this, InvoicingDetailActivity.class);
+        intent.putExtra("invId", mInvId);
+        startActivity(intent);
+        finish();
+
+    }
+
+    @Override
+    public void startProgressDialog(String msg) {
+        QpadProgressUtils.showProgress(this,msg);
+    }
+
+    @Override
+    public void stopProgressDialog() {
+        QpadProgressUtils.closeProgress();
+    }
+
+    /**
+     * 预计数量和实际数量是否为0
+     * @param mInvoicingDetailList
+     * @return
+     */
+    private boolean IsZero(List<InvoicingDetail> mInvoicingDetailList) {
+        if (mInvoicingDetailList != null && mInvoicingDetailList.size() > 0) {
+            for (int i = 0; i < mInvoicingDetailList.size(); i++) {
+                InvoicingDetail invoicingDetail = mInvoicingDetailList.get(i);
+                if (invoicingDetail.getActualQty() == 0 || invoicingDetail.getExpectedQty() == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
 }

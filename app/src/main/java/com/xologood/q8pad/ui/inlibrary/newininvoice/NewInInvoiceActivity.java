@@ -82,6 +82,11 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     @Bind(R.id.new_in_invoice_ll)
     LinearLayout newInInvoiceLl;
 
+    private Intent intent;
+    private boolean IsOld = false;
+    private String oldInvNumber;
+    private String oldInvDate;
+    private String oldWarehouseId;
 
     private String LoginName;
     private String SysKey;
@@ -128,6 +133,15 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     public void initView() {
         titleView.setTitle("新建订单入库");
 
+        intent = getIntent();
+        IsOld = intent.getBooleanExtra("isOld",false);
+        oldInvNumber = intent.getStringExtra("InvNumber");
+        oldInvDate = intent.getStringExtra("InvDate");
+        oldWarehouseId = intent.getStringExtra("WarehouseId");
+        if (IsOld) {
+            invId = intent.getIntExtra("invId",0);
+        }
+
         date = new Date();
         InvDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
         options = new HashMap<>();
@@ -146,9 +160,18 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         mPresenter.GetProductList(SysKey, IsUse);
 
 
+
         //初始化单号 创建时间
-        InvNumber.setFieldTextAndValue(getInvNumber(1, UserId));
-        InvTime.setFieldTextAndValue(InvDate);
+        if (IsOld) {
+            InvNumber.setFieldTextAndValue(oldInvNumber);
+            InvTime.setFieldTextAndValue(oldInvDate);
+            wareHouse.setFieldEnabled(false);
+            InvNumber.setFieldEnabled(false);
+            InvTime.setFieldEnabled(false);
+        } else {
+            InvNumber.setFieldTextAndValue(getInvNumber(1, UserId));
+            InvTime.setFieldTextAndValue(InvDate);
+        }
 
 
         newInInvoiceList = new ArrayList<>();
@@ -192,8 +215,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     //监听事件
     @Override
     public void initListener() {
-
-
         wareHouse.setOnChangeListener(new QpadEditText.OnChangeListener() {
             @Override
             public void onChanged(CommonSelectData data) {
@@ -253,7 +274,12 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 commonSelectWarehouse.add(new CommonSelectData(name, id));
             }
             wareHouse.setLists(commonSelectWarehouse);
-            wareHouse.setFieldTextAndValue(commonSelectWarehouse.get(0));
+            if (IsOld) {
+                wareHouse.setFieldTextAndValueFromValue(oldWarehouseId);
+            } else {
+                wareHouse.setFieldTextAndValue(commonSelectWarehouse.get(0));
+            }
+
         }
     }
 

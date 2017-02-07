@@ -40,6 +40,15 @@ public interface FastOutContract {
     interface View extends BaseView {
         void SetFastOutInvoicingBean(List<InvoicingBean> invoicingBeanList);
         void  SetInvoicingDetail(Invoice invoice);
+
+        /**
+         * 开启加载进度条
+         */
+        public void startProgressDialog(String msg) ;
+        /**
+         * 停止加载进度条
+         */
+        public void stopProgressDialog() ;
     }
 
     abstract class Presenter extends BasePresenter<Model, View> {

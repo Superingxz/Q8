@@ -7,6 +7,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.mview.customdialog.view.dialog.NormalDialog;
+import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
+import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
+import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.bean.common.CommonSelectData;
 import com.mview.medittext.utils.QpadJudgeUtils;
 import com.mview.medittext.view.QpadEditText;
@@ -75,6 +79,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     private int mInvId;
     private InvoicingBean invoicingBean;
+    private boolean IsSelect = false;
 
     @Override
     public int getLayoutId() {
@@ -129,6 +134,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     @Override
     public void SetInvoicingDetail(Invoice invoice) {
+        IsSelect = true;
         mInvoice = invoice;
         invoicingBean = invoice.getInvoicing();
         List<InvoicingDetail> invoicingDetailList = invoice.getInvoicingDetail();
@@ -164,11 +170,55 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     @OnClick(R.id.commit)
     public void commit(View view) {
-        if(invoicingBean != null){
-            Intent intent = new Intent(this, InvoicingDetailActivity.class);
-            intent.putExtra("invId", mInvId + "");
-            startActivity(intent);
+        if (!IsSelect) {
+            final NormalDialog IsSelect_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsSelect_Dialog, "未选择！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsSelect_Dialog.dismiss();
+                }
+            });
+            return;
         }
+        if (mInvoicingDetailList.size() <= 0) {
+            final NormalDialog IsNoDetail_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showTwoPromptDialog(IsNoDetail_Dialog, "此单据没有明细，请先添加明细！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsNoDetail_Dialog.dismiss();
+                }
+            }, new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    //添加明细
+                    if (invoicingBean != null) {
+                        Intent intent = new Intent(FastOutLibraryActivity.this, NewFastOutInvoiceActivity.class);
+                        intent.putExtra("isOld", true);
+                        intent.putExtra("InvNumber", invoicingBean.getInvNumber());
+                        intent.putExtra("InvDate", invoicingBean.getInvDate());
+                        intent.putExtra("ReceivingComKey", invoicingBean.getReceivingComKey());
+                        intent.putExtra("ReceivingComName", invoicingBean.getReceivingComName());
+                        intent.putExtra("ReceivingWarehouseId", invoicingBean.getReceivingWarehouseId());
+                        startActivity(intent);
+                    }
+                    IsNoDetail_Dialog.dismiss();
+                }
+            });
+            return;
+        }
+        if (IsZero(mInvoicingDetailList)) {
+            final NormalDialog IsZero_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsZero_Dialog, "预计数量或者实际数量为0，不能确认完成！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsZero_Dialog.dismiss();
+                }
+            });
+            return;
+        }
+        Intent intent = new Intent(this, InvoicingDetailActivity.class);
+        intent.putExtra("invId", mInvId + "");
+        startActivity(intent);
     }
 
     @OnClick(R.id.btQueryInv)
@@ -192,6 +242,16 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
             }
             invoiceInvlist.setLists(mCommonSelectDataList);
         }
+    }
+
+    @Override
+    public void startProgressDialog(String msg) {
+        QpadProgressUtils.showProgress(this,msg);
+    }
+
+    @Override
+    public void stopProgressDialog() {
+        QpadProgressUtils.closeProgress();
     }
 
     private int GetInvId(String InvNumber, List<InvoicingBean> invoicingBeanList) {
@@ -221,5 +281,23 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
         consignee.setText(mReceivingComName);
     }
 
+    /**
+     * 预计数量和实际数量是否为0
+     * @param mInvoicingDetailList
+     * @return
+     */
+    private boolean IsZero(List<InvoicingDetail> mInvoicingDetailList) {
+        if (mInvoicingDetailList != null && mInvoicingDetailList.size() > 0) {
+            for (int i = 0; i < mInvoicingDetailList.size(); i++) {
+                InvoicingDetail invoicingDetail = mInvoicingDetailList.get(i);
+                if (invoicingDetail.getActualQty() == 0 || invoicingDetail.getExpectedQty() == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
 
 }

@@ -127,6 +127,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     private String oldReceivingComName;
 
     private List<BarCodeLog> mBarCodeLogList;
+    private int SuccessCount;
 
     @Override
     public int getLayoutId() {
@@ -234,7 +235,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             } else {
                 count.setVisibility(View.GONE);
             }
-            ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
+         //   ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
         }
     }
 
@@ -354,6 +355,13 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                 isUpload = true;
             }*/
             isUpload = true;
+            SuccessCount = GetSuccessCount(barCodeLogList);
+            if (SuccessCount > 0) {
+                count.setVisibility(View.VISIBLE);
+                count.setText("已扫描" + SuccessCount + "条");
+            } else {
+                count.setVisibility(View.GONE);
+            }
             ScanBarCodeAdpater scanBarCodeAdpater = new ScanBarCodeAdpater(barCodeLogList, mContext);
             View layout_scanbarcode_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_scanbarcode_dialog, null);
             final AlertDialog barCodeLogDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
@@ -510,7 +518,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         } else {
            if (!isUpload) {
                 final NormalDialog IsUpload_Dialog = new NormalDialog(mContext);
-                QPadPromptDialogUtils.showOnePromptDialog(IsUpload_Dialog, "请上传！", new OnBtnClickL() {
+                QPadPromptDialogUtils.showOnePromptDialog(IsUpload_Dialog, "请上传条码！", new OnBtnClickL() {
                     @Override
                     public void onBtnClick() {
                         IsUpload_Dialog.dismiss();

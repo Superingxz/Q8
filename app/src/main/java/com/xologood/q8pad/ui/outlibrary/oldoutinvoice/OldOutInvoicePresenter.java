@@ -2,6 +2,7 @@ package com.xologood.q8pad.ui.outlibrary.oldoutinvoice;
 
 import android.util.Log;
 
+import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
@@ -20,14 +21,14 @@ public class OldOutInvoicePresenter extends OldOutInvoiceContract.Presenter {
     @Override
     public void GetInvoiceInvlist(String ComKey, String InvState, String CheckUserId, String InvType) {
         mRxManager.add(mModel.GetInvoiceInvlist(ComKey,InvState,CheckUserId,InvType)
-                .subscribe(new Action1<BaseResponse<List<InvoicingBean>>>() {
+                .subscribe(new RxSubscriber<BaseResponse<List<InvoicingBean>>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<List<InvoicingBean>> listBaseResponse) {
+                    protected void _onNext(BaseResponse<List<InvoicingBean>> listBaseResponse) {
                         mView.SetInvoiceInvlist(listBaseResponse.getData());
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    protected void _onError(String message) {
 
                     }
                 })

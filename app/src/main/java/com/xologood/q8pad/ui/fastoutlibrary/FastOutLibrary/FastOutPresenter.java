@@ -1,6 +1,7 @@
 package com.xologood.q8pad.ui.fastoutlibrary.FastOutLibrary;
 
 import com.xologood.mvpframework.util.helper.RxSchedulers;
+import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
@@ -18,14 +19,14 @@ public class FastOutPresenter extends FastOutContract.Presenter {
     public void InvoicingQuickInvList(String Syskey, String Comkey) {
         mRxManager.add(mModel.InvoicingQuickInvList(Syskey,Comkey)
                              .compose(RxSchedulers.<BaseResponse<List<InvoicingBean>>>io_main())
-                             .subscribe(new Action1<BaseResponse<List<InvoicingBean>>>() {
+                             .subscribe(new RxSubscriber<BaseResponse<List<InvoicingBean>>>(mContext,false) {
                                  @Override
-                                 public void call(BaseResponse<List<InvoicingBean>> listBaseResponse) {
-                                    mView.SetFastOutInvoicingBean(listBaseResponse.getData());
+                                 protected void _onNext(BaseResponse<List<InvoicingBean>> listBaseResponse) {
+                                     mView.SetFastOutInvoicingBean(listBaseResponse.getData());
                                  }
-                             }, new Action1<Throwable>() {
+
                                  @Override
-                                 public void call(Throwable throwable) {
+                                 protected void _onError(String message) {
 
                                  }
                              })

@@ -155,9 +155,9 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
                 smmAdapter.notifyDataSetChanged();
                 scan_msg.setText(ewm_num+"删除成功！");
             }
-            if (smm.size() > 0) {
+            if (SuccessCount > 0) {
                 scan_count.setVisibility(View.VISIBLE);
-                scan_count.setText("已扫描" + smm.size() + "条");
+                scan_count.setText("已扫描" + SuccessCount + "条");
             } else {
                 scan_count.setVisibility(View.GONE);
             }
@@ -171,6 +171,12 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
             smm.removeAll(smm);
             smmAdapter.notifyDataSetChanged();
             SuccessCount = GetSuccessCount(barCodeLogList);
+            if (SuccessCount > 0) {
+                scan_count.setVisibility(View.VISIBLE);
+                scan_count.setText("已扫描" + SuccessCount + "条");
+            } else {
+                scan_count.setVisibility(View.GONE);
+            }
             ScanBarCodeAdpater scanBarCodeAdpater = new ScanBarCodeAdpater(barCodeLogList, mContext);
             View layout_scanbarcode_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_scanbarcode_dialog, null);
             final AlertDialog barCodeLogDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
@@ -224,9 +230,9 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
             btnEditywm.setText("");
             ToastUitl.showShort("已经添加此条码,请重新输入！");
         }
-        if (smm.size() > 0) {
+        if (SuccessCount > 0) {
             scan_count.setVisibility(View.VISIBLE);
-            scan_count.setText("已扫描" + smm.size() + "条");
+            scan_count.setText("已扫描" + SuccessCount + "条");
         } else {
             scan_count.setVisibility(View.GONE);
         }
