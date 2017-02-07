@@ -444,7 +444,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         options.put("InvNumber", mInvNumber);
         options.put("InvDate", InvDate);
         options.put("InvReMark", "暂无");
-        options.put("InvGet", "在线PDA");
+        options.put("InvGet", "APP");
         options.put("InvType", "1");
         options.put("CheckedParty", "false");
         options.put("InvState", "1");

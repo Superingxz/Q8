@@ -321,7 +321,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             options.put("InvNumber", InvNumber.getFieldText());
             options.put("InvDate", InvDate);
             options.put("InvReMark", "暂无");
-            options.put("InvGet", "在线PDA");
+            options.put("InvGet", "APP");
             options.put("InvType", "2");
             options.put("CheckedParty", "true");
             options.put("InvState", "2");
@@ -436,7 +436,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                         invId + "",
                         InvNumber.getFieldText(),
                         "2",
-                        "在线PDA",
+                        "APP",
                         "暂无",
                         UserId,
                         UserName,
@@ -472,7 +472,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                         invId + "",
                         InvNumber.getFieldText(),
                         "2",
-                        "在线PDA",
+                        "APP",
                         "暂无",
                         UserId,
                         UserName,
