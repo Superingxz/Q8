@@ -17,10 +17,16 @@ public  class LoginPresenter extends LoginContract.Presenter {
      */
     @Override
     public void login(String loginName, String passWord) {
-        mRxManager.add(mModel.Login(loginName,passWord).subscribe(new RxSubscriber<BaseResponse<Account>>(mContext) {
+        mRxManager.add(mModel.Login(loginName,passWord).subscribe(new RxSubscriber<BaseResponse<Account>>(mContext,false) {
+            @Override
+            public void onStart() {
+                super.onStart();
+                mView.startProgressDialog("正在登录...");
+            }
             @Override
             protected void _onNext(BaseResponse<Account> response) {
                 mView.initData(response.getData());
+                mView.stopProgressDialog();
             }
 
             @Override
@@ -28,10 +34,5 @@ public  class LoginPresenter extends LoginContract.Presenter {
                 ToastUitl.showLong(message);
             }
         }));
-    }
-
-    @Override
-    public void onStart() {
-
     }
 }

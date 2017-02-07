@@ -217,6 +217,16 @@ public interface NewInInvoiceContract {
          */
         void CompleteSaveSuccess(String msg);
 
+
+        /**
+         * 开启加载进度条
+         */
+        public void startProgressDialog(String msg) ;
+        /**
+         * 停止加载进度条
+         */
+        public void stopProgressDialog() ;
+
     }
 
     abstract class Presenter extends BasePresenter<Model, View> {

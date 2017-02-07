@@ -2,8 +2,8 @@ package com.xologood.q8pad.ui.outlibrary.newoutinvoice;
 
 import android.util.Log;
 
-import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.mvpframework.util.helper.RxSchedulers;
+import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BarCodeLogList;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Company;
@@ -35,15 +35,22 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
     public void insertInv(Map<String, String> options) {
         mRxManager.add(mModel.insertInv(options)
                 .compose(RxSchedulers.<BaseResponse<InvoicingBean>>io_main())
-                .subscribe(new Action1<BaseResponse<InvoicingBean>>() {
+                .subscribe(new RxSubscriber<BaseResponse<InvoicingBean>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<InvoicingBean> response) {
-                        mView.insertInv(response.getData());
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在新增订单...");
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
-                        ToastUitl.showLong("保存入库主表异常失败！");
+                    protected void _onNext(BaseResponse<InvoicingBean> response) {
+                        mView.insertInv(response.getData());
+                        mView.stopProgressDialog();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+
                     }
                 })
         );
@@ -90,14 +97,15 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
     public void GetWareHouseList(String ComKey, String IsUse) {
         mRxManager.add(mModel.GetWareHouseList(ComKey,IsUse)
                   .compose(RxSchedulers.<BaseResponse<List<Warehouse>>>io_main())
-                  .subscribe(new Action1<BaseResponse<List<Warehouse>>>() {
+                  .subscribe(new RxSubscriber<BaseResponse<List<Warehouse>>>(mContext,false) {
                       @Override
-                      public void call(BaseResponse<List<Warehouse>> listBaseResponse) {
-                            mView.SetWareHouseList(listBaseResponse.getData());
+                      protected void _onNext(BaseResponse<List<Warehouse>> listBaseResponse) {
+                          mView.SetWareHouseList(listBaseResponse.getData());
+                          mView.stopProgressDialog();
                       }
-                  }, new Action1<Throwable>() {
+
                       @Override
-                      public void call(Throwable throwable) {
+                      protected void _onError(String message) {
 
                       }
                   }));
@@ -141,16 +149,22 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
     public void GetAllCompList(final String ComKey, String CType) {
         mRxManager.add(mModel.GetAllCompList(ComKey, CType)
                              .compose(RxSchedulers.<BaseResponse<List<Company>>>io_main())
-                             .subscribe(new Action1<BaseResponse<List<Company>>>() {
+                             .subscribe(new RxSubscriber<BaseResponse<List<Company>>>(mContext,false) {
                                  @Override
-                                 public void call(BaseResponse<List<Company>> listBaseResponse) {
+                                 public void onStart() {
+                                     super.onStart();
+                                     mView.startProgressDialog("正在加载...");
+                                 }
+
+                                 @Override
+                                 protected void _onNext(BaseResponse<List<Company>> listBaseResponse) {
                                      String mConKey = ComKey;
                                      List<Company> data = listBaseResponse.getData();
                                      mView.SetAllCompList(data);
                                  }
-                             }, new Action1<Throwable>() {
+
                                  @Override
-                                 public void call(Throwable throwable) {
+                                 protected void _onError(String message) {
 
                                  }
                              }));
@@ -314,14 +328,21 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
                                                     CheckedParty,
                                                     sysKeyBase)
                         .compose(RxSchedulers.<BaseResponse<BarCodeLogList>>io_main())
-                        .subscribe(new Action1<BaseResponse<BarCodeLogList>>() {
+                        .subscribe(new RxSubscriber<BaseResponse<BarCodeLogList>>(mContext,false) {
                             @Override
-                            public void call(BaseResponse<BarCodeLogList> barCodeLogListBaseResponse) {
-                                mView.setScanBarCodeList(barCodeLogListBaseResponse.getData().getBarCodeLogList());
+                            public void onStart() {
+                                super.onStart();
+                                mView.startProgressDialog("正在上传...");
                             }
-                        }, new Action1<Throwable>() {
+
                             @Override
-                            public void call(Throwable throwable) {
+                            protected void _onNext(BaseResponse<BarCodeLogList> barCodeLogListBaseResponse) {
+                                mView.setScanBarCodeList(barCodeLogListBaseResponse.getData().getBarCodeLogList());
+                                mView.stopProgressDialog();
+                            }
+
+                            @Override
+                            protected void _onError(String message) {
 
                             }
                         }));

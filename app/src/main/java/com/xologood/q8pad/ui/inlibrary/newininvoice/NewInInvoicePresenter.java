@@ -3,6 +3,7 @@ package com.xologood.q8pad.ui.inlibrary.newininvoice;
 import android.util.Log;
 
 import com.xologood.mvpframework.util.helper.RxSchedulers;
+import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.InvoiceingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
@@ -39,15 +40,21 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
     public void insertInv(Map<String, String> options) {
         mRxManager.add(mModel.insertInv(options)
                 .compose(RxSchedulers.<BaseResponse<InvoicingBean>>io_main())
-                .subscribe(new Action1<BaseResponse<InvoicingBean>>() {
+                .subscribe(new RxSubscriber<BaseResponse<InvoicingBean>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<InvoicingBean> response) {
-                       mView.insertInv(response.getData());
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在保存...");
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
-                      //  ToastUitl.showLong("保存入库主表异常失败！");
+                    protected void _onNext(BaseResponse<InvoicingBean> invoicingBeanBaseResponse) {
+                        mView.insertInv(invoicingBeanBaseResponse.getData());
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+
                     }
                 })
         );
@@ -112,14 +119,20 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
     public void GetWareHouseList(String ComKey, String IsUse) {
         mRxManager.add(mModel.GetWareHouseList(ComKey,IsUse)
                 .compose(RxSchedulers.<BaseResponse<List<Warehouse>>>io_main())
-                .subscribe(new Action1<BaseResponse<List<Warehouse>>>() {
+                .subscribe(new RxSubscriber<BaseResponse<List<Warehouse>>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<List<Warehouse>> listBaseResponse) {
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在加载...");
+                    }
+
+                    @Override
+                    protected void _onNext(BaseResponse<List<Warehouse>> listBaseResponse) {
                         mView.SetWareHouseList(listBaseResponse.getData());
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    protected void _onError(String message) {
 
                     }
                 })
@@ -130,14 +143,20 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
     public void GetProductList(String SysKey, String IsUse) {
         mRxManager.add(mModel.GetProductList(SysKey, IsUse)
                 .compose(RxSchedulers.<BaseResponse<List<Product>>>io_main())
-                .subscribe(new Action1<BaseResponse<List<Product>>>() {
+                .subscribe(new RxSubscriber<BaseResponse<List<Product>>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<List<Product>> listBaseResponse) {
-                        mView.SetProductList(listBaseResponse.getData());
+                    public void onStart() {
+                        super.onStart();
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    protected void _onNext(BaseResponse<List<Product>> listBaseResponse) {
+                        mView.SetProductList(listBaseResponse.getData());
+                        mView.stopProgressDialog();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
 
                     }
                 })
@@ -258,14 +277,15 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                                                   ComKey,
                                                   SysKey)
                              .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
-                             .subscribe(new Action1<BaseResponse<InvoiceingDetailVo>>() {
+                             .subscribe(new RxSubscriber<BaseResponse<InvoiceingDetailVo>>(mContext,false) {
                                  @Override
-                                 public void call(BaseResponse<InvoiceingDetailVo> invoiceingDetailVoBaseResponse) {
-                                        mView.InsertInvoiceDetailSuccess(invoiceingDetailVoBaseResponse.getData().getId());
+                                 protected void _onNext(BaseResponse<InvoiceingDetailVo> invoiceingDetailVoBaseResponse) {
+                                     mView.InsertInvoiceDetailSuccess(invoiceingDetailVoBaseResponse.getData().getId());
+                                     mView.stopProgressDialog();
                                  }
-                             }, new Action1<Throwable>() {
+
                                  @Override
-                                 public void call(Throwable throwable) {
+                                 protected void _onError(String message) {
 
                                  }
                              })
@@ -291,14 +311,15 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                                                   ComKey,
                                                   SysKey)
                               .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
-                              .subscribe(new Action1<BaseResponse<InvoiceingDetailVo>>() {
+                              .subscribe(new RxSubscriber<BaseResponse<InvoiceingDetailVo>>(mContext,false) {
                                   @Override
-                                  public void call(BaseResponse<InvoiceingDetailVo> invoiceingDetailVoBaseResponse) {
-                                        mView.UpdateInvoiceDetailSuccess(invoiceingDetailVoBaseResponse.getData().getId());
+                                  protected void _onNext(BaseResponse<InvoiceingDetailVo> invoiceingDetailVoBaseResponse) {
+                                      mView.UpdateInvoiceDetailSuccess(invoiceingDetailVoBaseResponse.getData().getId());
+                                      mView.stopProgressDialog();
                                   }
-                              }, new Action1<Throwable>() {
+
                                   @Override
-                                  public void call(Throwable throwable) {
+                                  protected void _onError(String message) {
 
                                   }
                               })
@@ -309,14 +330,21 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
     public void CompleteSave(String invId, String userId, String userName) {
         mRxManager.add(mModel.CompleteSave(invId,userId,userName)
                 .compose(RxSchedulers.<BaseResponse<String>>io_main())
-                .subscribe(new Action1<BaseResponse<String>>() {
+                .subscribe(new RxSubscriber<BaseResponse<String>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<String> stringBaseResponse) {
-                        mView.CompleteSaveSuccess(stringBaseResponse.getData());
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在确认...");
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    protected void _onNext(BaseResponse<String> stringBaseResponse) {
+                        mView.CompleteSaveSuccess(stringBaseResponse.getData());
+                        mView.stopProgressDialog();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
 
                     }
                 })

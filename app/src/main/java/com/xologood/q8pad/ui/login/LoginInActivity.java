@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.utils.QpadJudgeUtils;
 import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.q8pad.Config;
@@ -116,6 +117,16 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
         } else {
             Toast.makeText(LoginInActivity.this, "帐号密码错误！", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void startProgressDialog(String msg) {
+        QpadProgressUtils.showProgress(this,msg);
+    }
+
+    @Override
+    public void stopProgressDialog() {
+        QpadProgressUtils.closeProgress();
     }
 
     /**

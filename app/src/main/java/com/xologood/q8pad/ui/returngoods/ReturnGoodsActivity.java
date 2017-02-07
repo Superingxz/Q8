@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.mview.customdialog.view.dialog.NormalDialog;
 import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
 import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
+import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
@@ -218,6 +219,15 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
         }
     }
 
+    @Override
+    public void startProgressDialog(String msg) {
+        QpadProgressUtils.showProgress(this,msg);
+    }
+
+    @Override
+    public void stopProgressDialog() {
+        QpadProgressUtils.closeProgress();
+    }
 
     private String GetBarCodeString4List(List<String> smm) {
         StringBuffer sb = new StringBuffer();

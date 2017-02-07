@@ -18,7 +18,14 @@ public interface AbolishCodeContract {
     }
 
     interface View extends BaseView {
-        void AbolishCodeResult(String msg);
+        void AbolishCodeResult(String msg); /**
+         * 开启加载进度条
+         */
+        public void startProgressDialog(String msg) ;
+        /**
+         * 停止加载进度条
+         */
+        public void stopProgressDialog() ;
 
     }
 

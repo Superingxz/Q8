@@ -198,7 +198,7 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
         int count = 0;
         for (int i = 0; i < barCodeLogList.size(); i++) {
             BarCodeLog barCodeLog = barCodeLogList.get(i);
-            if ("true".equals(barCodeLog.isIsOk())) {
+            if (barCodeLog.isIsOk()) {
                 count++;
             }
         }

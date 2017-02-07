@@ -68,6 +68,8 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
 
 
 
+
+
     public abstract int getLayoutId();
 
     public abstract void initView();

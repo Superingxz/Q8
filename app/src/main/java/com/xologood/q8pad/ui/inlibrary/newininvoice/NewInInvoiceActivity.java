@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.mview.customdialog.view.dialog.NormalDialog;
 import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
 import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
+import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.bean.common.CommonSelectData;
 import com.mview.medittext.utils.QpadJudgeUtils;
 import com.mview.medittext.view.QpadEditText;
@@ -580,6 +581,17 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         }
 
     }
+
+    @Override
+    public void startProgressDialog(String msg) {
+        QpadProgressUtils.showProgress(this,msg);
+    }
+
+    @Override
+    public void stopProgressDialog() {
+        QpadProgressUtils.closeProgress();
+    }
+
 
     /**
      * 生成单号

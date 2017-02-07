@@ -1,10 +1,9 @@
 package com.xologood.q8pad.ui.returngoods;
 
 import com.xologood.mvpframework.util.helper.RxSchedulers;
+import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.ReturnGoodsResponse;
-
-import rx.functions.Action1;
 
 /**
  * Created by Administrator on 17-1-19.
@@ -33,14 +32,21 @@ public class ReturnGoodsPresenter extends ReturnGoodsContract.Presenter {
                                                     CheckMemo,
                                                     BarCode)
                             .compose(RxSchedulers.<BaseResponse<ReturnGoodsResponse>>io_main())
-                            .subscribe(new Action1<BaseResponse<ReturnGoodsResponse>>() {
+                            .subscribe(new RxSubscriber<BaseResponse<ReturnGoodsResponse>>(mContext,false) {
                                 @Override
-                                public void call(BaseResponse<ReturnGoodsResponse> returnGoodsResponseBaseResponse) {
-                                    mView.SetReturnGoodsResponse(returnGoodsResponseBaseResponse.getData());
+                                public void onStart() {
+                                    super.onStart();
+                                    mView.startProgressDialog("正在处理退货...");
                                 }
-                            }, new Action1<Throwable>() {
+
                                 @Override
-                                public void call(Throwable throwable) {
+                                protected void _onNext(BaseResponse<ReturnGoodsResponse> returnGoodsResponseBaseResponse) {
+                                    mView.SetReturnGoodsResponse(returnGoodsResponseBaseResponse.getData());
+                                    mView.stopProgressDialog();
+                                }
+
+                                @Override
+                                protected void _onError(String message) {
 
                                 }
                             }));
@@ -68,14 +74,21 @@ public class ReturnGoodsPresenter extends ReturnGoodsContract.Presenter {
                                                     CheckMemo,
                                                     BarCode)
                             .compose(RxSchedulers.<BaseResponse<ReturnGoodsResponse>>io_main())
-                            .subscribe(new Action1<BaseResponse<ReturnGoodsResponse>>() {
+                            .subscribe(new RxSubscriber<BaseResponse<ReturnGoodsResponse>>(mContext,false) {
                                 @Override
-                                public void call(BaseResponse<ReturnGoodsResponse> returnGoodsResponseBaseResponse) {
-                                    mView.SetReturnGoodsResponse(returnGoodsResponseBaseResponse.getData());
+                                public void onStart() {
+                                    super.onStart();
+                                    mView.startProgressDialog("正在处理退货...");
                                 }
-                            }, new Action1<Throwable>() {
+
                                 @Override
-                                public void call(Throwable throwable) {
+                                protected void _onNext(BaseResponse<ReturnGoodsResponse> returnGoodsResponseBaseResponse) {
+                                    mView.SetReturnGoodsResponse(returnGoodsResponseBaseResponse.getData());
+                                    mView.stopProgressDialog();
+                                }
+
+                                @Override
+                                protected void _onError(String message) {
 
                                 }
                             })

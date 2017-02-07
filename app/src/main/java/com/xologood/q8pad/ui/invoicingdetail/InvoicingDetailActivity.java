@@ -8,6 +8,7 @@ import android.widget.ListView;
 import com.mview.customdialog.view.dialog.NormalDialog;
 import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
 import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
+import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.view.QpadEditText;
 import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.q8pad.Config;
@@ -152,6 +153,16 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
                 finish();
             }
         });
+    }
+
+    @Override
+    public void startProgressDialog(String msg) {
+        QpadProgressUtils.showProgress(this,msg);
+    }
+
+    @Override
+    public void stopProgressDialog() {
+        QpadProgressUtils.closeProgress();
     }
 
     private boolean isRight(List<InvoicingDetail> invoicingDetailList) {

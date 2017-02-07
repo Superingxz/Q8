@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.mview.customdialog.view.dialog.NormalDialog;
 import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
 import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
+import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.bean.common.CommonSelectData;
 import com.mview.medittext.utils.QpadJudgeUtils;
 import com.mview.medittext.view.QpadEditText;
@@ -532,6 +533,15 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         }
     }
 
+    @Override
+    public void startProgressDialog(String msg) {
+        QpadProgressUtils.showProgress(this,msg);
+    }
+
+    @Override
+    public void stopProgressDialog() {
+        QpadProgressUtils.closeProgress();
+    }
     /**
      * 计算扫码成功数目
      * @param barCodeLogList
@@ -541,7 +551,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         int count = 0;
         for (int i = 0; i < barCodeLogList.size(); i++) {
             BarCodeLog barCodeLog = barCodeLogList.get(i);
-            if ("true".equals(barCodeLog.isIsOk())) {
+            if (barCodeLog.isIsOk()) {
                 count++;
             }
         }

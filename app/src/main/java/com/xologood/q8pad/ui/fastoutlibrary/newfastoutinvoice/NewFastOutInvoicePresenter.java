@@ -1,6 +1,7 @@
 package com.xologood.q8pad.ui.fastoutlibrary.newfastoutinvoice;
 
 import com.xologood.mvpframework.util.helper.RxSchedulers;
+import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BarCodeLogList;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Company;
@@ -23,16 +24,22 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
     public void GetAllCompList(final String ComKey, String CType) {
         mRxManager.add(mModel.GetAllCompList(ComKey, CType)
                 .compose(RxSchedulers.<BaseResponse<List<Company>>>io_main())
-                .subscribe(new Action1<BaseResponse<List<Company>>>() {
+                .subscribe(new RxSubscriber<BaseResponse<List<Company>>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<List<Company>> listBaseResponse) {
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在加载...");
+                    }
+
+                    @Override
+                    protected void _onNext(BaseResponse<List<Company>> listBaseResponse) {
                         String mConKey = ComKey;
                         List<Company> data = listBaseResponse.getData();
                         mView.SetAllCompList(data);
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    protected void _onError(String message) {
 
                     }
                 }));
@@ -59,14 +66,15 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
     public void GetProductList(String SysKey, String IsUse) {
         mRxManager.add(mModel.GetProductList(SysKey,IsUse)
                 .compose(RxSchedulers.<BaseResponse<List<Product>>>io_main())
-                .subscribe(new Action1<BaseResponse<List<Product>>>() {
+                .subscribe(new RxSubscriber<BaseResponse<List<Product>>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<List<Product>> listBaseResponse) {
+                    protected void _onNext(BaseResponse<List<Product>> listBaseResponse) {
                         mView.SetProductList(listBaseResponse.getData());
+                        mView.stopProgressDialog();
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    protected void _onError(String message) {
 
                     }
                 }));
@@ -166,15 +174,21 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
                                                  ProductId,
                                                  Batch)
                              .compose(RxSchedulers.<BaseResponse<BarCodeLogList>>io_main())
-                             .subscribe(new Action1<BaseResponse<BarCodeLogList>>() {
+                             .subscribe(new RxSubscriber<BaseResponse<BarCodeLogList>>(mContext,false) {
                                  @Override
-                                 public void call(BaseResponse<BarCodeLogList> barCodeLogListBaseResponse) {
-                                    mView.SetBarCodeList(barCodeLogListBaseResponse.getData().getBarCodeLogList());
-                                 //    mView.SetInvid(barCodeLogListBaseResponse.getData().getInvId());
+                                 public void onStart() {
+                                     super.onStart();
+                                     mView.startProgressDialog("正在上传...");
                                  }
-                             }, new Action1<Throwable>() {
+
                                  @Override
-                                 public void call(Throwable throwable) {
+                                 protected void _onNext(BaseResponse<BarCodeLogList> barCodeLogListBaseResponse) {
+                                     mView.SetBarCodeList(barCodeLogListBaseResponse.getData().getBarCodeLogList());
+                                     mView.stopProgressDialog();
+                                 }
+
+                                 @Override
+                                 protected void _onError(String message) {
 
                                  }
                              })
