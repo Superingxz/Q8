@@ -212,7 +212,7 @@
                     android:id="@+id/count"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:text="已扫描X条" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"

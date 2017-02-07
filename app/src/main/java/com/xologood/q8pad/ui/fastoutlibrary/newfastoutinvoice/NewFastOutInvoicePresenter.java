@@ -36,6 +36,7 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
                         String mConKey = ComKey;
                         List<Company> data = listBaseResponse.getData();
                         mView.SetAllCompList(data);
+
                     }
 
                     @Override
@@ -49,14 +50,14 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
     public void GetWareHouseList(String ComKey, String IsUse) {
         mRxManager.add(mModel.GetWareHouseList(ComKey,IsUse)
                 .compose(RxSchedulers.<BaseResponse<List<Warehouse>>>io_main())
-                .subscribe(new Action1<BaseResponse<List<Warehouse>>>() {
+                .subscribe(new RxSubscriber<BaseResponse<List<Warehouse>>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<List<Warehouse>> listBaseResponse) {
+                    protected void _onNext(BaseResponse<List<Warehouse>> listBaseResponse) {
                         mView.SetWareHouseList(listBaseResponse.getData());
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    protected void _onError(String message) {
 
                     }
                 }));

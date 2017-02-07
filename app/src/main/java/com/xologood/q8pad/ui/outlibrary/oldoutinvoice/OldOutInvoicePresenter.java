@@ -23,8 +23,15 @@ public class OldOutInvoicePresenter extends OldOutInvoiceContract.Presenter {
         mRxManager.add(mModel.GetInvoiceInvlist(ComKey,InvState,CheckUserId,InvType)
                 .subscribe(new RxSubscriber<BaseResponse<List<InvoicingBean>>>(mContext,false) {
                     @Override
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在加载...");
+                    }
+
+                    @Override
                     protected void _onNext(BaseResponse<List<InvoicingBean>> listBaseResponse) {
                         mView.SetInvoiceInvlist(listBaseResponse.getData());
+                        mView.stopProgressDialog();
                     }
 
                     @Override

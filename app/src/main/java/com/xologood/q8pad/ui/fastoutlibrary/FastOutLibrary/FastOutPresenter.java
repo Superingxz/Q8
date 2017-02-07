@@ -21,8 +21,15 @@ public class FastOutPresenter extends FastOutContract.Presenter {
                              .compose(RxSchedulers.<BaseResponse<List<InvoicingBean>>>io_main())
                              .subscribe(new RxSubscriber<BaseResponse<List<InvoicingBean>>>(mContext,false) {
                                  @Override
+                                 public void onStart() {
+                                     super.onStart();
+                                     mView.startProgressDialog("正在加载...");
+                                 }
+
+                                 @Override
                                  protected void _onNext(BaseResponse<List<InvoicingBean>> listBaseResponse) {
                                      mView.SetFastOutInvoicingBean(listBaseResponse.getData());
+                                     mView.stopProgressDialog();
                                  }
 
                                  @Override
