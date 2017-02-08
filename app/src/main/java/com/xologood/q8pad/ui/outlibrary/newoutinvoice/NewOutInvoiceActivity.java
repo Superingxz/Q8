@@ -33,6 +33,7 @@ import com.xologood.q8pad.bean.Warehouse;
 import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
+import com.xologood.q8pad.utils.StringUtils;
 import com.xologood.q8pad.view.TitileView;
 import com.xologood.zxing.activity.CaptureActivity;
 
@@ -132,6 +133,8 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     private List<Warehouse> mWarehouseList;
     private List<Company> mCompanyList;
 
+    private List<CommonSelectData> mCommonSelectDataCompanyList;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_new_out_invoice;
@@ -143,6 +146,8 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
         mWarehouseList = new ArrayList<>();
         mCompanyList = new ArrayList<>();
+
+        mCommonSelectDataCompanyList = new ArrayList<>();
 
         intent = getIntent();
         isOld = intent.getBooleanExtra("isOld",false);
@@ -279,13 +284,12 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     @Override
     public void SetAllCompList(List<Company> companyList) {
         mCompanyList = companyList;
-        List<CommonSelectData> commonSelectDataCompanyList = new ArrayList<>();
         if (companyList != null && companyList.size() > 0) {
             for (int i = 0; i < companyList.size(); i++) {
                 Company mCompany = companyList.get(i);
-                commonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getCompanyId() + ""));
+                mCommonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getCompanyId() + ""));
             }
-            company.setLists(commonSelectDataCompanyList);
+            company.setLists(mCommonSelectDataCompanyList);
             if (isOld) {
                 company.setFieldTextAndValue(oldReceivingComName);
             }
@@ -579,6 +583,35 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         }
         return count;
     }
+
+    /**
+     * 查询机构
+     * @param view
+     */
+    @OnClick(R.id.btnQueryCompany)
+    public void setQueryCompany(View view) {
+        List<CommonSelectData> mCommonSelectDataList = new ArrayList<>();
+        company.setFieldTextAndValue("");
+        if (mCommonSelectDataCompanyList != null
+                && mCommonSelectDataCompanyList.size() > 0) {
+            if (!QpadJudgeUtils.isEmpty(qetQueryCompany.getFieldText())) {
+                for (int i = 0; i < mCommonSelectDataCompanyList.size(); i++) {
+                    CommonSelectData mCommonSelectData = mCommonSelectDataCompanyList.get(i);
+                    if (StringUtils.ifIndexOf(mCommonSelectData.getText(), qetQueryCompany.getFieldText())
+                            && !QpadJudgeUtils.isEmpty(qetQueryCompany.getFieldText())) {
+                        mCommonSelectDataList.add(mCommonSelectData);
+
+                    }
+                }
+            } else {
+                mCommonSelectDataList.clear();
+                mCommonSelectDataList.addAll(mCommonSelectDataCompanyList);
+            }
+            company.setLists(mCommonSelectDataList);
+        }
+    }
+
+
 
     /**
      * 拼接扫码

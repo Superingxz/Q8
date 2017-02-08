@@ -33,6 +33,7 @@ import com.xologood.q8pad.bean.Warehouse;
 import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
+import com.xologood.q8pad.utils.StringUtils;
 import com.xologood.q8pad.view.TitileView;
 import com.xologood.zxing.activity.CaptureActivity;
 
@@ -130,6 +131,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
     private ArrayList<Warehouse> mWarehouseList;
     private List<Product> mProductList;
     private List<ProductBatch> mProductBatchList;
+    private List<CommonSelectData> mCommonSelectDataCompanyList;
 
     @Override
     public int getLayoutId() {
@@ -145,6 +147,8 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
         mCompanyList = new ArrayList<>();
         mProductList = new ArrayList<>();
         mProductBatchList = new ArrayList<>();
+
+        mCommonSelectDataCompanyList = new ArrayList<>();
 
         date = new Date();
         InvDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
@@ -201,8 +205,8 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
             public void onChanged(CommonSelectData data) {
                 mCompanyName = data.getText();
                 mCompanyId = data.getValue();
-                if (QpadJudgeUtils.isEmpty(mCompanyId)) {
-                    mPresenter.GetAllCompList(ComKey,"2");
+                if (mCompanyList.size() == 0) {
+                    mPresenter.GetAllCompList(ComKey, "2");
                 }
             }
         });
@@ -212,7 +216,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
             public void onChanged(CommonSelectData data) {
                 mReceivingWarehouseId = data.getValue();
                 mReceivingWarehouseName = data.getText();
-                if (QpadJudgeUtils.isEmpty(mReceivingWarehouseId)) {
+                if (mWarehouseList.size() == 0) {
                     mPresenter.GetWareHouseList(ComKey,IsUse);
                 }
             }
@@ -225,8 +229,8 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                 mProductName = data.getText();
                 if (!QpadJudgeUtils.isEmpty(mProductId)) {
                     mPresenter.GetProductBatchByProductId(mProductId);
-                } else {
-                    mPresenter.GetProductList(SysKey,IsUse);
+                } else if (mProductList.size() == 0) {
+                    mPresenter.GetProductList(SysKey, IsUse);
                 }
             }
         });
@@ -236,7 +240,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
             public void onChanged(CommonSelectData data) {
                 mBatch = data.getValue();
                 mBatchNo = data.getText();
-                if (QpadJudgeUtils.isEmpty(mBatch) && !QpadJudgeUtils.isEmpty(mProductId)) {
+                if (mProductBatchList.size() == 0 && !QpadJudgeUtils.isEmpty(mProductId)) {
                     mPresenter.GetProductBatchByProductId(mProductId);
                 }
             }
@@ -275,13 +279,12 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
     @Override
     public void SetAllCompList(List<Company> companyList) {
         mCompanyList = companyList;
-        List<CommonSelectData> commonSelectDataCompanyList = new ArrayList<>();
         if (companyList != null && companyList.size() > 0) {
             for (int i = 0; i < companyList.size(); i++) {
                 Company mCompany = companyList.get(i);
-                commonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getCompanyId() + ""));
+                mCommonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getCompanyId() + ""));
             }
-            company.setLists(commonSelectDataCompanyList);
+            company.setLists(mCommonSelectDataCompanyList);
             if (isOld) {
                 company.setFieldTextAndValue(oldReceivingComName);
             }
@@ -432,7 +435,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                 }
             });
         } else  {
-            mPresenter.InsertProductBatch(addProductBatch, mProductName, SysKey, InvDate, LoginName);
+            mPresenter.InsertProductBatch(addProductBatch, mProductId, SysKey, InvDate, LoginName);
             if (!QpadJudgeUtils.isEmpty(mProductId)) {
                 mPresenter.GetProductBatchByProductId(mProductId);
             }
@@ -591,6 +594,32 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                 startActivity(intent);
             }
     }
+
+    /**
+     * 查询机构
+     * @param view
+     */
+    @OnClick(R.id.btnQueryCompany)
+    public void setQueryCompany(View view) {
+        company.setFieldTextAndValue("");
+        List<CommonSelectData> commonSelectDataCompanyList = new ArrayList<>();
+        if (mCommonSelectDataCompanyList != null
+                && mCommonSelectDataCompanyList.size() > 0) {
+            if (!QpadJudgeUtils.isEmpty(qetQueryCompany.getFieldText())) {
+                for (int i = 0; i < mCommonSelectDataCompanyList.size(); i++) {
+                    CommonSelectData mCommonSelectData = mCommonSelectDataCompanyList.get(i);
+                    if (StringUtils.ifIndexOf(mCommonSelectData.getText(), qetQueryCompany.getFieldText())) {
+                        commonSelectDataCompanyList.add(mCommonSelectData);
+                    }
+                }
+            } else {
+                commonSelectDataCompanyList.clear();
+                commonSelectDataCompanyList.addAll(mCommonSelectDataCompanyList);
+            }
+            company.setLists(commonSelectDataCompanyList);
+        }
+    }
+
     @Override
     public void startProgressDialog(String msg) {
         QpadProgressUtils.showProgress(this,msg);

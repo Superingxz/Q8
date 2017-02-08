@@ -169,8 +169,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         mPresenter.GetWareHouseList(ComKey, IsUse);
         mPresenter.GetProductList(SysKey, IsUse);
 
-
-
         //初始化单号 创建时间
         if (IsOld) {
             InvNumber.setFieldTextAndValue(oldInvNumber);
@@ -275,7 +273,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 }
             }
         });
-
     }
 
     /**
@@ -543,7 +540,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 }
             });
         } else {
-            mPresenter.InsertProductBatch(addProductBatch, mProductName, SysKey, InvDate, LoginName);
+            mPresenter.InsertProductBatch(addProductBatch, mProductId, SysKey, InvDate, LoginName);
             if (!QpadJudgeUtils.isEmpty(mProductId)) {
                 mPresenter.GetProductBatchByProductId(mProductId);
             }
