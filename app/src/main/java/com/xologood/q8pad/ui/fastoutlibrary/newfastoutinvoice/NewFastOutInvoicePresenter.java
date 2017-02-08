@@ -52,8 +52,15 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
                 .compose(RxSchedulers.<BaseResponse<List<Warehouse>>>io_main())
                 .subscribe(new RxSubscriber<BaseResponse<List<Warehouse>>>(mContext,false) {
                     @Override
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在加载...");
+                    }
+
+                    @Override
                     protected void _onNext(BaseResponse<List<Warehouse>> listBaseResponse) {
                         mView.SetWareHouseList(listBaseResponse.getData());
+                        mView.stopProgressDialog();
                     }
 
                     @Override
@@ -68,6 +75,12 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
         mRxManager.add(mModel.GetProductList(SysKey,IsUse)
                 .compose(RxSchedulers.<BaseResponse<List<Product>>>io_main())
                 .subscribe(new RxSubscriber<BaseResponse<List<Product>>>(mContext,false) {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在加载...");
+                    }
+
                     @Override
                     protected void _onNext(BaseResponse<List<Product>> listBaseResponse) {
                         mView.SetProductList(listBaseResponse.getData());
@@ -103,14 +116,21 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
     public void GetProductBatchByProductId(String ProductId) {
         mRxManager.add(mModel.GetProductBatchByProductId(ProductId)
                 .compose(RxSchedulers.<BaseResponse<List<ProductBatch>>>io_main())
-                .subscribe(new Action1<BaseResponse<List<ProductBatch>>>() {
+                .subscribe(new RxSubscriber<BaseResponse<List<ProductBatch>>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<List<ProductBatch>> listBaseResponse) {
-                        mView.SetProductBatch(listBaseResponse.getData());
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在加载...");
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    protected void _onNext(BaseResponse<List<ProductBatch>> listBaseResponse) {
+                        mView.SetProductBatch(listBaseResponse.getData());
+                        mView.stopProgressDialog();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
 
                     }
                 })

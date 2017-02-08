@@ -200,17 +200,6 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
         }
     }
 
-    private int GetSuccessCount(List<BarCodeLog> barCodeLogList) {
-        int count = 0;
-        for (int i = 0; i < barCodeLogList.size(); i++) {
-            BarCodeLog barCodeLog = barCodeLogList.get(i);
-            if (barCodeLog.isIsOk()) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     @Override
     public void UploadBarCodeError(String msg) {
         ToastUitl.showLong(msg);
@@ -267,6 +256,17 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
         intent.putExtra("mActualQty", SuccessCount);
         setResult(RESULT_OK,intent);
         finish();
+    }
+
+    private int GetSuccessCount(List<BarCodeLog> barCodeLogList) {
+        int count = 0;
+        for (int i = 0; i < barCodeLogList.size(); i++) {
+            BarCodeLog barCodeLog = barCodeLogList.get(i);
+            if (barCodeLog.isIsOk()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private String GetBarCodeString4List(List<String> smm) {

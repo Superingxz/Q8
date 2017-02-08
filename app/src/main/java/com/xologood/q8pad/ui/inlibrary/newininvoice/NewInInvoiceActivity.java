@@ -123,6 +123,11 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
 
     private boolean isSave = false;
 
+    private List<Warehouse> mWarehouseList;
+    private List<Product> mProductList;
+    private List<ProductBatch> mProductBatchList;
+    private List<StandardUnit> mStandardUnitList;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_new_in_invoice;
@@ -132,6 +137,11 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     @Override
     public void initView() {
         titleView.setTitle("新建订单入库");
+
+        mWarehouseList = new ArrayList<>();
+        mProductList = new ArrayList<>();
+        mProductBatchList = new ArrayList<>();
+        mStandardUnitList = new ArrayList<>();
 
         intent = getIntent();
         IsOld = intent.getBooleanExtra("isOld",false);
@@ -220,18 +230,22 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             public void onChanged(CommonSelectData data) {
                 mReceivingWarehouseId = data.getValue();
                 mReceivingWarehouseName = data.getText();
+                if (mWarehouseList.size() == 0) {
+                    mPresenter.GetWareHouseList(ComKey, IsUse);
+                }
             }
         });
 
         produceName.setOnChangeListener(new QpadEditText.OnChangeListener() {
             @Override
             public void onChanged(CommonSelectData data) {
-                String value = data.getValue();
-                if (value != null) {
-                    mPresenter.GetProductBatchByProductId(value);
-                    mPresenter.GetStandardUnitByProductId(value, SysKey);
-                    mProductId = data.getValue();
-                    mProductName = data.getText();
+                mProductId = data.getValue();
+                mProductName = data.getText();
+                if (!QpadJudgeUtils.isEmpty(mProductId)) {
+                    mPresenter.GetProductBatchByProductId(mProductId);
+                    mPresenter.GetStandardUnitByProductId(mProductId, SysKey);
+                } else if (mProductList.size() == 0) {
+                    mPresenter.GetProductList(SysKey, IsUse);
                 }
             }
         });
@@ -244,6 +258,8 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 ProductBatch productBatch = (ProductBatch) data.getObj();
                 if (productBatch != null) {
                     mCreationDate = productBatch.getCreationDate();
+                } else if (mProductBatchList.size() == 0 && !QpadJudgeUtils.isEmpty(mProductId)) {
+                    mPresenter.GetProductBatchByProductId(mProductId);
                 }
             }
         });
@@ -254,6 +270,9 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 Log.i("superingxz", "onChanged: 选择单位id:" + data.getValue() + "选择单位名称:" + data.getText());
                 mBunit = data.getValue();
                 mStandardUnit = data.getText();
+                if (mStandardUnitList.size() == 0 && !QpadJudgeUtils.isEmpty(mProductId)) {
+                    mPresenter.GetStandardUnitByProductId(mProductId, SysKey);
+                }
             }
         });
 
@@ -266,6 +285,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      */
     @Override
     public void SetWareHouseList(List<Warehouse> warehouseList) {
+        mWarehouseList = warehouseList;
         List<CommonSelectData> commonSelectWarehouse = new ArrayList<>();
         if (warehouseList != null && warehouseList.size() > 0) {
             for (int i = 0; i < warehouseList.size(); i++) {
@@ -290,6 +310,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      */
     @Override
     public void SetProductList(List<Product> productList) {
+        mProductList = productList;
         List<CommonSelectData> commonSelectProductList = new ArrayList<>();
         if (productList != null && productList.size() > 0) {
             for (int i = 0; i < productList.size(); i++) {
@@ -308,6 +329,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      */
     @Override
     public void SetProductBatch(List<ProductBatch> productBatchList) {
+        mProductBatchList = productBatchList;
         List<CommonSelectData> commonSelectProductBatchList = new ArrayList<>();
         if (productBatchList != null && productBatchList.size() > 0) {
             for (int i = 0; i < productBatchList.size(); i++) {
@@ -330,6 +352,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      */
     @Override
     public void SetStandardUnitByProductId(List<StandardUnit> standardUnitList) {
+        mStandardUnitList = standardUnitList;
         List<CommonSelectData> commonSelectStandardUnitList = new ArrayList<>();
         if (standardUnitList != null && standardUnitList.size() > 0) {
             for (int i = 0; i < standardUnitList.size(); i++) {
@@ -338,7 +361,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 commonSelectStandardUnitList.add(new CommonSelectData(standardUnitName, id));
             }
             standardUnit.setLists(commonSelectStandardUnitList);
-
         }
     }
 
@@ -522,6 +544,9 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             });
         } else {
             mPresenter.InsertProductBatch(addProductBatch, mProductName, SysKey, InvDate, LoginName);
+            if (!QpadJudgeUtils.isEmpty(mProductId)) {
+                mPresenter.GetProductBatchByProductId(mProductId);
+            }
         }
     }
 

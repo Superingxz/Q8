@@ -129,6 +129,7 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                     @Override
                     protected void _onNext(BaseResponse<List<Warehouse>> listBaseResponse) {
                         mView.SetWareHouseList(listBaseResponse.getData());
+                        mView.stopProgressDialog();
                     }
 
                     @Override
@@ -147,6 +148,7 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                     @Override
                     public void onStart() {
                         super.onStart();
+                        mView.startProgressDialog("正在加载...");
                     }
 
                     @Override
@@ -168,14 +170,21 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
     public void GetProductBatchByProductId(String ProductId) {
         mRxManager.add(mModel.GetProductBatchByProductId(ProductId)
                 .compose(RxSchedulers.<BaseResponse<List<ProductBatch>>>io_main())
-                .subscribe(new Action1<BaseResponse<List<ProductBatch>>>() {
+                .subscribe(new RxSubscriber<BaseResponse<List<ProductBatch>>>(mContext,false) {
                     @Override
-                    public void call(BaseResponse<List<ProductBatch>> listBaseResponse) {
-                        mView.SetProductBatch(listBaseResponse.getData());
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在加载...");
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    protected void _onNext(BaseResponse<List<ProductBatch>> listBaseResponse) {
+                        mView.SetProductBatch(listBaseResponse.getData());
+                        mView.stopProgressDialog();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
 
                     }
                 })
@@ -187,14 +196,21 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
     public void GetStandardUnitByProductId(String ProductId, String SysKey) {
         mRxManager.add( mModel.GetStandardUnitByProductId(ProductId,SysKey)
                 .compose(RxSchedulers.<BaseResponse<List<StandardUnit>>>io_main())
-                .subscribe(new Action1<BaseResponse<List<StandardUnit>>>() {
+                .subscribe(new RxSubscriber<BaseResponse<List<StandardUnit>>>(mContext, false) {
                     @Override
-                    public void call(BaseResponse<List<StandardUnit>> listBaseResponse) {
-                        mView.SetStandardUnitByProductId(listBaseResponse.getData());
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在加载...");
                     }
-                }, new Action1<Throwable>() {
+
                     @Override
-                    public void call(Throwable throwable) {
+                    protected void _onNext(BaseResponse<List<StandardUnit>> listBaseResponse) {
+                        mView.SetStandardUnitByProductId(listBaseResponse.getData());
+                        mView.stopProgressDialog();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
 
                     }
                 })

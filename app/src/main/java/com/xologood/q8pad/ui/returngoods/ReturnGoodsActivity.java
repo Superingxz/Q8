@@ -67,6 +67,8 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
     private String UserId;
     private String SysKey;
 
+    private int SuccessCount;//成功退货数量
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_return_goods;
@@ -102,6 +104,15 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
             smmAdapter.notifyDataSetChanged();
 
             List<BarCodeLog> barCodeLogList = returnGoodsResponse.getBarCodeLogList();
+
+            SuccessCount = GetSuccessCount(barCodeLogList);
+            if (SuccessCount > 0) {
+                count.setVisibility(View.VISIBLE);
+                count.setText("已扫描" + SuccessCount + "条");
+            } else {
+                count.setVisibility(View.GONE);
+            }
+
             ScanBarCodeAdpater scanBarCodeAdpater = new ScanBarCodeAdpater(barCodeLogList, mContext);
             View layout_scanbarcode_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_scanbarcode_dialog, null);
             final AlertDialog barCodeLogDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
@@ -145,9 +156,9 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
                 smmAdapter.notifyDataSetChanged();
                 information.setText(ewm_num+"删除成功！");
             }
-            if (smm.size() > 0) {
+            if (SuccessCount > 0) {
                 count.setVisibility(View.VISIBLE);
-                count.setText("已扫描" + smm.size() + "条");
+                count.setText("已扫描" + SuccessCount + "条");
             } else {
                 count.setVisibility(View.GONE);
             }
@@ -227,6 +238,22 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
     @Override
     public void stopProgressDialog() {
         QpadProgressUtils.closeProgress();
+    }
+
+    /**
+     * 计算扫码成功数目
+     * @param barCodeLogList
+     * @return
+     */
+    private int GetSuccessCount(List<BarCodeLog> barCodeLogList) {
+        int count = 0;
+        for (int i = 0; i < barCodeLogList.size(); i++) {
+            BarCodeLog barCodeLog = barCodeLogList.get(i);
+            if (barCodeLog.isIsOk()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private String GetBarCodeString4List(List<String> smm) {

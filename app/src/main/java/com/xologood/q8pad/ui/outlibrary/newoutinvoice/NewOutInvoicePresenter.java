@@ -99,6 +99,12 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
                   .compose(RxSchedulers.<BaseResponse<List<Warehouse>>>io_main())
                   .subscribe(new RxSubscriber<BaseResponse<List<Warehouse>>>(mContext,false) {
                       @Override
+                      public void onStart() {
+                          super.onStart();
+                          mView.startProgressDialog("正在加载...");
+                      }
+
+                      @Override
                       protected void _onNext(BaseResponse<List<Warehouse>> listBaseResponse) {
                           mView.SetWareHouseList(listBaseResponse.getData());
                           mView.stopProgressDialog();

@@ -29,6 +29,7 @@ import com.xologood.q8pad.bean.Company;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProductBatch;
+import com.xologood.q8pad.bean.Warehouse;
 import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
@@ -125,6 +126,11 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
     private List<BarCodeLog> mBarCodeLogList;
     private int SuccessCount;
 
+    private List<Company> mCompanyList;
+    private ArrayList<Warehouse> mWarehouseList;
+    private List<Product> mProductList;
+    private List<ProductBatch> mProductBatchList;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_fast_new_out_invoice;
@@ -135,6 +141,10 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
         titleView.setTitle("新建订单出库");
 
         mBarCodeLogList = new ArrayList<>();
+
+        mCompanyList = new ArrayList<>();
+        mProductList = new ArrayList<>();
+        mProductBatchList = new ArrayList<>();
 
         date = new Date();
         InvDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
@@ -191,6 +201,9 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
             public void onChanged(CommonSelectData data) {
                 mCompanyName = data.getText();
                 mCompanyId = data.getValue();
+                if (QpadJudgeUtils.isEmpty(mCompanyId)) {
+                    mPresenter.GetAllCompList(ComKey,"2");
+                }
             }
         });
 
@@ -199,17 +212,21 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
             public void onChanged(CommonSelectData data) {
                 mReceivingWarehouseId = data.getValue();
                 mReceivingWarehouseName = data.getText();
+                if (QpadJudgeUtils.isEmpty(mReceivingWarehouseId)) {
+                    mPresenter.GetWareHouseList(ComKey,IsUse);
+                }
             }
         });
 
         produceName.setOnChangeListener(new QpadEditText.OnChangeListener() {
             @Override
             public void onChanged(CommonSelectData data) {
-                String value = data.getValue();
-                if (value != null) {
-                    mPresenter.GetProductBatchByProductId(value);
-                    mProductId = data.getValue();
-                    mProductName = data.getText();
+                mProductId = data.getValue();
+                mProductName = data.getText();
+                if (!QpadJudgeUtils.isEmpty(mProductId)) {
+                    mPresenter.GetProductBatchByProductId(mProductId);
+                } else {
+                    mPresenter.GetProductList(SysKey,IsUse);
                 }
             }
         });
@@ -219,6 +236,9 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
             public void onChanged(CommonSelectData data) {
                 mBatch = data.getValue();
                 mBatchNo = data.getText();
+                if (QpadJudgeUtils.isEmpty(mBatch) && !QpadJudgeUtils.isEmpty(mProductId)) {
+                    mPresenter.GetProductBatchByProductId(mProductId);
+                }
             }
         });
     }
@@ -242,9 +262,9 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                 smmAdapter.notifyDataSetChanged();
                 information.setText(ewm_num+"删除成功！");
             }
-            if (smm.size() > 0) {
+            if (SuccessCount > 0) {
                 count.setVisibility(View.VISIBLE);
-                count.setText("已扫描" + smm.size() + "条");
+                count.setText("已扫描" + SuccessCount + "条");
             } else {
                 count.setVisibility(View.GONE);
             }
@@ -254,6 +274,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
 
     @Override
     public void SetAllCompList(List<Company> companyList) {
+        mCompanyList = companyList;
         List<CommonSelectData> commonSelectDataCompanyList = new ArrayList<>();
         if (companyList != null && companyList.size() > 0) {
             for (int i = 0; i < companyList.size(); i++) {
@@ -268,7 +289,8 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
     }
 
     @Override
-    public void SetWareHouseList(List<com.xologood.q8pad.bean.Warehouse> warehouseList) {
+    public void SetWareHouseList(List<Warehouse> warehouseList) {
+        mWarehouseList = new ArrayList<>();
         List<CommonSelectData> commonSelectWarehouse = new ArrayList<>();
         if (warehouseList != null && warehouseList.size() > 0) {
             for (int i = 0; i < warehouseList.size(); i++) {
@@ -287,6 +309,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
 
     @Override
     public void SetProductList(List<Product> productList) {
+        mProductList = productList;
         List<CommonSelectData> commonSelectProductList = new ArrayList<>();
         if (productList != null && productList.size() > 0) {
             for (int i = 0; i < productList.size(); i++) {
@@ -300,6 +323,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
 
     @Override
     public void SetProductBatch(List<ProductBatch> productBatchList) {
+        mProductBatchList = productBatchList;
         List<CommonSelectData> commonSelectProductBatchList = new ArrayList<>();
         if (productBatchList != null && productBatchList.size() > 0) {
             for (int i = 0; i < productBatchList.size(); i++) {
@@ -407,8 +431,11 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                     IsEmpty_ProductBatch_Dialog.dismiss();
                 }
             });
-        } else {
+        } else  {
             mPresenter.InsertProductBatch(addProductBatch, mProductName, SysKey, InvDate, LoginName);
+            if (!QpadJudgeUtils.isEmpty(mProductId)) {
+                mPresenter.GetProductBatchByProductId(mProductId);
+            }
         }
     }
 

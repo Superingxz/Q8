@@ -129,6 +129,9 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     private List<BarCodeLog> mBarCodeLogList;
     private int SuccessCount;
 
+    private List<Warehouse> mWarehouseList;
+    private List<Company> mCompanyList;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_new_out_invoice;
@@ -137,6 +140,9 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     @Override
     public void initView() {
         mBarCodeLogList = new ArrayList<>();
+
+        mWarehouseList = new ArrayList<>();
+        mCompanyList = new ArrayList<>();
 
         intent = getIntent();
         isOld = intent.getBooleanExtra("isOld",false);
@@ -198,6 +204,9 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             public void onChanged(CommonSelectData data) {
                 mCompanyName = data.getText();
                 mCompanyId = data.getValue();
+                if (mCompanyList.size() == 0) {
+                    mPresenter.GetAllCompList(ComKey,"2");
+                }
             }
         });
 
@@ -206,6 +215,9 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             public void onChanged(CommonSelectData data) {
                 mReceivingWarehouseId = data.getValue();
                 mReceivingWarehouseName = data.getText();
+                if (mWarehouseList.size() == 0) {
+                    mPresenter.GetWareHouseList(ComKey,IsUse);
+                }
             }
         });
     }
@@ -229,9 +241,9 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                 smmAdapter.notifyDataSetChanged();
                 information.setText(ewm_num+"删除成功！");
             }
-            if (smm.size() > 0) {
+            if (SuccessCount > 0) {
                 count.setVisibility(View.VISIBLE);
-                count.setText("已扫描" + smm.size() + "条");
+                count.setText("已扫描" + SuccessCount + "条");
             } else {
                 count.setVisibility(View.GONE);
             }
@@ -246,6 +258,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
      */
     @Override
     public void SetWareHouseList(List<Warehouse> warehouseList) {
+        mWarehouseList = warehouseList;
         List<CommonSelectData> commonSelectWarehouse = new ArrayList<>();
         if (warehouseList != null && warehouseList.size() > 0) {
             for (int i = 0; i < warehouseList.size(); i++) {
@@ -265,6 +278,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
     @Override
     public void SetAllCompList(List<Company> companyList) {
+        mCompanyList = companyList;
         List<CommonSelectData> commonSelectDataCompanyList = new ArrayList<>();
         if (companyList != null && companyList.size() > 0) {
             for (int i = 0; i < companyList.size(); i++) {

@@ -171,6 +171,7 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
         QpadProgressUtils.closeProgress();
     }
 
+
     private String GetBarCodeString4List(List<String> smm) {
         StringBuffer sb = new StringBuffer();
         for (String s : smm) {
