@@ -1,8 +1,11 @@
 package com.xologood.q8pad.ui.outlibrary.oldoutinvoice;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -22,11 +25,13 @@ import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.NewOutInvoiceAdapter;
+import com.xologood.q8pad.bean.FirstUser;
 import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.InvoicingDetail;
 import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.ui.outlibrary.newoutinvoice.NewOutInvoiceActivity;
+import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.utils.StringUtils;
 import com.xologood.q8pad.view.TitileView;
@@ -40,18 +45,22 @@ import butterknife.OnClick;
 public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, OldOutInvoiceModel>
         implements OldOutInvoiceContract.View {
     private static final int SCAN = 100;
+    @Bind(R.id.title_view)
+    TitileView titleView;
     @Bind(R.id.queryOrder)
     QpadEditText queryOrder;
     @Bind(R.id.query)
     Button query;
     @Bind(R.id.invoiceInvlist)
     QpadEditText invoiceInvlist;
-    @Bind(R.id.textView3)
-    TextView textView3;
+    @Bind(R.id.information)
+    Button information;
+    @Bind(R.id.textView4)
+    TextView textView4;
     @Bind(R.id.wareHouse)
     TextView wareHouse;
-    @Bind(R.id.textView)
-    TextView textView;
+    @Bind(R.id.textView6)
+    TextView textView6;
     @Bind(R.id.invDate)
     TextView invDate;
     @Bind(R.id.checkDate)
@@ -62,11 +71,8 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     TextView checkUserName;
     @Bind(R.id.lv)
     ListView lv;
-
     @Bind(R.id.orderForm)
     LinearLayout orderForm;
-    @Bind(R.id.title_view)
-    TitileView titleView;
     @Bind(R.id.commit)
     Button commit;
 
@@ -99,6 +105,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         SysKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEY);
         ComKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMKEY);
 
+
         mPresenter.GetInvoiceInvlist(ComKey, "2", "-2", "2");
 
         mInvoicingDetailList = new ArrayList<>();
@@ -116,7 +123,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                     intent.putExtra("InvDate", invoicingBean.getInvDate());
                     intent.putExtra("ReceivingWarehouseId", invoicingBean.getReceivingWarehouseId());
                     intent.putExtra("ReceivingComKey", invoicingBean.getReceivingComKey());
-                    intent.putExtra("ReceivingComName",invoicingBean.getComName());
+                    intent.putExtra("ReceivingComName", invoicingBean.getComName());
                 }
                 startActivity(intent);
             }
@@ -149,7 +156,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
             public void onChanged(CommonSelectData data) {
                 mInvId = GetInvId(data.getText(), invoicingBeanList);
                 Log.i("superingxz", "onChanged: " + mInvId);
-                mPresenter.GetInvoicingDetail(mInvId+"");
+                mPresenter.GetInvoicingDetail(mInvId + "");
             }
         });
 
@@ -177,6 +184,68 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     @Override
     public void GetInvoiceMsg(String Msg) {
         ToastUitl.showLong(Msg);
+    }
+
+    @Override
+    public void SetFirstUserByComKey(FirstUser firstUser) {
+        /*Intent intent = new Intent(OldOutInvoiceActivity.this, FirstUserDetail.class);
+        intent.putExtra("firstUser", firstUser);
+        startActivity(intent);*/
+        View layout_get_first_user_by_comkey_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_get_first_user_by_comkey, null);
+        final AlertDialog firstUserDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
+        firstUserDialog.setCanceledOnTouchOutside(false);
+        firstUserDialog.show();
+        firstUserDialog.getWindow().setContentView(layout_get_first_user_by_comkey_dialog);
+        WindowManager.LayoutParams lp_firstUser = firstUserDialog.getWindow().getAttributes();
+        lp_firstUser.width = (int) (QpadConfigUtils.SCREEN.Width * 0.85);
+        Button back = (Button) layout_get_first_user_by_comkey_dialog.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (firstUserDialog != null && firstUserDialog.isShowing()) {
+                    firstUserDialog.dismiss();
+                }
+            }
+        });
+        if (firstUser != null) {
+            final NormalDialog IsNotFirstUser_Dialog = new NormalDialog(mContext);
+            String mWeChat =  firstUser.getWeChat();
+            String mTel = firstUser.getTel();
+            String mAddress = firstUser.getAddres();
+            if (!QpadJudgeUtils.isEmpty(mWeChat)) {
+                ((TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.weChat)).setText(mWeChat);
+            } else {
+                firstUserDialog.dismiss();
+                QPadPromptDialogUtils.showOnePromptDialog(IsNotFirstUser_Dialog, "暂无信息！", new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        IsNotFirstUser_Dialog.dismiss();
+                    }
+                });
+            }
+            if (!QpadJudgeUtils.isEmpty(mTel)) {
+                firstUserDialog.dismiss();
+                ((TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.tel)).setText(mTel);
+            }else {
+                QPadPromptDialogUtils.showOnePromptDialog(IsNotFirstUser_Dialog, "暂无信息！", new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        IsNotFirstUser_Dialog.dismiss();
+                    }
+                });
+            }
+            if (!QpadJudgeUtils.isEmpty(mAddress)) {
+                ((TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.address)).setText(mAddress);
+            }else {
+                firstUserDialog.dismiss();
+                QPadPromptDialogUtils.showOnePromptDialog(IsNotFirstUser_Dialog, "暂无信息！", new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        IsNotFirstUser_Dialog.dismiss();
+                    }
+                });
+            }
+        }
     }
 
     @OnClick(R.id.query)
@@ -230,7 +299,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     }
 
     @OnClick(R.id.commit)
-    public void commit(View view){
+    public void commit(View view) {
         if (!IsSelect) {
             final NormalDialog IsSelect_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showOnePromptDialog(IsSelect_Dialog, "未选择！", new OnBtnClickL() {
@@ -261,7 +330,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                         intent.putExtra("InvDate", invoicingBean.getInvDate());
                         intent.putExtra("ReceivingWarehouseId", invoicingBean.getReceivingWarehouseId());
                         intent.putExtra("ReceivingComKey", invoicingBean.getReceivingComKey());
-                        intent.putExtra("ReceivingComName",invoicingBean.getComName());
+                        intent.putExtra("ReceivingComName", invoicingBean.getComName());
                         startActivity(intent);
                     }
                     IsNoDetail_Dialog.dismiss();
@@ -280,14 +349,23 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
             return;
         }
         Intent intent = new Intent(OldOutInvoiceActivity.this, InvoicingDetailActivity.class);
-        intent.putExtra("invId", mInvId+"");
+        intent.putExtra("invId", mInvId + "");
         startActivity(intent);
         finish();
     }
 
+    /**
+     * 详细信息
+     * @param view
+     */
+    @OnClick(R.id.information)
+    public void information(View view){
+        mPresenter.GetFirstUserByComKey(ComKey);
+    }
+
     @Override
     public void startProgressDialog(String msg) {
-        QpadProgressUtils.showProgress(this,msg);
+        QpadProgressUtils.showProgress(this, msg);
     }
 
     @Override
@@ -297,6 +375,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
 
     /**
      * 预计数量和实际数量是否为0
+     *
      * @param mInvoicingDetailList
      * @return
      */

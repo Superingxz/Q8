@@ -332,5 +332,4 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
         }
         return false;
     }
-
 }

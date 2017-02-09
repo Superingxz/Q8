@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:background="@drawable/dialog_setup_bg"
+    android:orientation="vertical" >
+
+    <TextView
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="签收人详情"
+        android:textColor="@color/black"/>
+    <View
+        android:layout_width="match_parent"
+        android:background="#cccccc"
+        android:layout_height="2dp"/>
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="20dp"
+       android:layout_marginLeft="10dp"
+       android:orientation="horizontal"
+       >
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           style="@style/TextViewStyle"
+           android:text="微信号："
+           />
+       <TextView
+           android:id="@+id/weChat"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text=""
+           />
+   </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextViewStyle"
+            android:text="电话："
+
+            />
+        <TextView
+            android:id="@+id/tel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="地址："
+            style="@style/TextViewStyle"
+            />
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="#005dab"
+        android:textColor="#ffffffff"
+        android:text="返回"
+        />
+</LinearLayout>

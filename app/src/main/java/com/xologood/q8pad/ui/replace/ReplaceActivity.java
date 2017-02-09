@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
@@ -92,7 +93,16 @@ public class ReplaceActivity extends BaseActivity<ReplacePresenter, ReplaceModel
     @Override
     public void InvoicingReplaceCode(String msg) {
         ToastUitl.showLong(msg);
+    }
 
+    @Override
+    public void startProgressDialog(String msg) {
+        QpadProgressUtils.showProgress(this,msg);
+    }
+
+    @Override
+    public void stopProgressDialog() {
+        QpadProgressUtils.closeProgress();
     }
 
     /**

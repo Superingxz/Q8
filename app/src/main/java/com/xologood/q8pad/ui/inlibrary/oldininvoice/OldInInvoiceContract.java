@@ -24,6 +24,7 @@ public interface OldInInvoiceContract {
         );
 
         Observable<BaseResponse<Invoice>> GetInvoicingDetail(String invId);
+
     }
 
     interface View extends BaseView {
@@ -46,6 +47,8 @@ public interface OldInInvoiceContract {
          */
         void GetInvoiceMsg(String Msg);
 
+
+
         /**
          * 开启加载进度条
          */
@@ -64,6 +67,8 @@ public interface OldInInvoiceContract {
         );
 
         public abstract void GetInvoicingDetail(String invId);
+
+
         @Override
         public void onStart() {}
     }

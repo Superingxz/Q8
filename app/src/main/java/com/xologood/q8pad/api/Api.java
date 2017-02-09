@@ -90,7 +90,7 @@ public class Api {
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 100); //100Mb
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .readTimeout(7676, TimeUnit.MILLISECONDS)
+                .readTimeout(300000, TimeUnit.MILLISECONDS)
                 .connectTimeout(7676, TimeUnit.MILLISECONDS)
                 //  .addInterceptor(mInterceptor)
                 .addInterceptor(httpLoggingInterceptor)

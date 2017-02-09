@@ -1,10 +1,12 @@
 package com.xologood.q8pad.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/1/15.
  */
 
-public class FirstUser {
+public class FirstUser implements Serializable{
 
     /**
      * UserId : 2
@@ -58,7 +60,7 @@ public class FirstUser {
     private String Sex;
     private String Tel;
     private Object Taobao;
-    private Object WeChat;
+    private String WeChat;
     private Object Alipay;
     private String BankCardNumber;
     private Object DepositBank;
@@ -66,7 +68,7 @@ public class FirstUser {
     private int Province;
     private int City;
     private int CityArea;
-    private Object Addres;
+    private String Addres;
     private String EMail;
     private Object MsgCode;
     private String CreationDate;
@@ -168,11 +170,11 @@ public class FirstUser {
         this.Taobao = Taobao;
     }
 
-    public Object getWeChat() {
+    public String getWeChat() {
         return WeChat;
     }
 
-    public void setWeChat(Object WeChat) {
+    public void setWeChat(String WeChat) {
         this.WeChat = WeChat;
     }
 
@@ -232,11 +234,11 @@ public class FirstUser {
         this.CityArea = CityArea;
     }
 
-    public Object getAddres() {
+    public String getAddres() {
         return Addres;
     }
 
-    public void setAddres(Object Addres) {
+    public void setAddres(String Addres) {
         this.Addres = Addres;
     }
 

@@ -20,10 +20,13 @@ import com.xologood.q8pad.bean.bean;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
+import retrofit2.http.Streaming;
+import retrofit2.http.Url;
 import rx.Observable;
 
 /**
@@ -360,11 +363,10 @@ public interface ApiService {
     /**
      * 获取用户
      * @param Comkey
-     * @param sysKeyBase
      * @return
      */
     @GET(ApiConstants.USER_GET_FIRSTUSER_BY_COMKE)
-   Observable<BaseResponse<FirstUser>> GetFirstUserByComKey(@Query("Comkey") String Comkey, @Query("sysKeyBase") String sysKeyBase);
+   Observable<BaseResponse<FirstUser>> GetFirstUserByComKey(@Query("Comkey") String Comkey);
 
     /**
      * 新建快捷出库
@@ -493,5 +495,13 @@ public interface ApiService {
     @GET(ApiConstants.INVOICING_ABOLISHCODE)
     Observable<BaseResponse<String>> InvoicingAbolishCode(@Query("code") String code);
 
+    /**
+     * 下载文件
+     * @param fileUrl
+     * @return
+     */
+    @Streaming
+    @GET
+    Observable<ResponseBody> downloadFileWithDynamicUrlSync(@Url String fileUrl);
 }
 

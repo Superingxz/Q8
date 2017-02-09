@@ -179,5 +179,4 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
         }
         return false;
     }
-
 }

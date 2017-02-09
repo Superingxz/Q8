@@ -430,9 +430,9 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             etEditywm.setText("");
             ToastUitl.showShort("已经添加此条码,请重新输入！");
         }
-        if (smm.size() > 0) {
+        if (SuccessCount > 0) {
             count.setVisibility(View.VISIBLE);
-            count.setText("已扫描" + smm.size() + "条");
+            count.setText("已扫描" + SuccessCount + "条");
         } else {
             count.setVisibility(View.GONE);
         }

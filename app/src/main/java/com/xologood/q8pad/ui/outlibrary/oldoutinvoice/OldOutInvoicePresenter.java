@@ -2,8 +2,10 @@ package com.xologood.q8pad.ui.outlibrary.oldoutinvoice;
 
 import android.util.Log;
 
+import com.xologood.mvpframework.util.helper.RxSchedulers;
 import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BaseResponse;
+import com.xologood.q8pad.bean.FirstUser;
 import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.InvoicingDetail;
@@ -61,5 +63,29 @@ public class OldOutInvoicePresenter extends OldOutInvoiceContract.Presenter {
                         mView.GetInvoiceMsg(throwable.getMessage());
                     }
                 }));
+    }
+
+    @Override
+    public void GetFirstUserByComKey(String Comkey) {
+        mRxManager.add(mModel.GetFirstUserByComKey(Comkey)
+                               .compose(RxSchedulers.<BaseResponse<FirstUser>>io_main())
+                               .subscribe(new RxSubscriber<BaseResponse<FirstUser>>(mContext,false) {
+                                   @Override
+                                   public void onStart() {
+                                       super.onStart();
+                                       mView.startProgressDialog("正在加载...");
+                                   }
+
+                                   @Override
+                                   protected void _onNext(BaseResponse<FirstUser> firstUserBaseResponse) {
+                                       mView.SetFirstUserByComKey(firstUserBaseResponse.getData());
+                                       mView.stopProgressDialog();
+                                   }
+
+                                   @Override
+                                   protected void _onError(String message) {
+
+                                   }
+                               }));
     }
 }

@@ -124,7 +124,7 @@ public class ApiConstants {
     /**
      * 获取用户
      */
-    public static final String USER_GET_FIRSTUSER_BY_COMKE="/User/GetFirstUserByComKe";
+    public static final String USER_GET_FIRSTUSER_BY_COMKE="/User/GetFirstUserByComKey";
     /**
      * 获取Host
      *

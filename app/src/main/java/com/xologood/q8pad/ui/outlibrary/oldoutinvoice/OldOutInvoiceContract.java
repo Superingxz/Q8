@@ -4,6 +4,7 @@ import com.xologood.mvpframework.base.BaseModel;
 import com.xologood.mvpframework.base.BasePresenter;
 import com.xologood.mvpframework.base.BaseView;
 import com.xologood.q8pad.bean.BaseResponse;
+import com.xologood.q8pad.bean.FirstUser;
 import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
 
@@ -26,13 +27,15 @@ public interface OldOutInvoiceContract {
         );
 
         Observable<BaseResponse<Invoice>> GetInvoicingDetail(String invId);
+
+        Observable<BaseResponse<FirstUser>> GetFirstUserByComKey(String Comkey);
     }
 
     interface View extends BaseView {
         void SetInvoiceInvlist(List<InvoicingBean> invoicingBeanList);
         void SetInvoicingDetail(Invoice invoice);
         void GetInvoiceMsg(String Msg);
-
+        void SetFirstUserByComKey(FirstUser firstUser);
         /**
          * 开启加载进度条
          */
@@ -51,6 +54,8 @@ public interface OldOutInvoiceContract {
         );
 
         public abstract void GetInvoicingDetail(String invId);
+
+        public abstract void GetFirstUserByComKey( String Comkey);
         @Override
         public void onStart() {}
     }

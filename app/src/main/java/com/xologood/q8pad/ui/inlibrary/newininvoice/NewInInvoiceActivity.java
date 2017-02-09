@@ -662,9 +662,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         }
         return invNumber;
     }
-
-
-
 }
 
 
