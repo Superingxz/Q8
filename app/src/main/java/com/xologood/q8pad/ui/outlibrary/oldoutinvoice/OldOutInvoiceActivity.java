@@ -97,6 +97,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     private String mRecorderBase;
     private String mSysKeyBase;
 
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_old_out_invoice;
@@ -216,7 +217,19 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                 }
             }
         });
-        if (firstUser != null && IsSelect) {
+        if (!IsSelect) {
+            firstUserDialog.dismiss();
+            final NormalDialog IsNotSelect_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsNotSelect_Dialog, "未选择！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsNotSelect_Dialog.dismiss();
+                }
+            });
+            return;
+        }
+        if (firstUser != null ) {
+            firstUserDialog.show();
             final NormalDialog IsNotFirstUser_Dialog = new NormalDialog(mContext);
             String mWeChat = firstUser.getWeChat();
             String mTel = firstUser.getTel();

@@ -33,8 +33,9 @@
                 android:paddingRight="@dimen/common_padding5"
                 aaron:fieldEnabled="true"
                 aaron:fieldTitle="查询订单："
-                aaron:fieldType="String" >
-            </com.mview.medittext.view.QpadEditText>
+                aaron:fieldHint="查找单号"
+                aaron:fieldType="String" />
+
 
             <Button
                 android:id="@+id/btQueryInv"

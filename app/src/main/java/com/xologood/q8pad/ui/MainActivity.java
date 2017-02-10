@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.GridView;
+import android.widget.SimpleAdapter;
 
 import com.mview.customdialog.view.dialog.NormalDialog;
 import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
@@ -23,33 +25,28 @@ import com.xologood.q8pad.ui.replace.ReplaceActivity;
 import com.xologood.q8pad.ui.returngoods.ReturnGoodsActivity;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 public class MainActivity extends AppCompatActivity {
-
-
-    @Bind(R.id.ivInLibrary)
-    ImageView ivInLibrary;
-    @Bind(R.id.ivReplace)
-    ImageView ivReplace;
-    @Bind(R.id.ivLogOff)
-    ImageView ivLogOff;
-    @Bind(R.id.ivOutLibrary)
-    ImageView ivOutLibrary;
-    @Bind(R.id.abolish)
-    ImageView abolish;
-    @Bind(R.id.ivExit)
-    ImageView ivExit;
-    @Bind(R.id.ivFast)
-    ImageView ivFast;
-    @Bind(R.id.ivReturnGoods)
-    ImageView ivReturnGoods;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.gridview)
+    GridView gridview;
+
+
     private Context mContext;
+    private GridView gridView;
+
+    private int[] images = {R.mipmap.in_library, R.mipmap.out_library, R.mipmap.fast,
+            R.mipmap.replace, R.mipmap.abolish, R.mipmap.return_goods, R.mipmap.log_off, R.mipmap.exit};
+
+    private String[] texts = new String[]
+            {"入库", "出库", "快捷出库", "替换", "作废", "退货", "注销", "退出"};
 
 
     @Override
@@ -69,41 +66,55 @@ public class MainActivity extends AppCompatActivity {
     public void initView() {
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        gridView = (GridView) findViewById(R.id.gridview);
+
+        ArrayList<HashMap<String, Object>> listImageItem = new ArrayList<HashMap<String, Object>>();
+        for (int i = 0; i < images.length; i++) {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("itemImage", images[i]);
+            map.put("itemText", texts[i]);
+            listImageItem.add(map);
+        }
+
+        SimpleAdapter simpleAdapter = new SimpleAdapter(this, listImageItem, R.layout.gridview_item,
+                new String[]{"itemImage", "itemText"}, new int[]{R.id.itemImage, R.id.itemText});
+
+        gridView.setAdapter(simpleAdapter);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        startActivity(new Intent(mContext, InLibraryActivity.class));
+                        break;
+                    case 1:
+                        startActivity(new Intent(mContext, OutLibraryActivity.class));
+                        break;
+                    case 2:
+                        startActivity(new Intent(mContext, FastOutLibraryActivity.class));
+                        break;
+                    case 3:
+                        startActivity(new Intent(mContext, ReplaceActivity.class));
+                        break;
+                    case 4:
+                        startActivity(new Intent(mContext, AbolishCodeActivity.class));
+                        break;
+                    case 5:
+                        startActivity(new Intent(mContext, ReturnGoodsActivity.class));
+                        break;
+                    case 6:
+                        logOff();
+                        break;
+                    case 7:
+                        exit();
+                        break;
+                }
+            }
+        });
     }
 
-    @OnClick(R.id.ivInLibrary)
-    public void ivInLibrary(View view) {
-        startActivity(new Intent(this, InLibraryActivity.class));
-    }
-
-    @OnClick(R.id.ivOutLibrary)
-    public void ivOutLibrary(View view) {
-        startActivity(new Intent(this, OutLibraryActivity.class));
-    }
-
-    @OnClick(R.id.ivFast)
-    public void ivFast(View view) {
-        startActivity(new Intent(this, FastOutLibraryActivity.class));
-    }
-
-
-    @OnClick(R.id.ivReplace)
-    public void ivReplace(View view) {
-        startActivity(new Intent(this, ReplaceActivity.class));
-    }
-
-    @OnClick(R.id.abolish)
-    public void abolish(View view) {
-        startActivity(new Intent(this, AbolishCodeActivity.class));
-    }
-
-    @OnClick(R.id.ivReturnGoods)
-    public void ivReturnGoods(View view) {
-        startActivity(new Intent(this, ReturnGoodsActivity.class));
-    }
-
-    @OnClick(R.id.ivLogOff)
-    public void ivLogOff(View view) {
+    public void logOff() {
         final NormalDialog normalDialog = new NormalDialog(this);
         String InvidMsg = "是否注销当前用户？";
         QPadPromptDialogUtils.showTwoPromptDialog(normalDialog, InvidMsg, new OnBtnClickL() {
@@ -116,15 +127,15 @@ public class MainActivity extends AppCompatActivity {
             public void onBtnClick() {
                 normalDialog.dismiss();
                 SharedPreferencesUtils.clearData(Qpadapplication.getAppContext());
-               Intent intent = new Intent(MainActivity.this, LoginInActivity.class);
-               startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, LoginInActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
     }
 
-    @OnClick(R.id.ivExit)
-    public void ivExit(View view) {
+
+    public void exit() {
         final NormalDialog normalDialog = new NormalDialog(this);
         String InvidMsg = "是否退出程序？";
         QPadPromptDialogUtils.showTwoPromptDialog(normalDialog, InvidMsg, new OnBtnClickL() {
