@@ -100,7 +100,7 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
             } else {
                 count.setVisibility(View.GONE);
             }
-            ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
+         //   ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
         }
     }
 
@@ -158,6 +158,12 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
                     IsNotScan_Dialog.dismiss();
                 }
             });
+        }
+        if (smm.size() > 0) {
+            count.setVisibility(View.VISIBLE);
+            count.setText("已扫描" + smm.size() + "条");
+        } else {
+            count.setVisibility(View.GONE);
         }
     }
 

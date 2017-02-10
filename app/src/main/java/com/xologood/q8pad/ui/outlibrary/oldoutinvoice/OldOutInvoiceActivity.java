@@ -25,6 +25,7 @@ import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.NewOutInvoiceAdapter;
+import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.FirstUser;
 import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
@@ -215,9 +216,9 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                 }
             }
         });
-        if (firstUser != null) {
+        if (firstUser != null && IsSelect) {
             final NormalDialog IsNotFirstUser_Dialog = new NormalDialog(mContext);
-            String mWeChat =  firstUser.getWeChat();
+            String mWeChat = firstUser.getWeChat();
             String mTel = firstUser.getTel();
             String mAddress = firstUser.getAddres();
             if (QpadJudgeUtils.isEmpty(mWeChat) && QpadJudgeUtils.isEmpty(mTel) && QpadJudgeUtils.isEmpty(mAddress)) {
@@ -232,21 +233,21 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
             }
             if (!QpadJudgeUtils.isEmpty(mWeChat)) {
                 weChat.setVisibility(View.VISIBLE);
-                weChat.setText("微信号:"+mWeChat);
+                weChat.setText("微信号:" + mWeChat);
             } else {
                 weChat.setVisibility(View.GONE);
             }
 
             if (!QpadJudgeUtils.isEmpty(mTel)) {
                 tel.setVisibility(View.VISIBLE);
-                tel.setText("电话:"+mTel);
+                tel.setText("电话:" + mTel);
             } else {
                 tel.setVisibility(View.GONE);
             }
 
             if (!QpadJudgeUtils.isEmpty(mAddress)) {
                 address.setVisibility(View.VISIBLE);
-                address.setText("地址:"+mAddress);
+                address.setText("地址:" + mAddress);
             } else {
                 address.setVisibility(View.GONE);
             }
@@ -380,6 +381,22 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     @Override
     public void stopProgressDialog() {
         QpadProgressUtils.closeProgress();
+    }
+
+    /**
+     * 计算扫码成功数目
+     * @param barCodeLogList
+     * @return
+     */
+    private int GetSuccessCount(List<BarCodeLog> barCodeLogList) {
+        int count = 0;
+        for (int i = 0; i < barCodeLogList.size(); i++) {
+            BarCodeLog barCodeLog = barCodeLogList.get(i);
+            if (barCodeLog.isIsOk()) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
