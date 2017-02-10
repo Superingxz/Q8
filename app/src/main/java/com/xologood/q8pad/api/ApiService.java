@@ -366,7 +366,8 @@ public interface ApiService {
      * @return
      */
     @GET(ApiConstants.USER_GET_FIRSTUSER_BY_COMKE)
-   Observable<BaseResponse<FirstUser>> GetFirstUserByComKey(@Query("Comkey") String Comkey);
+   Observable<BaseResponse<FirstUser>> GetFirstUserByComKey(@Query("Comkey") String Comkey,
+                                                            @Query("sysKeyBase") String sysKeyBase);
 
     /**
      * 新建快捷出库

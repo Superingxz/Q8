@@ -28,12 +28,6 @@
        android:orientation="horizontal"
        >
        <TextView
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           style="@style/TextViewStyle"
-           android:text="微信号："
-           />
-       <TextView
            android:id="@+id/weChat"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
@@ -49,13 +43,6 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextViewStyle"
-            android:text="电话："
-
-            />
-        <TextView
             android:id="@+id/tel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,12 +57,6 @@
         android:layout_marginLeft="10dp"
         android:orientation="horizontal"
         >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="地址："
-            style="@style/TextViewStyle"
-            />
         <TextView
             android:id="@+id/address"
             android:layout_width="wrap_content"

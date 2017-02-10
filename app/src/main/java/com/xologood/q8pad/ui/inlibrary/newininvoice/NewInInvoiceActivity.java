@@ -82,6 +82,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     @Bind(R.id.new_in_invoice_ll)
     LinearLayout newInInvoiceLl;
 
+    //已有入库传过来数据
     private Intent intent;
     private boolean IsOld = false;
     private String oldInvNumber;
@@ -170,7 +171,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         mPresenter.GetProductList(SysKey, IsUse);
 
         //初始化单号 创建时间
-        if (IsOld) {
+        if (IsOld) { //如果是已有出库
             InvNumber.setFieldTextAndValue(oldInvNumber);
             InvTime.setFieldTextAndValue(oldInvDate);
             wareHouse.setFieldEnabled(false);

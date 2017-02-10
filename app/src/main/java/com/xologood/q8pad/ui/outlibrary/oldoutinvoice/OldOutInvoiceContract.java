@@ -28,7 +28,7 @@ public interface OldOutInvoiceContract {
 
         Observable<BaseResponse<Invoice>> GetInvoicingDetail(String invId);
 
-        Observable<BaseResponse<FirstUser>> GetFirstUserByComKey(String Comkey);
+        Observable<BaseResponse<FirstUser>> GetFirstUserByComKey(String Comkey,String sysKeyBase);
     }
 
     interface View extends BaseView {
@@ -55,7 +55,7 @@ public interface OldOutInvoiceContract {
 
         public abstract void GetInvoicingDetail(String invId);
 
-        public abstract void GetFirstUserByComKey( String Comkey);
+        public abstract void GetFirstUserByComKey( String Comkey,String sysKeyBase);
         @Override
         public void onStart() {}
     }

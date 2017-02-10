@@ -43,7 +43,7 @@ public class OldOutInvoiceModel implements OldOutInvoiceContract.Model{
     }
 
     @Override
-    public Observable<BaseResponse<FirstUser>> GetFirstUserByComKey(String Comkey) {
-        return Api.getLoginInInstance(HostType.USERURL,recorderBase,sysKeyBase).GetFirstUserByComKey(Comkey);
+    public Observable<BaseResponse<FirstUser>> GetFirstUserByComKey(String Comkey,String sysKeyBase) {
+        return Api.getDefault(HostType.USERURL).GetFirstUserByComKey(Comkey, sysKeyBase);
     }
 }

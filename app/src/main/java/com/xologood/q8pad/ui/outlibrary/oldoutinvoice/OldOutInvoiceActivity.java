@@ -89,7 +89,12 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     private Invoice mInvoice;
     private int mInvId;
 
-    private boolean IsSelect = false;
+    private boolean IsSelect = false;//是否已经选择单据
+
+    //选择后的获取数据
+    private String mComKey;
+    private String mRecorderBase;
+    private String mSysKeyBase;
 
     @Override
     public int getLayoutId() {
@@ -199,6 +204,9 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         WindowManager.LayoutParams lp_firstUser = firstUserDialog.getWindow().getAttributes();
         lp_firstUser.width = (int) (QpadConfigUtils.SCREEN.Width * 0.85);
         Button back = (Button) layout_get_first_user_by_comkey_dialog.findViewById(R.id.back);
+        TextView weChat = (TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.weChat);
+        TextView tel = (TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.tel);
+        TextView address = (TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.address);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,38 +220,35 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
             String mWeChat =  firstUser.getWeChat();
             String mTel = firstUser.getTel();
             String mAddress = firstUser.getAddres();
+            if (QpadJudgeUtils.isEmpty(mWeChat) && QpadJudgeUtils.isEmpty(mTel) && QpadJudgeUtils.isEmpty(mAddress)) {
+                firstUserDialog.dismiss();
+                QPadPromptDialogUtils.showOnePromptDialog(IsNotFirstUser_Dialog, "暂无信息！", new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        IsNotFirstUser_Dialog.dismiss();
+                    }
+                });
+                return;
+            }
             if (!QpadJudgeUtils.isEmpty(mWeChat)) {
-                ((TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.weChat)).setText(mWeChat);
+                weChat.setVisibility(View.VISIBLE);
+                weChat.setText("微信号:"+mWeChat);
             } else {
-                firstUserDialog.dismiss();
-                QPadPromptDialogUtils.showOnePromptDialog(IsNotFirstUser_Dialog, "暂无信息！", new OnBtnClickL() {
-                    @Override
-                    public void onBtnClick() {
-                        IsNotFirstUser_Dialog.dismiss();
-                    }
-                });
+                weChat.setVisibility(View.GONE);
             }
+
             if (!QpadJudgeUtils.isEmpty(mTel)) {
-                firstUserDialog.dismiss();
-                ((TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.tel)).setText(mTel);
-            }else {
-                QPadPromptDialogUtils.showOnePromptDialog(IsNotFirstUser_Dialog, "暂无信息！", new OnBtnClickL() {
-                    @Override
-                    public void onBtnClick() {
-                        IsNotFirstUser_Dialog.dismiss();
-                    }
-                });
+                tel.setVisibility(View.VISIBLE);
+                tel.setText("电话:"+mTel);
+            } else {
+                tel.setVisibility(View.GONE);
             }
+
             if (!QpadJudgeUtils.isEmpty(mAddress)) {
-                ((TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.address)).setText(mAddress);
-            }else {
-                firstUserDialog.dismiss();
-                QPadPromptDialogUtils.showOnePromptDialog(IsNotFirstUser_Dialog, "暂无信息！", new OnBtnClickL() {
-                    @Override
-                    public void onBtnClick() {
-                        IsNotFirstUser_Dialog.dismiss();
-                    }
-                });
+                address.setVisibility(View.VISIBLE);
+                address.setText("地址:"+mAddress);
+            } else {
+                address.setVisibility(View.GONE);
             }
         }
     }
@@ -290,6 +295,10 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         String mCheckDate = invoicingBean.getCheckDate();
         String mCheckUserName = invoicingBean.getCheckUserName();
         String mReceivingComName = invoicingBean.getReceivingComName();
+
+        mComKey = invoicingBean.getComKey();
+        mRecorderBase = String.valueOf(invoicingBean.getRecorderBase());
+        mSysKeyBase = String.valueOf(invoicingBean.getSysKeyBase());
 
         consignee.setText(mReceivingComName);
         wareHouse.setText(mReceivingWarehouseName);
@@ -360,7 +369,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
      */
     @OnClick(R.id.information)
     public void information(View view){
-        mPresenter.GetFirstUserByComKey(ComKey);
+        mPresenter.GetFirstUserByComKey(mComKey,mSysKeyBase);
     }
 
     @Override

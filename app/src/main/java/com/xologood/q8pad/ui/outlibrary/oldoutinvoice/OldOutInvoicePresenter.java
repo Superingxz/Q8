@@ -66,8 +66,8 @@ public class OldOutInvoicePresenter extends OldOutInvoiceContract.Presenter {
     }
 
     @Override
-    public void GetFirstUserByComKey(String Comkey) {
-        mRxManager.add(mModel.GetFirstUserByComKey(Comkey)
+    public void GetFirstUserByComKey(String Comkey,String sysKeyBase) {
+        mRxManager.add(mModel.GetFirstUserByComKey(Comkey, sysKeyBase)
                                .compose(RxSchedulers.<BaseResponse<FirstUser>>io_main())
                                .subscribe(new RxSubscriber<BaseResponse<FirstUser>>(mContext,false) {
                                    @Override
