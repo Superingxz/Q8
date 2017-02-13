@@ -50,6 +50,7 @@
                     >
                     <Button
                         android:id="@+id/add"
+                        style="@style/ButtonStyle"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:textSize="10dp"
@@ -75,10 +76,12 @@
             >
 
             <Button
+                android:id="@+id/close"
+                style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="关闭"
-                android:id="@+id/close" />
+                 />
 
             <RadioGroup
                 android:id="@+id/rg"
@@ -120,12 +123,14 @@
 
             <Button
                 android:id="@+id/scanywm"
+                style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="扫描二维码"/>
 
             <Button
                 android:id="@+id/upload"
+                style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="上传"/>
@@ -133,10 +138,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/alpha_20_black"/>
 
     <LinearLayout
         android:layout_width="match_parent"

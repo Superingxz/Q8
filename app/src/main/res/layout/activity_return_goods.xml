@@ -99,12 +99,14 @@
 
                 <Button
                     android:id="@+id/scanywm"
+                    style="@style/ButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="扫描" />
 
                 <Button
                     android:id="@+id/upload"
+                    style="@style/ButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="退货" />

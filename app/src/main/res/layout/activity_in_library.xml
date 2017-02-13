@@ -17,6 +17,7 @@
         >
         <Button
             android:id="@+id/btnOrderIn"
+            style="@style/ButtonStyle"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:text="已有订单入库"
@@ -24,6 +25,7 @@
 
         <Button
             android:id="@+id/btnNewOrder"
+            style="@style/ButtonStyle"
             android:layout_marginTop="50dp"
             android:layout_width="200dp"
             android:layout_height="wrap_content"

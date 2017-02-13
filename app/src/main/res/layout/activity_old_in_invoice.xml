@@ -31,13 +31,13 @@
             android:paddingLeft="@dimen/common_padding5"
             android:paddingRight="@dimen/common_padding5"
             aaron:fieldEnabled="true"
-            aaron:fieldTitle="查询订单："
-            aaron:fieldHint="查找单号"
+            aaron:fieldHint="查找的单号"
             aaron:fieldType="String" >
         </com.mview.medittext.view.QpadEditText>
 
         <Button
             android:id="@+id/query"
+            style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="查询" />
@@ -175,6 +175,7 @@
 
     <Button
         android:id="@+id/commit"
+        style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="确定完成"

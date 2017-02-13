@@ -57,6 +57,7 @@
 
                         <Button
                             android:id="@+id/add"
+                            style="@style/ButtonStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="添加" />
@@ -121,7 +122,7 @@
                     android:id="@+id/count"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:text="已扫描X条" />
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
@@ -130,12 +131,15 @@
 
                 <Button
                     android:id="@+id/scanywm"
+                    style="@style/ButtonStyle"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="扫描" />
 
                 <Button
                     android:id="@+id/upload"
+                    style="@style/ButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="作废" />

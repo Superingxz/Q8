@@ -32,8 +32,7 @@
                 android:paddingLeft="@dimen/common_padding5"
                 android:paddingRight="@dimen/common_padding5"
                 aaron:fieldEnabled="true"
-                aaron:fieldTitle="查询订单："
-                aaron:fieldHint="查找单号"
+                aaron:fieldHint="查找的单号"
                 aaron:fieldType="String" />
 
 
@@ -41,8 +40,9 @@
                 android:id="@+id/btQueryInv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
                 android:background="#005dab"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:textColor="#ffffffff"
                 android:text="订单查询" />
 
@@ -51,6 +51,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:background="#005dab"
                 android:textColor="#ffffffff"
                 android:text="增加订单" />

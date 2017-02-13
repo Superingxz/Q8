@@ -163,14 +163,16 @@
 
         <Button
             android:id="@+id/scanywm"
+            style="@style/ButtonStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:text="扫描" />
 
         <Button
             android:id="@+id/replace"
+            style="@style/ButtonStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:text="替换" />
     </LinearLayout>
 </LinearLayout>
