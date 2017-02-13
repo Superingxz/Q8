@@ -14,6 +14,7 @@ import com.xologood.q8pad.bean.Warehouse;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import rx.Observable;
 
@@ -106,13 +107,12 @@ public class NewFastOutInvoiceModel implements NewFastOutInvoiceContract.Model{
     }
 
     /**
-     * 保存入库主表2
-     * @param SysKey
-     * @param InvNumber
+     * 保存入库主表
+     * @param options
      * @return
      */
     @Override
-    public Observable<BaseResponse<InvoicingBean>> insertInv2(String SysKey, String InvNumber) {
-        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).insertInv2(SysKey,InvNumber);
+    public Observable<BaseResponse<InvoicingBean>> insertInv(Map<String, String> options) {
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).insertInv( options);
     }
 }

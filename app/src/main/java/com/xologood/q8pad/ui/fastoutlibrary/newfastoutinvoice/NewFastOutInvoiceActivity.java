@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -132,6 +133,9 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
     private List<Product> mProductList;
     private List<ProductBatch> mProductBatchList;
     private List<CommonSelectData> mCommonSelectDataCompanyList;
+
+
+    private Map options;
 
     @Override
     public int getLayoutId() {
@@ -399,8 +403,6 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                     }
                 }
             });
-
-            mPresenter.insertInv(SysKey,mInvNumber);
         }
     }
 
@@ -454,7 +456,6 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
 
     @OnClick(R.id.upload)
     public void upload(View view){
-        mInvNumber = InvNumber.getFieldText();
         if (!isOld) {
             if (QpadJudgeUtils.isEmpty(mCompanyName)) {
                 final NormalDialog IsEmpty_CompanyName_Dialog = new NormalDialog(mContext);
@@ -490,7 +491,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                 });
             } else if (smm != null && smm.size() > 0) {
                 mPresenter.NewQuickScanBarCode(GetBarCodeString4List(smm),
-                        mInvNumber,
+                        InvNumber.getFieldText(),
                         "1",
                         "APP",
                         "暂无",
@@ -535,7 +536,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                 });
             } else if (smm != null && smm.size() > 0) {
                 mPresenter.NewQuickScanBarCode(GetBarCodeString4List(smm),
-                        mInvNumber,
+                        InvNumber.getFieldText(),
                         "1",
                         "APP",
                         "暂无",
@@ -566,8 +567,8 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
 
 
     @Override
-    public void insertInv2(InvoicingBean invoicingBean) {
-
+    public void insertInv(InvoicingBean invoicingBean) {
+        mInvId = invoicingBean.getInvId();
     }
 
     @OnClick(R.id.commit)

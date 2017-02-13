@@ -14,6 +14,7 @@ import com.xologood.q8pad.bean.ProductBatch;
 import com.xologood.q8pad.bean.Warehouse;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.http.GET;
 import rx.Observable;
@@ -137,13 +138,12 @@ public interface NewFastOutInvoiceContract {
 
 
         /**
-         * 保存入库/出库主表2
+         * 保存入库/出库主表
          *
-         * @param SysKey
-         * @param InvNumber
+         * @param options
          * @return
          */
-        Observable<BaseResponse<InvoicingBean>> insertInv2(String SysKey, String InvNumber);
+        Observable<BaseResponse<InvoicingBean>> insertInv(Map<String, String> options);
     }
 
     interface View extends BaseView {
@@ -174,7 +174,7 @@ public interface NewFastOutInvoiceContract {
          *
          * @param invoicingBean
          */
-        void insertInv2(InvoicingBean invoicingBean);
+        void insertInv(InvoicingBean invoicingBean);
 
         /**
          * 开启加载进度条
@@ -263,10 +263,9 @@ public interface NewFastOutInvoiceContract {
          /**
           * 保存入库主表回调
           *
-          * @param SysKey
-          * @param InvNumber
+          * @param options
           */
-         public abstract void insertInv(String SysKey,String InvNumber);
+         public abstract void insertInv(Map<String, String> options);
 
 
         @Override

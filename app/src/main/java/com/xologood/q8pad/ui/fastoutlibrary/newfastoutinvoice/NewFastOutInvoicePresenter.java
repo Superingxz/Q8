@@ -11,6 +11,7 @@ import com.xologood.q8pad.bean.ProductBatch;
 import com.xologood.q8pad.bean.Warehouse;
 
 import java.util.List;
+import java.util.Map;
 
 import rx.functions.Action1;
 
@@ -218,13 +219,13 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
 
 
     @Override
-    public void insertInv(String SysKey, String InvNumber) {
-        mRxManager.add(mModel.insertInv2(SysKey,InvNumber)
+    public void insertInv(Map<String, String> options) {
+        mRxManager.add(mModel.insertInv(options)
                 .compose(RxSchedulers.<BaseResponse<InvoicingBean>>io_main())
                 .subscribe(new Action1<BaseResponse<InvoicingBean>>() {
                     @Override
                     public void call(BaseResponse<InvoicingBean> invoicingBeanBaseResponse) {
-                        mView.insertInv2(invoicingBeanBaseResponse.getData());
+                        mView.insertInv(invoicingBeanBaseResponse.getData());
                     }
                 }, new Action1<Throwable>() {
                     @Override
