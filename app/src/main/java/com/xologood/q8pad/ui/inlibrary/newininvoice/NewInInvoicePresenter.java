@@ -5,6 +5,7 @@ import android.util.Log;
 import com.xologood.mvpframework.util.helper.RxSchedulers;
 import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BaseResponse;
+import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoiceingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
@@ -262,8 +263,8 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                         .subscribe(new Action1<BaseResponse<InvoiceingDetailVo>>() {
                             @Override
                             public void call(BaseResponse<InvoiceingDetailVo> invoiceDetailBaseResponse) {
-                                int id = invoiceDetailBaseResponse.getData().getId();
-                                mView.GetInvoiceDetailSuccess(id);
+                                InvoiceingDetailVo data = invoiceDetailBaseResponse.getData();
+                                mView.GetInvoiceDetailSuccess(data.getId(),data.getInvId());
 
                             }
                         }, new Action1<Throwable>() {
@@ -340,6 +341,30 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                                   }
                               })
         );
+    }
+
+    @Override
+    public void GetInvoicingDetail(final String invId) {
+        mRxManager.add(mModel.GetInvoicingDetail(invId)
+                .subscribe(new RxSubscriber<BaseResponse<Invoice>>(mContext,false) {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在加载...");
+                    }
+
+                    @Override
+                    protected void _onNext(BaseResponse<Invoice> invoiceBaseResponse) {
+                        Invoice data = invoiceBaseResponse.getData();
+                        mView.SetInvoicingDetail(data);
+                        mView.stopProgressDialog();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+
+                    }
+                }));
     }
 
     @Override

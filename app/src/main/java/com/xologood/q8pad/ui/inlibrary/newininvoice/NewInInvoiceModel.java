@@ -1,10 +1,12 @@
 package com.xologood.q8pad.ui.inlibrary.newininvoice;
 
+import com.xologood.mvpframework.util.helper.RxSchedulers;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.api.Api;
 import com.xologood.q8pad.api.HostType;
 import com.xologood.q8pad.bean.BaseResponse;
+import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoiceingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
@@ -136,6 +138,12 @@ public class NewInInvoiceModel implements NewInInvoiceContract.Model {
                                                                                                        ExpectedQty,
                                                                                                        ComKey,
                                                                                                        SysKey);
+    }
+
+    @Override
+    public Observable<BaseResponse<Invoice>> GetInvoicingDetail(String invId) {
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).GetInvoicingDetail(invId)
+                .compose(RxSchedulers.<BaseResponse<Invoice>>io_main());
     }
 
     @Override

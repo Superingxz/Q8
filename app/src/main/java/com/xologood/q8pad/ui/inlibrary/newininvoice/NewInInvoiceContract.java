@@ -4,6 +4,7 @@ import com.xologood.mvpframework.base.BaseModel;
 import com.xologood.mvpframework.base.BasePresenter;
 import com.xologood.mvpframework.base.BaseView;
 import com.xologood.q8pad.bean.BaseResponse;
+import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoiceingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
@@ -135,6 +136,8 @@ public interface NewInInvoiceContract {
                                                                          String SysKey
         );
 
+        Observable<BaseResponse<Invoice>> GetInvoicingDetail(String invId);
+
         /**
          * 确认提交
          *
@@ -201,7 +204,7 @@ public interface NewInInvoiceContract {
         /**
          * 验证入库明细成功回调
          */
-        void GetInvoiceDetailSuccess(int Id);
+        void GetInvoiceDetailSuccess(int id,String InvId);
 
         /**
          * 增加入库明细成功回调
@@ -211,6 +214,12 @@ public interface NewInInvoiceContract {
         void InsertInvoiceDetailSuccess(int Id);
 
         void UpdateInvoiceDetailSuccess(int Id);
+
+        /**
+         * 获取单据信息成功
+         * @param invoice
+         */
+        void SetInvoicingDetail(Invoice invoice);
 
         /**
          * 确定提交成功
@@ -332,6 +341,8 @@ public interface NewInInvoiceContract {
                                                  String ComKey,
                                                  String SysKey
         );
+
+        public abstract void GetInvoicingDetail(String invId);
 
         /**
          * 确认提交

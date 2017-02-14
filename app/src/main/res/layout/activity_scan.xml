@@ -62,6 +62,7 @@
                         android:layout_height="wrap_content"
                         android:hint="手动添加条码"
                         android:textSize="13dp"
+                        android:inputType="number"
                         android:id="@+id/btn_editywm" />
                 </LinearLayout>
             </LinearLayout>

@@ -166,6 +166,7 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:hint="手动添加条码"
+                            android:inputType="number"
                             android:textSize="13dp" />
                     </LinearLayout>
                 </RelativeLayout>

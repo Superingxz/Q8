@@ -23,6 +23,7 @@ import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.NewInInvoiceAdpter;
+import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.InvoicingDetail;
 import com.xologood.q8pad.bean.Product;
@@ -100,7 +101,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     private Date date;
 
     private String mCreationDate;//生产日期
-
     private String mProductId;  //产品id
     private String mProductName;
     private String mBatch;
@@ -114,20 +114,22 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     private String InvDate;//开单时间
 
     private NewInInvoiceAdpter newInInvoiceAdpter;
-    private List<InvoicingDetail> newInInvoiceList;
 
     private Map<String, String> options; //保存入库主表请求参数
     private int invId; //入库单号
 
-    private boolean HasSava = false;
     private String ExpectedQty;
 
-    private boolean isSave = false;
-
     private List<Warehouse> mWarehouseList;
+
     private List<Product> mProductList;
     private List<ProductBatch> mProductBatchList;
     private List<StandardUnit> mStandardUnitList;
+    private List<InvoicingDetail> mInvoicingDetailList;
+
+    private boolean isSave = false;
+    private boolean HasSava = false;
+    private boolean isReturn = false;
 
     @Override
     public int getLayoutId() {
@@ -143,6 +145,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         mProductList = new ArrayList<>();
         mProductBatchList = new ArrayList<>();
         mStandardUnitList = new ArrayList<>();
+        mInvoicingDetailList = new ArrayList();
 
         intent = getIntent();
         IsOld = intent.getBooleanExtra("isOld",false);
@@ -183,14 +186,13 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         }
 
 
-        newInInvoiceList = new ArrayList<>();
-        newInInvoiceAdpter = new NewInInvoiceAdpter(newInInvoiceList, this);
+        newInInvoiceAdpter = new NewInInvoiceAdpter(mInvoicingDetailList, this);
         lv.setAdapter(newInInvoiceAdpter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(NewInInvoiceActivity.this, ScanActivity.class);
-                InvoicingDetail invoicingDetail = newInInvoiceList.get(position);
+                InvoicingDetail invoicingDetail = mInvoicingDetailList.get(position);
                 intent.putExtra("InvDetailId", invoicingDetail.getId() + "");
                 intent.putExtra("InvId", invoicingDetail.getInvId());
                 intent.putExtra("ProductId", invoicingDetail.getProductId() + "");
@@ -212,11 +214,13 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        InvoicingDetail ClickInvoicingDetail = (InvoicingDetail) lv.getTag();
+       /* InvoicingDetail ClickInvoicingDetail = (InvoicingDetail) lv.getTag();
         if (resultCode == ScanActivity.RESULT_OK) {
             int mActualQty = data.getIntExtra("mActualQty", 0);
             newInInvoiceAdpter.updateActualQty(mActualQty, ClickInvoicingDetail.getProductName(), ClickInvoicingDetail.getBatchNO());
-        }
+        }*/
+        isReturn = true;
+        mPresenter.GetInvoicingDetail(invId+"");
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -369,6 +373,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      */
     @Override
     public void insertInv(InvoicingBean invoicingBean) {
+        isReturn = false;
         mPresenter.insertInv(SysKey, InvNumber.getFieldText());
     }
 
@@ -387,22 +392,16 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      * 验证入库明细(根据返回Id  "0" 则新增入库明细数据 否则 更新修改入库明细数据)
      *
      * @param Id 明细id  写死0
+     * @param InvId 单号
      */
     @Override
-    public void GetInvoiceDetailSuccess(int Id) {
+    public void GetInvoiceDetailSuccess(int Id,String InvId) {
         if (Id == 0) {
             // ToastUitl.showLong("增加入库明细:" + Id);
             mPresenter.InsertInvoiceDetail(Id + "", invId + "", mProductId, mBatch, "0", mExpectedQty, ComKey, SysKey);
         } else {
             mPresenter.UpdateInvoiceDetail(Id + "", invId + "", mProductId, mBatch, "0", mExpectedQty, ComKey, SysKey);
         }
-        final NormalDialog IsSava_Success_Dialog = new NormalDialog(mContext);
-        QPadPromptDialogUtils.showOnePromptDialog(IsSava_Success_Dialog, "保存成功！", new OnBtnClickL() {
-            @Override
-            public void onBtnClick() {
-                IsSava_Success_Dialog.dismiss();
-            }
-        });
     }
 
     /**
@@ -413,13 +412,16 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     @Override
     public void InsertInvoiceDetailSuccess(int Id) {
         //AddOrUpdate(Id);
-        int batch = Integer.valueOf(mBatch).intValue();
+      /*  int batch = Integer.valueOf(mBatch).intValue();
         int expectedQty = Integer.valueOf(mExpectedQty).intValue();
-        InvoicingDetail newInInvoice = new InvoicingDetail(Id, invId, mProductId, mProductName, batch,
-                mBatchNo, expectedQty, 0, mCreationDate, mStandardUnit);
-        newInInvoiceList.add(newInInvoice);
-        newInInvoiceAdpter.notifyDataSetChanged();
-        isSave = true;
+        if (mStandardUnitList.size() > 0 && mStandardUnitList.get(0) != null) {
+            InvoicingDetail newInInvoice = new InvoicingDetail(Id, invId, mProductId, mProductName, batch,
+                    mBatchNo, expectedQty, 0, mCreationDate, mStandardUnitList.get(0).getStandardUnitName());
+            newInInvoiceList.add(newInInvoice);
+            newInInvoiceAdpter.notifyDataSetChanged();
+            isSave = true;
+        }*/
+        mPresenter.GetInvoicingDetail(invId+"");
     }
 
     /**
@@ -430,7 +432,27 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     @Override
     public void UpdateInvoiceDetailSuccess(int Id) {
         //AddOrUpdate(Id);
-        isSave = newInInvoiceAdpter.update(mExpectedQty, mProductName, mBatchNo);
+        //isSave = newInInvoiceAdpter.update(mExpectedQty, mProductName, mBatchNo);
+        mPresenter.GetInvoicingDetail(invId+"");
+    }
+
+    @Override
+    public void SetInvoicingDetail(Invoice invoice) {
+        if (invoice != null && invoice.getInvoicingDetail() != null) {
+            mInvoicingDetailList.clear();
+            mInvoicingDetailList.addAll(invoice.getInvoicingDetail());
+            newInInvoiceAdpter.notifyDataSetChanged();
+            isSave = true; //这里（更新 增加 和扫描后回来都执行到这里  isSave设置为保存成功）
+            final NormalDialog IsSava_Success_Dialog = new NormalDialog(mContext);
+            if (!isReturn) {
+                QPadPromptDialogUtils.showOnePromptDialog(IsSava_Success_Dialog, "保存成功！", new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        IsSava_Success_Dialog.dismiss();
+                    }
+                });
+            }
+        }
     }
 
     private void AddOrUpdate(int Id) {

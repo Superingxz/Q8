@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
@@ -82,7 +83,8 @@ public class BarCodeEditDialog extends Dialog implements OnClickListener {
 	        confim.setBackgroundDrawable(CornerUtils.btnSelector(radius, bgColor, btnPressColor, 1));
 	 
 	        barcode_num = (EditText) this.findViewById(R.id.edit_barcode_num);
-   
+   			//设置只能输入数字
+			barcode_num.setInputType(InputType.TYPE_CLASS_NUMBER);
 	        confim.setOnClickListener(this);
 	        cancel.setOnClickListener(this);
 

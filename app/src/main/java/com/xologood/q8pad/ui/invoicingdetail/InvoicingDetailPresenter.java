@@ -5,8 +5,6 @@ import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Invoice;
 
-import rx.functions.Action1;
-
 /**
  * Created by Administrator on 17-1-11.
  */
@@ -17,14 +15,21 @@ public class InvoicingDetailPresenter extends InvoicingDetailContract.Presenter{
     public void GetInvoicingDetail(String invId) {
         mRxManager.add(mModel.GetInvoicingDetail(invId)
                                 .compose(RxSchedulers.<BaseResponse<Invoice>>io_main())
-                                .subscribe(new Action1<BaseResponse<Invoice>>() {
+                                .subscribe(new RxSubscriber<BaseResponse<Invoice>>(mContext,false) {
                                     @Override
-                                    public void call(BaseResponse<Invoice> invoiceBaseResponse) {
-                                        mView.SetInvoicingDetail(invoiceBaseResponse.getData());
+                                    public void onStart() {
+                                        super.onStart();
+                                        mView.startProgressDialog("正在加载...");
                                     }
-                                }, new Action1<Throwable>() {
+
                                     @Override
-                                    public void call(Throwable throwable) {
+                                    protected void _onNext(BaseResponse<Invoice> invoiceBaseResponse) {
+                                        mView.SetInvoicingDetail(invoiceBaseResponse.getData());
+                                        mView.stopProgressDialog();
+                                    }
+
+                                    @Override
+                                    protected void _onError(String message) {
 
                                     }
                                 }));
