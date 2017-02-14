@@ -546,6 +546,26 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     @OnClick(R.id.saveBatch)
     public void setSaveBatch(View view) {
         String addProductBatch = addProduceBatch.getFieldText();
+        if (IsOld && QpadJudgeUtils.isEmpty(mProductName)) {
+            final NormalDialog IsEmpty_Product_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_Product_Dialog, "产品不能空！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsEmpty_Product_Dialog.dismiss();
+                }
+            });
+            return;
+        }
+        if (IsOld && QpadJudgeUtils.isEmpty(addProductBatch)) {
+            final NormalDialog IsEmpty_addProductBatch_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_addProductBatch_Dialog, "产品批次不能空！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsEmpty_addProductBatch_Dialog.dismiss();
+                }
+            });
+            return;
+        }
         if (QpadJudgeUtils.isEmpty(addProductBatch)) {
             final NormalDialog IsEmpty_ProductBatch_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_ProductBatch_Dialog, "请选择批次！", new OnBtnClickL() {

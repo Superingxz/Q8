@@ -14,9 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        >
-
+        android:orientation="vertical">
         <com.mview.medittext.view.QpadEditText
             android:id="@+id/InvId"
             android:layout_width="fill_parent"
@@ -104,4 +102,5 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:text="确定完成" />
+
 </LinearLayout>

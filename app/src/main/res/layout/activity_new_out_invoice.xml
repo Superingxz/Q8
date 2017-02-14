@@ -156,8 +156,9 @@
 
                         <Button
                             android:id="@+id/add"
+                            style="@style/ButtonStyle"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:text="添加" />
 
                         <EditText
@@ -167,7 +168,7 @@
                             android:layout_height="wrap_content"
                             android:hint="手动添加条码"
                             android:inputType="number"
-                            android:textSize="13dp" />
+                            android:textSize="15dp" />
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
@@ -230,12 +231,14 @@
 
                 <Button
                     android:id="@+id/upload"
+                    style="@style/ButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="上传" />
 
                 <Button
                     android:id="@+id/commit"
+                    style="@style/ButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="完成" />

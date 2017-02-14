@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -47,8 +49,8 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePresenter,NewFastOutInvoiceModel>
-        implements NewFastOutInvoiceContract.View{
+public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePresenter, NewFastOutInvoiceModel>
+        implements NewFastOutInvoiceContract.View {
     @Bind(R.id.title_view)
     TitileView titleView;
     @Bind(R.id.InvNumber)
@@ -87,6 +89,12 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
     Button upload;
     @Bind(R.id.commit)
     Button commit;
+    @Bind(R.id.add)
+    Button add;
+    @Bind(R.id.et_editywm)
+    EditText etEditywm;
+    @Bind(R.id.llAdd)
+    LinearLayout llAdd;
 
     private String LoginName;
     private String SysKey;
@@ -169,7 +177,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
 
 
         Intent intent = getIntent();
-        isOld = intent.getBooleanExtra("isOld",false);
+        isOld = intent.getBooleanExtra("isOld", false);
         oldInvNumber = intent.getStringExtra("InvNumber");
         oldInvDate = intent.getStringExtra("InvDate");
         oldReceivingComKey = intent.getStringExtra("ReceivingComKey");
@@ -177,7 +185,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
         oldReceivingWarehouseId = intent.getStringExtra("ReceivingWarehouseId");
 
         if (isOld) {
-            invId = intent.getIntExtra("invId",0);
+            invId = intent.getIntExtra("invId", 0);
         }
 
         mPresenter.GetAllCompList(ComKey, "2");
@@ -221,7 +229,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                 mReceivingWarehouseId = data.getValue();
                 mReceivingWarehouseName = data.getText();
                 if (mWarehouseList.size() == 0) {
-                    mPresenter.GetWareHouseList(ComKey,IsUse);
+                    mPresenter.GetWareHouseList(ComKey, IsUse);
                 }
             }
         });
@@ -268,7 +276,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
             } else if (rbDelete.isChecked() && smm.contains(ewm_num)) {
                 smm.remove(ewm_num);
                 smmAdapter.notifyDataSetChanged();
-                information.setText(ewm_num+"删除成功！");
+                information.setText(ewm_num + "删除成功！");
             }
             if (SuccessCount > 0) {
                 count.setVisibility(View.VISIBLE);
@@ -276,7 +284,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
             } else {
                 count.setVisibility(View.GONE);
             }
-           // ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
+            // ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
         }
     }
 
@@ -398,7 +406,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
             back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(barCodeLogDialog!=null && barCodeLogDialog.isShowing()){
+                    if (barCodeLogDialog != null && barCodeLogDialog.isShowing()) {
                         barCodeLogDialog.dismiss();
                     }
                 }
@@ -409,7 +417,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
     @Override
     public void SetInvid(int invId) {
         mInvId = invId;
-        ToastUitl.showLong("成功扫码："+invId+"");
+        ToastUitl.showLong("成功扫码：" + invId + "");
     }
 
     /**
@@ -428,7 +436,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                     IsEmpty_ProductName_Dialog.dismiss();
                 }
             });
-        }else if (QpadJudgeUtils.isEmpty(addProductBatch)) {
+        } else if (QpadJudgeUtils.isEmpty(addProductBatch)) {
             final NormalDialog IsEmpty_ProductBatch_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_ProductBatch_Dialog, "请填写批次！", new OnBtnClickL() {
                 @Override
@@ -436,7 +444,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                     IsEmpty_ProductBatch_Dialog.dismiss();
                 }
             });
-        } else  {
+        } else {
             mPresenter.InsertProductBatch(addProductBatch, mProductId, SysKey, InvDate, LoginName);
             if (!QpadJudgeUtils.isEmpty(mProductId)) {
                 mPresenter.GetProductBatchByProductId(mProductId);
@@ -455,7 +463,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
     }
 
     @OnClick(R.id.upload)
-    public void upload(View view){
+    public void upload(View view) {
         if (!isOld) {
             if (QpadJudgeUtils.isEmpty(mCompanyName)) {
                 final NormalDialog IsEmpty_CompanyName_Dialog = new NormalDialog(mContext);
@@ -473,7 +481,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                         IsEmpty_WarehouseName_Dialog.dismiss();
                     }
                 });
-            }else if (QpadJudgeUtils.isEmpty(mProductName)) {
+            } else if (QpadJudgeUtils.isEmpty(mProductName)) {
                 final NormalDialog IsEmpty_ProductName_Dialog = new NormalDialog(mContext);
                 QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_ProductName_Dialog, "请选择产品！", new OnBtnClickL() {
                     @Override
@@ -481,7 +489,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                         IsEmpty_ProductName_Dialog.dismiss();
                     }
                 });
-            }else if (smm == null || smm.size() == 0) {
+            } else if (smm == null || smm.size() == 0) {
                 final NormalDialog IsNotScan_Dialog = new NormalDialog(mContext);
                 QPadPromptDialogUtils.showOnePromptDialog(IsNotScan_Dialog, "条码列表为空，请先扫码！", new OnBtnClickL() {
                     @Override
@@ -518,6 +526,36 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                 );
             }
         } else {
+            if (isOld && QpadJudgeUtils.isEmpty(mCompanyName)) {
+                final NormalDialog IsEmpty_CompanyName_Dialog = new NormalDialog(mContext);
+                QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_CompanyName_Dialog, "机构不能空！", new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        IsEmpty_CompanyName_Dialog.dismiss();
+                    }
+                });
+                return;
+            }
+            if (isOld && QpadJudgeUtils.isEmpty(mReceivingWarehouseId)) {
+                final NormalDialog IsEmpty_Warehouse_Dialog = new NormalDialog(mContext);
+                QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_Warehouse_Dialog, "仓库不能为空！", new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        IsEmpty_Warehouse_Dialog.dismiss();
+                    }
+                });
+                return;
+            }
+            if (isOld && QpadJudgeUtils.isEmpty(mReceivingWarehouseId)) {
+                final NormalDialog IsEmpty_Product_Dialog = new NormalDialog(mContext);
+                QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_Product_Dialog, "产品不能为空！", new OnBtnClickL() {
+                    @Override
+                    public void onBtnClick() {
+                        IsEmpty_Product_Dialog.dismiss();
+                    }
+                });
+                return;
+            }
             if (QpadJudgeUtils.isEmpty(mProductName)) {
                 final NormalDialog IsEmpty_ProductName_Dialog = new NormalDialog(mContext);
                 QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_ProductName_Dialog, "请选择产品！", new OnBtnClickL() {
@@ -526,7 +564,7 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                         IsEmpty_ProductName_Dialog.dismiss();
                     }
                 });
-            }else if (smm == null || smm.size() == 0) {
+            } else if (smm == null || smm.size() == 0) {
                 final NormalDialog IsNotScan_Dialog = new NormalDialog(mContext);
                 QPadPromptDialogUtils.showOnePromptDialog(IsNotScan_Dialog, "条码列表为空，请先扫码！", new OnBtnClickL() {
                     @Override
@@ -565,6 +603,33 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
         }
     }
 
+    /**
+     * 手动添加条码
+     *
+     * @param view
+     */
+    @OnClick(R.id.add)
+    public void add(View view) {
+        String et_ywm = etEditywm.getText().toString().trim();
+        if (QpadJudgeUtils.isEmpty(et_ywm)) {
+            ToastUitl.showShort("请输入条码！");
+        }else if (!smm.contains(et_ywm)) {
+            smm.add(et_ywm);
+            smmAdapter.notifyDataSetChanged();
+            count.setText("已扫描" + smm.size() + "条");
+            information.setText(etEditywm.getText().toString().trim() + "添加成功！");
+        } else {
+            etEditywm.setText("");
+            ToastUitl.showShort("已经添加此条码,请重新输入！");
+        }
+        if (SuccessCount > 0) {
+            count.setVisibility(View.VISIBLE);
+            count.setText("已扫描" + SuccessCount + "条");
+        } else {
+            count.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     public void insertInv(InvoicingBean invoicingBean) {
@@ -589,15 +654,16 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
                     IsUpload_Dialog.dismiss();
                 }
             });
-        }else {
-                Intent intent = new Intent(this, InvoicingDetailActivity.class);
-                intent.putExtra("invId", mInvId);
-                startActivity(intent);
-            }
+        } else {
+            Intent intent = new Intent(this, InvoicingDetailActivity.class);
+            intent.putExtra("invId", mInvId);
+            startActivity(intent);
+        }
     }
 
     /**
      * 查询机构
+     *
      * @param view
      */
     @OnClick(R.id.btnQueryCompany)
@@ -623,15 +689,17 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
 
     @Override
     public void startProgressDialog(String msg) {
-        QpadProgressUtils.showProgress(this,msg);
+        QpadProgressUtils.showProgress(this, msg);
     }
 
     @Override
     public void stopProgressDialog() {
         QpadProgressUtils.closeProgress();
     }
+
     /**
      * 计算扫码成功数目
+     *
      * @param barCodeLogList
      * @return
      */
@@ -668,4 +736,5 @@ public class NewFastOutInvoiceActivity extends  BaseActivity<NewFastOutInvoicePr
         }
         return invNumber;
     }
+
 }

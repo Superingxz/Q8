@@ -94,6 +94,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
 
     //选择后的获取数据
     private String mComKey;
+    private String mReceivingComKey;
     private String mRecorderBase;
     private String mSysKeyBase;
 
@@ -311,6 +312,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         String mReceivingComName = invoicingBean.getReceivingComName();
 
         mComKey = invoicingBean.getComKey();
+        mReceivingComKey = invoicingBean.getReceivingComKey();
         mRecorderBase = String.valueOf(invoicingBean.getRecorderBase());
         mSysKeyBase = String.valueOf(invoicingBean.getSysKeyBase());
 
@@ -383,7 +385,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
      */
     @OnClick(R.id.information)
     public void information(View view){
-        mPresenter.GetFirstUserByComKey(mComKey,mSysKeyBase);
+        mPresenter.GetFirstUserByComKey(mReceivingComKey,mSysKeyBase);
     }
 
     @Override

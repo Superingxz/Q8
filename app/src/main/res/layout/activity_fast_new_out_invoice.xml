@@ -159,10 +159,41 @@
                     android:layout_height="wrap_content"
                     android:text="已扫描条码列表" />
 
-                <ListView
-                    android:id="@+id/lv"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <ListView
+                        android:id="@+id/lv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@+id/llAdd"
+                        />
+
+                    <LinearLayout
+                        android:id="@+id/llAdd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/add"
+                            style="@style/ButtonStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="添加" />
+
+                        <EditText
+                            android:id="@+id/et_editywm"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:hint="手动添加条码"
+                            android:inputType="number"
+                            android:textSize="15dp" />
+                    </LinearLayout>
+                </RelativeLayout>
 
             </LinearLayout>
 

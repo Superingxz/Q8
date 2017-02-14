@@ -323,6 +323,26 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     public void setSaveNnit(View view) {
         options = new HashMap<>();
         String CheckDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        if (isOld && QpadJudgeUtils.isEmpty(mCompanyName)) {
+            final NormalDialog IsEmpty_CompanyName_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_CompanyName_Dialog, "机构不能空！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsEmpty_CompanyName_Dialog.dismiss();
+                }
+            });
+            return;
+        }
+        if (isOld && QpadJudgeUtils.isEmpty(mReceivingWarehouseId)) {
+            final NormalDialog IsEmpty_Warehouse_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_Warehouse_Dialog, "仓库不能为空！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsEmpty_Warehouse_Dialog.dismiss();
+                }
+            });
+            return;
+        }
         if (QpadJudgeUtils.isEmpty(mCompanyName)) {
             final NormalDialog IsEmpty_CompanyName_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_CompanyName_Dialog, "请选择机构！", new OnBtnClickL() {

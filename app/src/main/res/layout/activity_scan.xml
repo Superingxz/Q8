@@ -20,33 +20,33 @@
             android:orientation="vertical"
             >
 
-            <LinearLayout
+            <TextView
+                style="@style/TextViewStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center_vertical"
+                android:text="已扫码列表"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 >
-
-                <TextView
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:gravity="center_vertical"
-                    android:text="已扫码列表"/>
-
                 <ListView
                     android:id="@+id/lv"
                     android:layout_width="match_parent"
-                    android:background="@color/alpha_05_black"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/llAdd"
                     >
                 </ListView>
 
                 <LinearLayout
+                    android:id="@+id/llAdd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_alignParentBottom="true"
+                    android:orientation="horizontal"
                     >
                     <Button
                         android:id="@+id/add"
@@ -62,10 +62,9 @@
                         android:layout_height="wrap_content"
                         android:hint="手动添加条码"
                         android:textSize="13dp"
-                        android:inputType="number"
                         android:id="@+id/btn_editywm" />
                 </LinearLayout>
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
@@ -73,6 +72,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
+            android:background="@color/alpha_05_black"
             android:orientation="vertical"
             >
 
@@ -117,7 +117,8 @@
 
             <TextView
                 android:id="@+id/scan_count"
-                android:layout_width="wrap_content"
+                android:background="@color/alpha_05_black"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
                 />

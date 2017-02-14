@@ -30,6 +30,7 @@ import butterknife.OnClick;
 public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresenter, InvoicingDetailModel>
         implements InvoicingDetailContract.View {
 
+
     @Bind(R.id.title_view)
     TitileView titleView;
     @Bind(R.id.InvId)
@@ -48,6 +49,7 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
     ListView lv;
     @Bind(R.id.commit)
     Button commit;
+
     private String mInvId;
     private String mUserId;
     private String mUserName;
@@ -81,6 +83,8 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
 
         mNewInInvoiceAdpter = new NewInInvoiceAdpter(mNewInInvoiceList, this);
         lv.setAdapter(mNewInInvoiceAdpter);
+
+
     }
 
     @Override
@@ -155,9 +159,11 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
         });
     }
 
+
+
     @Override
     public void startProgressDialog(String msg) {
-        QpadProgressUtils.showProgress(this,msg);
+        QpadProgressUtils.showProgress(this, msg);
     }
 
     @Override
@@ -179,4 +185,6 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
         }
         return false;
     }
+
+
 }
