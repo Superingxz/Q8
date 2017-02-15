@@ -46,6 +46,7 @@ import butterknife.OnClick;
 public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, OldOutInvoiceModel>
         implements OldOutInvoiceContract.View {
     private static final int SCAN = 100;
+    private static final int REQUEST_OK = 101;
     @Bind(R.id.title_view)
     TitileView titleView;
     @Bind(R.id.queryOrder)
@@ -97,6 +98,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     private String mReceivingComKey;
     private String mRecorderBase;
     private String mSysKeyBase;
+    private boolean IsCommitSuccess = false;//是否确认完成成功
 
 
     @Override
@@ -136,11 +138,39 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                 startActivity(intent);
             }
         });
+        //没有数据重新获取
+        invoiceInvlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (commonSelectDataInvoicingBeanList.size() == 0) {
+                    mPresenter.GetInvoiceInvlist(ComKey, "2", "-2", "2");
+                }
+            }
+        });
     }
 
     @Override
     public void initListener() {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == InvoicingDetailActivity.RESULT_OK) {
+            IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
+        }
+       if (IsCommitSuccess) {
+            wareHouse.setText("");
+            invDate.setText("");
+            checkDate.setText("");
+            consignee.setText("");
+            checkUserName.setText("");
+            invoiceInvlist.setFieldTextAndValue("");
+            mInvoicingDetailList.removeAll(mInvoicingDetailList);
+            newOutInvoiceAdpter.notifyDataSetChanged();
+            IsSelect = false;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -156,7 +186,6 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                 CommonSelectData commonSelectData = new CommonSelectData(invoicingBean.getInvNumber(), invoicingBean.getInvId() + "");
                 commonSelectDataInvoicingBeanList.add(commonSelectData);
             }
-            commonSelectDataInvoicingBeanList.add(new CommonSelectData("请选择", "-1"));
             invoiceInvlist.setLists(commonSelectDataInvoicingBeanList);
         }
         invoiceInvlist.setOnChangeListener(new QpadEditText.OnChangeListener() {
@@ -375,7 +404,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         }
         Intent intent = new Intent(OldOutInvoiceActivity.this, InvoicingDetailActivity.class);
         intent.putExtra("invId", mInvId + "");
-        startActivity(intent);
+        startActivityForResult(intent,REQUEST_OK);
         finish();
     }
 

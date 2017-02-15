@@ -144,6 +144,15 @@ public interface NewFastOutInvoiceContract {
          * @return
          */
         Observable<BaseResponse<InvoicingBean>> insertInv(Map<String, String> options);
+
+        /**
+         * 保存入库/出库主表2
+         *
+         * @param SysKey
+         * @param InvNumber
+         * @return
+         */
+        Observable<BaseResponse<InvoicingBean>> insertInv(String SysKey,String InvNumber);
     }
 
     interface View extends BaseView {
@@ -266,7 +275,7 @@ public interface NewFastOutInvoiceContract {
           * @param options
           */
          public abstract void insertInv(Map<String, String> options);
-
+         public abstract void insertInv(String SysKey,String InvNumber);
 
         @Override
         public void onStart() {

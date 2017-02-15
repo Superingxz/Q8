@@ -217,9 +217,6 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             public void onChanged(CommonSelectData data) {
                 mCompanyName = data.getText();
                 mCompanyId = data.getValue();
-                if (mCompanyList.size() == 0) {
-                    mPresenter.GetAllCompList(ComKey, "2");
-                }
             }
         });
 
@@ -228,9 +225,6 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             public void onChanged(CommonSelectData data) {
                 mReceivingWarehouseId = data.getValue();
                 mReceivingWarehouseName = data.getText();
-                if (mWarehouseList.size() == 0) {
-                    mPresenter.GetWareHouseList(ComKey, IsUse);
-                }
             }
         });
 
@@ -241,8 +235,6 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                 mProductName = data.getText();
                 if (!QpadJudgeUtils.isEmpty(mProductId)) {
                     mPresenter.GetProductBatchByProductId(mProductId);
-                } else if (mProductList.size() == 0) {
-                    mPresenter.GetProductList(SysKey, IsUse);
                 }
             }
         });
@@ -252,6 +244,37 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             public void onChanged(CommonSelectData data) {
                 mBatch = data.getValue();
                 mBatchNo = data.getText();
+            }
+        });
+
+        //没有数据时候重新加载
+        company.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCompanyList.size() == 0) {
+                    mPresenter.GetAllCompList(ComKey, "2");
+                }
+            }
+        });
+        wareHouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mWarehouseList.size() == 0) {
+                    mPresenter.GetWareHouseList(ComKey, IsUse);
+                }
+            }
+        });
+        produceName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mProductList.size() == 0) {
+                    mPresenter.GetProductList(SysKey, IsUse);
+                }
+            }
+        });
+        produceBatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (mProductBatchList.size() == 0 && !QpadJudgeUtils.isEmpty(mProductId)) {
                     mPresenter.GetProductBatchByProductId(mProductId);
                 }
@@ -411,6 +434,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                     }
                 }
             });
+            mPresenter.insertInv(SysKey,mInvNumber);
         }
     }
 

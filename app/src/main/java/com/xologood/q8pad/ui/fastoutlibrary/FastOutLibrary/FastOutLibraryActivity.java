@@ -38,6 +38,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
         implements FastOutContract.View {
 
 
+    private static final int REQUEST_OK = 100;
     @Bind(R.id.title_view)
     TitileView titleView;
     @Bind(R.id.qetQueryInv)
@@ -80,6 +81,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
     private int mInvId;
     private InvoicingBean invoicingBean;
     private boolean IsSelect = false;
+    private boolean IsCommitSuccess = false;//是否确认完成成功
 
     @Override
     public int getLayoutId() {
@@ -104,7 +106,32 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     @Override
     public void initListener() {
+        mPresenter.InvoicingQuickInvList(SysKey, ComKey);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == InvoicingDetailActivity.RESULT_OK) {
+            IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
+        }
+        if (IsCommitSuccess) {
+            warehouse.setText("");
+            invTime.setText("");
+            checkDate.setText("");
+            consignee.setText("");
+            checkUserName.setText("");
+            invoiceInvlist.setFieldTextAndValue("");
+            mInvoicingDetailList.removeAll(mInvoicingDetailList);
+            newOutInvoiceAdpter.notifyDataSetChanged();
+            IsSelect = false;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.InvoicingQuickInvList(SysKey, ComKey);
     }
 
     @Override
@@ -117,7 +144,6 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
                 CommonSelectData commonSelectData = new CommonSelectData(invoicingBean.getInvNumber(), invoicingBean.getInvId() + "");
                 commonSelectDataInvoicingBeanList.add(commonSelectData);
             }
-            commonSelectDataInvoicingBeanList.add(new CommonSelectData("请选择", "-1"));
             invoiceInvlist.setLists(commonSelectDataInvoicingBeanList);
         }
         invoiceInvlist.setOnChangeListener(new QpadEditText.OnChangeListener() {
@@ -156,7 +182,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     @OnClick(R.id.addProduce)
     public void addProduce(View view) {
-        if (invoicingBean != null) {
+        if (invoicingBean != null && IsSelect) {
             Intent intent = new Intent(this, NewFastOutInvoiceActivity.class);
             intent.putExtra("isOld", true);
             intent.putExtra("InvNumber", invoicingBean.getInvNumber());
@@ -218,7 +244,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
         }
         Intent intent = new Intent(this, InvoicingDetailActivity.class);
         intent.putExtra("invId", mInvId + "");
-        startActivity(intent);
+        startActivityForResult(intent,REQUEST_OK);
     }
 
     @OnClick(R.id.btQueryInv)

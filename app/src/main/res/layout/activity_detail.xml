@@ -1,106 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aaron="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:aaron="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.xologood.q8pad.view.TitileView
         android:id="@+id/title_view"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"/>
+        android:layout_height="?android:attr/actionBarSize" />
 
-    <LinearLayout
-        android:layout_height="0dp"
-        android:layout_weight="1"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_ly"
         android:layout_width="match_parent"
-        android:orientation="vertical">
-        <com.mview.medittext.view.QpadEditText
-            android:id="@+id/InvId"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/common_layout_middle"
-            android:background="@drawable/btn_layout_off_bg"
-            android:paddingLeft="@dimen/common_padding5"
-            android:paddingRight="@dimen/common_padding5"
-            aaron:fieldEnabled="true"
-            aaron:fieldTitle="单号："
-            aaron:fieldType="String" />
-
-        <com.mview.medittext.view.QpadEditText
-            android:id="@+id/ComName"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/common_layout_middle"
-            android:background="@drawable/btn_layout_off_bg"
-            android:paddingLeft="@dimen/common_padding5"
-            android:paddingRight="@dimen/common_padding5"
-            aaron:fieldEnabled="true"
-            aaron:fieldTitle="开单机构："
-            aaron:fieldType="String" />
-
-        <com.mview.medittext.view.QpadEditText
-            android:id="@+id/receivingComName"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/common_layout_middle"
-            android:background="@drawable/btn_layout_off_bg"
-            android:paddingLeft="@dimen/common_padding5"
-            android:paddingRight="@dimen/common_padding5"
-            aaron:fieldEnabled="true"
-            aaron:fieldTitle="签收机构："
-            aaron:fieldType="String" />
-
-        <com.mview.medittext.view.QpadEditText
-            android:id="@+id/stateName"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/common_layout_middle"
-            android:background="@drawable/btn_layout_off_bg"
-            android:paddingLeft="@dimen/common_padding5"
-            android:paddingRight="@dimen/common_padding5"
-            aaron:fieldEnabled="true"
-            aaron:fieldTitle="单据状态："
-            aaron:fieldType="String" />
-
-        <com.mview.medittext.view.QpadEditText
-            android:id="@+id/InvByName"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/common_layout_middle"
-            android:background="@drawable/btn_layout_off_bg"
-            android:paddingLeft="@dimen/common_padding5"
-            android:paddingRight="@dimen/common_padding5"
-            aaron:fieldEnabled="true"
-            aaron:fieldTitle="开单据人："
-            aaron:fieldType="String" />
-        <com.mview.medittext.view.QpadEditText
-            android:id="@+id/invTime"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/common_layout_middle"
-            android:background="@drawable/btn_layout_off_bg"
-            android:paddingLeft="@dimen/common_padding5"
-            android:paddingRight="@dimen/common_padding5"
-            aaron:fieldEnabled="true"
-            aaron:fieldTitle="开单时间："
-            aaron:fieldType="String" />
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-            <ListView
-                android:id="@+id/lv"
+            android:orientation="vertical">
+
+            <com.mview.medittext.view.QpadEditText
+                android:id="@+id/InvId"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/common_layout_middle"
+                android:background="@drawable/btn_layout_off_bg"
+                android:paddingLeft="@dimen/common_padding5"
+                android:paddingRight="@dimen/common_padding5"
+                aaron:fieldEnabled="true"
+                aaron:fieldTitle="单号："
+                aaron:fieldType="String" />
+
+            <com.mview.medittext.view.QpadEditText
+                android:id="@+id/ComName"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/common_layout_middle"
+                android:background="@drawable/btn_layout_off_bg"
+                android:paddingLeft="@dimen/common_padding5"
+                android:paddingRight="@dimen/common_padding5"
+                aaron:fieldEnabled="true"
+                aaron:fieldTitle="开单机构："
+                aaron:fieldType="String" />
+
+            <com.mview.medittext.view.QpadEditText
+                android:id="@+id/receivingComName"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/common_layout_middle"
+                android:background="@drawable/btn_layout_off_bg"
+                android:paddingLeft="@dimen/common_padding5"
+                android:paddingRight="@dimen/common_padding5"
+                aaron:fieldEnabled="true"
+                aaron:fieldTitle="签收机构："
+                aaron:fieldType="String" />
+
+            <com.mview.medittext.view.QpadEditText
+                android:id="@+id/stateName"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/common_layout_middle"
+                android:background="@drawable/btn_layout_off_bg"
+                android:paddingLeft="@dimen/common_padding5"
+                android:paddingRight="@dimen/common_padding5"
+                aaron:fieldEnabled="true"
+                aaron:fieldTitle="单据状态："
+                aaron:fieldType="String" />
+
+            <com.mview.medittext.view.QpadEditText
+                android:id="@+id/InvByName"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/common_layout_middle"
+                android:background="@drawable/btn_layout_off_bg"
+                android:paddingLeft="@dimen/common_padding5"
+                android:paddingRight="@dimen/common_padding5"
+                aaron:fieldEnabled="true"
+                aaron:fieldTitle="开单据人："
+                aaron:fieldType="String" />
+
+            <com.mview.medittext.view.QpadEditText
+                android:id="@+id/invTime"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/common_layout_middle"
+                android:background="@drawable/btn_layout_off_bg"
+                android:paddingLeft="@dimen/common_padding5"
+                android:paddingRight="@dimen/common_padding5"
+                aaron:fieldEnabled="true"
+                aaron:fieldTitle="开单时间："
+                aaron:fieldType="String" />
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:dividerHeight="3dp">
-            </ListView>
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/lv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/commit"
+                    android:dividerHeight="3dp">
+                </ListView>
+
+                <Button
+                    android:id="@+id/commit"
+                    style="@style/ButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:text="确定完成"/>
+            </RelativeLayout>
         </LinearLayout>
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/commit"
-        style="@style/ButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:text="确定完成" />
-
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

@@ -220,6 +220,21 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             public void onChanged(CommonSelectData data) {
                 mReceivingWarehouseId = data.getValue();
                 mReceivingWarehouseName = data.getText();
+            }
+        });
+
+        //没有数据会重新加载
+        company.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mCompanyList.size() == 0) {
+                    mPresenter.GetAllCompList(ComKey,"2");
+                }
+            }
+        });
+        wareHouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (mWarehouseList.size() == 0) {
                     mPresenter.GetWareHouseList(ComKey,IsUse);
                 }

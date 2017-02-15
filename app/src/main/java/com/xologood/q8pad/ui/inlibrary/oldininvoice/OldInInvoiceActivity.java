@@ -43,6 +43,7 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
     private static final String TAG = "Superingxz";
     private static final int REQUEST_SCAN = 100;
     private static final int SCAN = 100;
+    private static final int REQUEST_OK = 101;
     @Bind(R.id.title_view)
     TitileView titleView;
     @Bind(R.id.queryOrder)
@@ -92,6 +93,8 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
     private boolean IsSelect = false;//是否选择已有
     private List<InvoicingDetail> invoicingDetailList;
 
+
+    private boolean IsCommitSuccess  = false;//是否确认成功
     @Override
     public int getLayoutId() {
         return R.layout.activity_old_in_invoice;
@@ -137,6 +140,15 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
                 lv.setTag(invoicingDetail);
             }
         });
+        //没有数据重新获取
+        invoiceInvlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (commonSelectDataInvoicingBeanList.size() == 0) {
+                    mPresenter.GetInvoiceInvlist(ComKey, "2", "-2", "1");
+                }
+            }
+        });
     }
 
     @Override
@@ -147,9 +159,21 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         InvoicingDetail ClickInvoicingDetail = (InvoicingDetail) lv.getTag();
-        if (resultCode == ScanActivity.RESULT_OK) {
+        if (resultCode == InvoicingDetailActivity.RESULT_OK) {
             int mActualQty = data.getIntExtra("mActualQty", 0);
+            IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
             newInInvoiceAdpter.updateActualQty(mActualQty, ClickInvoicingDetail.getProductName(), ClickInvoicingDetail.getBatchNO());
+        }
+        if (IsCommitSuccess) {
+            wareHouse.setText("");
+            invDate.setText("");
+            checkDate.setText("");
+            checkUserName.setText("");
+            consignee.setText("");
+            invoiceInvlist.setFieldTextAndValue("");
+            mInvoicingDetailList.removeAll(mInvoicingDetailList);
+            newInInvoiceAdpter.notifyDataSetChanged();
+            IsSelect = false;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -299,7 +323,7 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
         }
         Intent intent = new Intent(OldInInvoiceActivity.this, InvoicingDetailActivity.class);
         intent.putExtra("invId", mInvId);
-        startActivity(intent);
+        startActivityForResult(intent,REQUEST_OK);
         finish();
 
     }

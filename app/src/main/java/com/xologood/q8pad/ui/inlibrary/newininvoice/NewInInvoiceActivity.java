@@ -233,9 +233,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             public void onChanged(CommonSelectData data) {
                 mReceivingWarehouseId = data.getValue();
                 mReceivingWarehouseName = data.getText();
-                if (mWarehouseList.size() == 0) {
-                    mPresenter.GetWareHouseList(ComKey, IsUse);
-                }
             }
         });
 
@@ -247,8 +244,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 if (!QpadJudgeUtils.isEmpty(mProductId)) {
                     mPresenter.GetProductBatchByProductId(mProductId);
                     mPresenter.GetStandardUnitByProductId(mProductId, SysKey);
-                } else if (mProductList.size() == 0) {
-                    mPresenter.GetProductList(SysKey, IsUse);
                 }
             }
         });
@@ -261,8 +256,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 ProductBatch productBatch = (ProductBatch) data.getObj();
                 if (productBatch != null) {
                     mCreationDate = productBatch.getCreationDate();
-                } else if (mProductBatchList.size() == 0 && !QpadJudgeUtils.isEmpty(mProductId)) {
-                    mPresenter.GetProductBatchByProductId(mProductId);
                 }
             }
         });
@@ -273,11 +266,43 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 Log.i("superingxz", "onChanged: 选择单位id:" + data.getValue() + "选择单位名称:" + data.getText());
                 mBunit = data.getValue();
                 mStandardUnit = data.getText();
+            }
+        });
+
+        //没有数据会重新加载
+        wareHouse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mWarehouseList.size() == 0) {
+                    mPresenter.GetWareHouseList(ComKey, IsUse);
+                }
+            }
+        });
+        produceName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mProductList.size() == 0) {
+                    mPresenter.GetProductList(SysKey, IsUse);
+                }
+            }
+        });
+        produceBatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mProductBatchList.size() == 0 && !QpadJudgeUtils.isEmpty(mProductId)) {
+                    mPresenter.GetProductBatchByProductId(mProductId);
+                }
+            }
+        });
+        standardUnit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (mStandardUnitList.size() == 0 && !QpadJudgeUtils.isEmpty(mProductId)) {
                     mPresenter.GetStandardUnitByProductId(mProductId, SysKey);
                 }
             }
         });
+
     }
 
     /**

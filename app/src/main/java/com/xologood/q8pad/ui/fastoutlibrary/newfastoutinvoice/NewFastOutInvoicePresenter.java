@@ -235,4 +235,22 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
                     }
                 }));
     }
+
+    @Override
+    public void insertInv(String SysKey, String InvNumber) {
+        mRxManager.add(mModel.insertInv(SysKey,InvNumber)
+                .compose(RxSchedulers.<BaseResponse<InvoicingBean>>io_main())
+                .subscribe(new Action1<BaseResponse<InvoicingBean>>() {
+                    @Override
+                    public void call(BaseResponse<InvoicingBean> invoicingBeanBaseResponse) {
+                        mView.SetInvid(invoicingBeanBaseResponse.getData().getInvId());
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+
+                    }
+                }));
+    }
 }

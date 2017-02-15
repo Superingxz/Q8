@@ -115,4 +115,15 @@ public class NewFastOutInvoiceModel implements NewFastOutInvoiceContract.Model{
     public Observable<BaseResponse<InvoicingBean>> insertInv(Map<String, String> options) {
         return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).insertInv( options);
     }
+
+    /**
+     * 保存入库主表2
+     * @param SysKey
+     * @param InvNumber
+     * @return
+     */
+    @Override
+    public Observable<BaseResponse<InvoicingBean>> insertInv(String SysKey, String InvNumber) {
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).insertInv2(SysKey,InvNumber);
+    }
 }

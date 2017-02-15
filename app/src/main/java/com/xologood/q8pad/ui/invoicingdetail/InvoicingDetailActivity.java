@@ -1,6 +1,7 @@
 package com.xologood.q8pad.ui.invoicingdetail;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -28,7 +29,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresenter, InvoicingDetailModel>
-        implements InvoicingDetailContract.View {
+        implements InvoicingDetailContract.View ,SwipeRefreshLayout.OnRefreshListener {
 
 
     @Bind(R.id.title_view)
@@ -49,6 +50,8 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
     ListView lv;
     @Bind(R.id.commit)
     Button commit;
+    @Bind(R.id.swipe_ly)
+    SwipeRefreshLayout swipeLy;
 
     private String mInvId;
     private String mUserId;
@@ -124,6 +127,10 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
 
     @Override
     public void CompliteSavaSuccess(String msg) {
+        Intent intent = new Intent();
+        boolean IsCommit = true;
+        intent.putExtra("isCommitSuccess", IsCommit);
+        setResult(RESULT_OK,intent);
         final NormalDialog dialog_detail = new NormalDialog(mContext);
         QPadPromptDialogUtils.showOnePromptDialog(dialog_detail, msg, new OnBtnClickL() {
             @Override
@@ -154,12 +161,16 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
             public void onBtnClick() {
                 dialog_detail_invid.dismiss();
                 mPresenter.CompleteSave(mInvId, mUserId, mUserName);
-                finish();
             }
         });
     }
 
+    @Override
+    public void onRefresh() {
+        mPresenter.GetInvoicingDetail(mInvId);
 
+        swipeLy.setRefreshing(false);
+    }
 
     @Override
     public void startProgressDialog(String msg) {
