@@ -434,14 +434,14 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                     }
                 }
             });
-            mPresenter.insertInv(SysKey,mInvNumber);
+            mPresenter.insertInv(SysKey,InvNumber.getFieldText());
         }
     }
 
     @Override
     public void SetInvid(int invId) {
         mInvId = invId;
-        ToastUitl.showLong("成功扫码：" + invId + "");
+   //     ToastUitl.showLong("成功扫码：" + invId + "");
     }
 
     /**

@@ -120,10 +120,10 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
             checkDate.setText("");
             consignee.setText("");
             checkUserName.setText("");
-            invoiceInvlist.setFieldTextAndValue("");
+           invoiceInvlist.setFieldTextAndValue("");
+            IsSelect = false;
             mInvoicingDetailList.removeAll(mInvoicingDetailList);
             newOutInvoiceAdpter.notifyDataSetChanged();
-            IsSelect = false;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -160,7 +160,12 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     @Override
     public void SetInvoicingDetail(Invoice invoice) {
-        IsSelect = true;
+        if (IsCommitSuccess) {
+            IsSelect = false;
+        } else {
+            IsSelect = true;
+        }
+        IsCommitSuccess = false;
         mInvoice = invoice;
         invoicingBean = invoice.getInvoicing();
         List<InvoicingDetail> invoicingDetailList = invoice.getInvoicingDetail();
@@ -206,7 +211,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
             });
             return;
         }
-        if (mInvoicingDetailList.size() <= 0) {
+        if (mInvoicingDetailList.size() == 0) {
             final NormalDialog IsNoDetail_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showTwoPromptDialog(IsNoDetail_Dialog, "此单据没有明细，请先添加明细！", new OnBtnClickL() {
                 @Override
