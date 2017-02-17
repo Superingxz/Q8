@@ -37,7 +37,7 @@ public interface ScanContract {
         void SetBarCodeList(List<BarCodeLog> barCodeLogList);
         void UploadBarCodeError(String msg);
 
-        void GetNeedToScan(String needToScan);
+        void SetCheckBarCode(String needToScan);
     }
 
     abstract class Presenter extends BasePresenter<Model, View> {

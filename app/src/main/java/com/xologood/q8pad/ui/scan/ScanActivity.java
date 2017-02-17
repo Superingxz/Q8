@@ -198,23 +198,7 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
                     }
                 }
             });
-            //修改实际数量
-            mPresenter.getCheckBarCode(GetSuccessCode(smm,barCodeLogList));
-            //mPresenter.getCheckBarCode("11223344");
         }
-    }
-
-    private String GetSuccessCode(List<String> smm, List<BarCodeLog> barCodeLogList) {
-        StringBuffer sb = new StringBuffer();
-        if (barCodeLogList.size() > 0) {
-            for (int i = 0; i < barCodeLogList.size(); i++) {
-                BarCodeLog barCodeLog = barCodeLogList.get(i);
-                if (barCodeLog.isIsOk()) {
-                    sb.append(smm.get(i)+",");
-                }
-            }
-        }
-        return sb.toString().substring(0, sb.length() - 1);
     }
 
 
@@ -224,8 +208,15 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
     }
 
     @Override
-    public void GetNeedToScan(String NeedToScan) {
-        needToScan.setText(NeedToScan);
+    public void SetCheckBarCode(String NeedToScan) {
+        Integer scanNum = Integer.valueOf(NeedToScan);//成功扫码 然后调用接口得到的大码或者小码对应数量
+        Integer mNeedToScan = Integer.valueOf(needToScan.getText().toString().trim());
+        int scan = mNeedToScan - scanNum;
+        if (scan < 0) {
+            needToScan.setText("0");
+        } else {
+            needToScan.setText(scan+"");
+        }
     }
 
     @OnClick(R.id.add)
@@ -282,11 +273,15 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
         finish();
     }
 
+
+
+
     private int GetSuccessCount(List<BarCodeLog> barCodeLogList) {
         int count = 0;
         for (int i = 0; i < barCodeLogList.size(); i++) {
             BarCodeLog barCodeLog = barCodeLogList.get(i);
             if (barCodeLog.isIsOk()) {
+                mPresenter.getCheckBarCode(barCodeLog.getBarCode());
                 count++;
             }
         }

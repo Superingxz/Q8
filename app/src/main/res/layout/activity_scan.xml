@@ -58,11 +58,13 @@
                         />
 
                     <EditText
+                        android:id="@+id/btn_editywm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="number"
                         android:hint="手动添加条码"
                         android:textSize="13dp"
-                        android:id="@+id/btn_editywm" />
+                        />
                 </LinearLayout>
             </RelativeLayout>
 

@@ -45,7 +45,7 @@ public class ScanPresenter extends ScanContract.Presenter{
                     @Override
                     public void call(BaseResponse<String> stringBaseResponse) {
                         String data = stringBaseResponse.getData();
-                        mView.GetNeedToScan(data);
+                        mView.SetCheckBarCode(data);
                     }
                 }, new Action1<Throwable>() {
                     @Override
