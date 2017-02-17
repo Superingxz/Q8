@@ -266,8 +266,8 @@ public final class CaptureActivity extends Activity implements
 		ambientLightManager = new AmbientLightManager(this);
 		beepManager = new BeepManager(this);  
 		
-		chosenIVSrcAndTVColor(0);
-		CameraManager.scanframe = 1;
+		chosenIVSrcAndTVColor(1);
+		CameraManager.scanframe = 2;
 		
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
