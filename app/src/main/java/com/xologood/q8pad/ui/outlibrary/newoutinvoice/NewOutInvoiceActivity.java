@@ -310,7 +310,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         if (companyList != null && companyList.size() > 0) {
             for (int i = 0; i < companyList.size(); i++) {
                 Company mCompany = companyList.get(i);
-                mCommonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getComKey() + ""));
+                mCommonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getKeyValue() + ""));
             }
             company.setLists(mCommonSelectDataCompanyList);
             if (isOld) {

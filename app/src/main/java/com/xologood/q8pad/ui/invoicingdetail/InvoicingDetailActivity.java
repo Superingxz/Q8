@@ -101,15 +101,15 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
         invoicingDetailList = invoice.getInvoicingDetail();
 
         String invIsStop = (String) invoicingBean.getInvIsStop();
-
-        if (invIsStop == null) {
+        stateName.setFieldTextAndValue(invoice.getStateName());
+      /*  if (invIsStop == null) {
             stateName.setFieldTextAndValue("单据进行中");
         } else if (invIsStop == "1") {
             stateName.setFieldTextAndValue("已废除");
         } else if (invIsStop == "0") {
             stateName.setFieldTextAndValue("已完成");
         }
-
+*/
 
         InvId.setFieldTextAndValue(invoicingBean.getInvNumber());
         ComName.setFieldTextAndValue(invoicingBean.getComName());
