@@ -52,6 +52,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         implements NewInInvoiceContract.View {
     private static final String TAG = "Superingxz";
     private static final int SCAN = 100;
+    private static final int REQUEST_OK = 101;
     @Bind(R.id.title_view)
     TitileView titleView;
     @Bind(R.id.InvNumber)
@@ -130,6 +131,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     private boolean isSave = false;
     private boolean HasSava = false;
     private boolean isReturn = false;
+    private boolean IsCommitSuccess = false;
 
     @Override
     public int getLayoutId() {
@@ -204,7 +206,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 intent.putExtra("StandardUnitName", invoicingDetail.getStandardUnitName());
                 int needScan = invoicingDetail.getExpectedQty() - invoicingDetail.getActualQty();
                 intent.putExtra("NeedToScan", String.valueOf(needScan));
-                if (needScan > 0) {
+                if (needScan > 0 ) {
                     startActivityForResult(intent, SCAN);
                 }
                 lv.setTag(invoicingDetail);
@@ -219,8 +221,12 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             int mActualQty = data.getIntExtra("mActualQty", 0);
             newInInvoiceAdpter.updateActualQty(mActualQty, ClickInvoicingDetail.getProductName(), ClickInvoicingDetail.getBatchNO());
         }*/
-        isReturn = true;
-        mPresenter.GetInvoicingDetail(invId+"");
+        if (resultCode == InvoicingDetailActivity.RESULT_OK) {
+            IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
+        }
+        if (IsCommitSuccess) {
+            mPresenter.GetInvoicingDetail(invId+"");
+        }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -681,11 +687,23 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      */
     @OnClick(R.id.commit)
     public void setCommit(View view) {
+        if (isHasZero(mInvoicingDetailList)) {
+            final NormalDialog IsZero_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsZero_Dialog, "实际数量不能为0", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsZero_Dialog.dismiss();
+                }
+            });
+            return;
+        }
         if (isSave) {
             Intent intent = new Intent(NewInInvoiceActivity.this, InvoicingDetailActivity.class);
             intent.putExtra("invId", invId + "");
-            startActivity(intent);
-            finish();
+            startActivityForResult(intent,REQUEST_OK);
+            if (IsCommitSuccess) {
+                finish();
+            }
         } else {
             final NormalDialog IsSava_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showOnePromptDialog(IsSava_Dialog, "数据未保存，请先保存数据！", new OnBtnClickL() {
@@ -695,7 +713,20 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 }
             });
         }
+        IsCommitSuccess = false;
+    }
 
+    private boolean isHasZero(List<InvoicingDetail> mInvoicingDetailList) {
+        boolean isZero = false;
+        if (mInvoicingDetailList.size() > 0) {
+            for (int i = 0; i < mInvoicingDetailList.size(); i++) {
+                InvoicingDetail invoicingDetail = mInvoicingDetailList.get(i);
+                if (invoicingDetail.getActualQty() == 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

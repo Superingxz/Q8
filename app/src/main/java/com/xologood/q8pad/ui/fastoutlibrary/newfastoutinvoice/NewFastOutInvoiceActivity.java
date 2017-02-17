@@ -113,7 +113,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
     private List<String> smm = new ArrayList<>();
 
     private String mCompanyName;
-    private String mCompanyId;
+    private String mComkey;
     private String mReceivingWarehouseId;
     private String mReceivingWarehouseName;
     private String mProductId;
@@ -216,7 +216,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             @Override
             public void onChanged(CommonSelectData data) {
                 mCompanyName = data.getText();
-                mCompanyId = data.getValue();
+                mComkey = data.getValue();
             }
         });
 
@@ -317,7 +317,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         if (companyList != null && companyList.size() > 0) {
             for (int i = 0; i < companyList.size(); i++) {
                 Company mCompany = companyList.get(i);
-                mCommonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getCompanyId() + ""));
+                mCommonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getComKey() + ""));
             }
             company.setLists(mCommonSelectDataCompanyList);
             if (isOld) {
@@ -441,7 +441,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
     @Override
     public void SetInvid(int invId) {
         mInvId = invId;
-   //     ToastUitl.showLong("成功扫码：" + invId + "");
+//        ToastUitl.showLong("成功扫码：" + invId + "");
     }
 
     /**
@@ -539,7 +539,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                         ComName,
                         SysKey,
                         "暂无",
-                        mCompanyId,
+                        mComkey,
                         mCompanyName,
                         mReceivingWarehouseId,
                         mReceivingWarehouseName,
@@ -614,7 +614,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                         ComName,
                         SysKey,
                         "暂无",
-                        mCompanyId,
+                        mComkey,
                         mCompanyName,
                         mReceivingWarehouseId,
                         mReceivingWarehouseName,
@@ -680,8 +680,9 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             });
         } else {
             Intent intent = new Intent(this, InvoicingDetailActivity.class);
-            intent.putExtra("invId", mInvId);
+            intent.putExtra("invId", mInvId+"");
             startActivity(intent);
+            finish();
         }
     }
 

@@ -33,4 +33,11 @@ public class ScanModel implements ScanContract.Model{
                 .compose(RxSchedulers.<BaseResponse<BarCodeLogList>>io_main());
     }
 
+    @Override
+    public Observable<BaseResponse<String>> getCheckBarCode(String barcode) {
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).InvoicingCheckBarCode(barcode)
+                .compose(RxSchedulers.<BaseResponse<String>>io_main());
+    }
+
+
 }

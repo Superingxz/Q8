@@ -50,6 +50,7 @@ import butterknife.OnClick;
 
 public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, NewOutInvoiceModel>
         implements NewOutInvoiceContract.View {
+    private static final int REQUEST_OK = 101;
     @Bind(R.id.title_view)
     TitileView titleView;
     @Bind(R.id.InvNumber)
@@ -113,7 +114,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     private int invId;
     private ArrayAdapter<String> smmAdapter;
     private List<String> smm = new ArrayList<>();
-    private String mCompanyId;
+    private String mComkey;
 
     private boolean isNewInvoicing  = false;  //是否新建出库单据
     private boolean isUpload  = false; //是否上传
@@ -134,6 +135,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     private List<Company> mCompanyList;
 
     private List<CommonSelectData> mCommonSelectDataCompanyList;
+    private boolean IsCommitSuccess = false;
 
     @Override
     public int getLayoutId() {
@@ -208,7 +210,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             @Override
             public void onChanged(CommonSelectData data) {
                 mCompanyName = data.getText();
-                mCompanyId = data.getValue();
+                mComkey = data.getValue();
                 if (mCompanyList.size() == 0) {
                     mPresenter.GetAllCompList(ComKey,"2");
                 }
@@ -268,6 +270,12 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                 count.setVisibility(View.GONE);
             }
          //   ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
+
+            //跳到详情页返回是否确认提交
+            if (resultCode == InvoicingDetailActivity.RESULT_OK) {
+                IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
+            }
+
         }
     }
 
@@ -302,7 +310,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         if (companyList != null && companyList.size() > 0) {
             for (int i = 0; i < companyList.size(); i++) {
                 Company mCompany = companyList.get(i);
-                mCommonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getCompanyId() + ""));
+                mCommonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getComKey() + ""));
             }
             company.setLists(mCommonSelectDataCompanyList);
             if (isOld) {
@@ -382,7 +390,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             options.put("CheckUserId", UserId);
             options.put("CheckUserName", UserName);
             options.put("CheckDate", CheckDate);
-            options.put("ReceivingComKey", mCompanyId);
+            options.put("ReceivingComKey", mComkey);
             options.put("ReceivingComName", mCompanyName);
             options.put("ReceivingWarehouseId", mReceivingWarehouseId);
             options.put("ReceivingWarehouseName", mReceivingWarehouseName);
@@ -503,7 +511,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                         ComName,
                         SysKey,
                         "暂无",
-                        mCompanyId,
+                        mComkey,
                         mCompanyName,
                         mReceivingWarehouseId,
                         mReceivingWarehouseName,
@@ -539,7 +547,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                         ComName,
                         SysKey,
                         "暂无",
-                        mCompanyId,
+                        mComkey,
                         mCompanyName,
                         mReceivingWarehouseId,
                         mReceivingWarehouseName,
@@ -588,10 +596,13 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             } else {
                 Intent intent = new Intent(NewOutInvoiceActivity.this, InvoicingDetailActivity.class);
                 intent.putExtra("invId", invId + "");
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent,REQUEST_OK);
+               if (IsCommitSuccess) {
+                   finish();
+               }
             }
         }
+        IsCommitSuccess = false;
     }
 
     @Override

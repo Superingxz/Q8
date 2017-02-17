@@ -26,11 +26,18 @@ public interface ScanContract {
                                                                    String ComName,
                                                                    String SysKey,
                                                                    String ReceivingWarehouseId);
+
+
+        Observable<BaseResponse<String>> getCheckBarCode(String barcode);
+
+
     }
 
     interface View extends BaseView {
         void SetBarCodeList(List<BarCodeLog> barCodeLogList);
         void UploadBarCodeError(String msg);
+
+        void GetNeedToScan(String needToScan);
     }
 
     abstract class Presenter extends BasePresenter<Model, View> {
@@ -43,6 +50,8 @@ public interface ScanContract {
                                                  String ComName,
                                                  String SysKey,
                                                  String ReceivingWarehouseId);
+
+        public abstract void getCheckBarCode(String barcode);
 
         @Override
         public void onStart() {

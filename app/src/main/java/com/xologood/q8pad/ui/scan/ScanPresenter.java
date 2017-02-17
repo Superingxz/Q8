@@ -37,4 +37,22 @@ public class ScanPresenter extends ScanContract.Presenter{
                                    }
                                }));
     }
+
+    @Override
+    public void getCheckBarCode(String barcode) {
+        mRxManager.add(mModel.getCheckBarCode(barcode)
+                .subscribe(new Action1<BaseResponse<String>>() {
+                    @Override
+                    public void call(BaseResponse<String> stringBaseResponse) {
+                        String data = stringBaseResponse.getData();
+                        mView.GetNeedToScan(data);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+
+                    }
+                })
+        );
+    }
 }

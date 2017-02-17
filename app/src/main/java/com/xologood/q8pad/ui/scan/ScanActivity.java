@@ -177,6 +177,7 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
             } else {
                 scan_count.setVisibility(View.GONE);
             }
+
             ScanBarCodeAdpater scanBarCodeAdpater = new ScanBarCodeAdpater(barCodeLogList, mContext);
             View layout_scanbarcode_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_scanbarcode_dialog, null);
             final AlertDialog barCodeLogDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
@@ -197,12 +198,34 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
                     }
                 }
             });
+            //修改实际数量
+            mPresenter.getCheckBarCode(GetSuccessCode(smm,barCodeLogList));
+            //mPresenter.getCheckBarCode("11223344");
         }
     }
+
+    private String GetSuccessCode(List<String> smm, List<BarCodeLog> barCodeLogList) {
+        StringBuffer sb = new StringBuffer();
+        if (barCodeLogList.size() > 0) {
+            for (int i = 0; i < barCodeLogList.size(); i++) {
+                BarCodeLog barCodeLog = barCodeLogList.get(i);
+                if (barCodeLog.isIsOk()) {
+                    sb.append(smm.get(i)+",");
+                }
+            }
+        }
+        return sb.toString().substring(0, sb.length() - 1);
+    }
+
 
     @Override
     public void UploadBarCodeError(String msg) {
         ToastUitl.showLong(msg);
+    }
+
+    @Override
+    public void GetNeedToScan(String NeedToScan) {
+        needToScan.setText(NeedToScan);
     }
 
     @OnClick(R.id.add)
@@ -235,6 +258,7 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
                     mInvDetailId,
                     mProductId,
                     mBatch,
+
                     mComKey,
                     mComName,
                     mSysKey,
