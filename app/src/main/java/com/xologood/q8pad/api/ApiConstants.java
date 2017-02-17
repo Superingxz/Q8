@@ -149,6 +149,11 @@ public class ApiConstants {
 
     public static final String INVOICING_ABOLISHCODE="/Invoicing/AbolishCode";
 
+    /**
+     * 扫描条码数量
+     */
+    public static final String INVOICING_CHECKBARCODE="Invoicing/CheckBarCode";
+
     public static String getHost(int hostType) {
         String host;
         switch (hostType) {

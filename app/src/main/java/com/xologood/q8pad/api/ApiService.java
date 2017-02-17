@@ -496,6 +496,16 @@ public interface ApiService {
     @GET(ApiConstants.INVOICING_ABOLISHCODE)
     Observable<BaseResponse<String>> InvoicingAbolishCode(@Query("code") String code);
 
+
+    /**
+     * 扫描条码数量
+     * @param barcode
+     * @return
+     */
+    @GET(ApiConstants.INVOICING_CHECKBARCODE)
+    Observable<BaseResponse<String>> InvoicingCheckBarCode(@Query("barcode") String barcode);
+
+
     /**
      * 下载文件
      * @param fileUrl
@@ -504,5 +514,6 @@ public interface ApiService {
     @Streaming
     @GET
     Observable<ResponseBody> downloadFileWithDynamicUrlSync(@Url String fileUrl);
+
 }
 
