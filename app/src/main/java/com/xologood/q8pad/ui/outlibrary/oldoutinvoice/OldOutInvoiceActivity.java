@@ -231,7 +231,6 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         View layout_get_first_user_by_comkey_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_get_first_user_by_comkey, null);
         final AlertDialog firstUserDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
         firstUserDialog.setCanceledOnTouchOutside(false);
-        firstUserDialog.show();
         firstUserDialog.getWindow().setContentView(layout_get_first_user_by_comkey_dialog);
         WindowManager.LayoutParams lp_firstUser = firstUserDialog.getWindow().getAttributes();
         lp_firstUser.width = (int) (QpadConfigUtils.SCREEN.Width * 0.85);
@@ -258,9 +257,10 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
             });
             return;
         }
-        if (firstUser != null ) {
+
+        final NormalDialog IsNotFirstUser_Dialog = new NormalDialog(mContext);
+        if (firstUser != null) {
             firstUserDialog.show();
-            final NormalDialog IsNotFirstUser_Dialog = new NormalDialog(mContext);
             String mWeChat = firstUser.getWeChat();
             String mTel = firstUser.getTel();
             String mAddress = firstUser.getAddres();
@@ -294,6 +294,13 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
             } else {
                 address.setVisibility(View.GONE);
             }
+        } else {
+            QPadPromptDialogUtils.showOnePromptDialog(IsNotFirstUser_Dialog, "暂无信息！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsNotFirstUser_Dialog.dismiss();
+                }
+            });
         }
     }
 

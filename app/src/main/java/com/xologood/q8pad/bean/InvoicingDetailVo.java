@@ -4,7 +4,7 @@ package com.xologood.q8pad.bean;
  * Created by Administrator on 2017/1/7.
  */
 
-public class InvoiceingDetailVo {
+public class InvoicingDetailVo {
 
     /**
      * Id : 976

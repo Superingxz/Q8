@@ -8,7 +8,7 @@ import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.BarCodeLogList;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Company;
-import com.xologood.q8pad.bean.InvoiceingDetailVo;
+import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProportionConversion;
@@ -93,14 +93,14 @@ public interface NewOutInvoiceContract {
          * @param SysKey        系统唯一标识
          * @return
          */
-        Observable<BaseResponse<InvoiceingDetailVo>> GetInvoiceDetail(String Id,
-                                                                      String InvId,
-                                                                      String ProductId,
-                                                                      String Batch,
-                                                                      String ActualQty,
-                                                                      String ExpectedQty,
-                                                                      String ComKey,
-                                                                      String SysKey);
+        Observable<BaseResponse<InvoicingDetailVo>> GetInvoiceDetail(String Id,
+                                                                     String InvId,
+                                                                     String ProductId,
+                                                                     String Batch,
+                                                                     String ActualQty,
+                                                                     String ExpectedQty,
+                                                                     String ComKey,
+                                                                     String SysKey);
 
         /**
          * 增加入库明细
@@ -114,14 +114,14 @@ public interface NewOutInvoiceContract {
          * @param SysKey        系统唯一标识
          * @return
          */
-        Observable<BaseResponse<InvoiceingDetailVo>> InsertInvoiceDetail(String Id,
-                                                                         String InvId,
-                                                                         String ProductId,
-                                                                         String Batch,
-                                                                         String ActualQty,
-                                                                         String ExpectedQty,
-                                                                         String ComKey,
-                                                                         String SysKey);
+        Observable<BaseResponse<InvoicingDetailVo>> InsertInvoiceDetail(String Id,
+                                                                        String InvId,
+                                                                        String ProductId,
+                                                                        String Batch,
+                                                                        String ActualQty,
+                                                                        String ExpectedQty,
+                                                                        String ComKey,
+                                                                        String SysKey);
         /**
          * 更新入库明细
          * @param Id            明细id  写死0
@@ -134,14 +134,14 @@ public interface NewOutInvoiceContract {
          * @param SysKey        系统唯一标识
          * @return
          */
-        Observable<BaseResponse<InvoiceingDetailVo>> UpdateInvoiceDetail(String Id,
-                                                                         String InvId,
-                                                                         String ProductId,
-                                                                         String Batch,
-                                                                         String ActualQty,
-                                                                         String ExpectedQty,
-                                                                         String ComKey,
-                                                                         String SysKey);
+        Observable<BaseResponse<InvoicingDetailVo>> UpdateInvoiceDetail(String Id,
+                                                                        String InvId,
+                                                                        String ProductId,
+                                                                        String Batch,
+                                                                        String ActualQty,
+                                                                        String ExpectedQty,
+                                                                        String ComKey,
+                                                                        String SysKey);
 
         Observable<BaseResponse<BarCodeLogList>> GetScanBarCodeList(String BarCodes,
                                                                     String InvId,

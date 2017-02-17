@@ -7,7 +7,7 @@ import com.xologood.q8pad.api.HostType;
 import com.xologood.q8pad.bean.BarCodeLogList;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Company;
-import com.xologood.q8pad.bean.InvoiceingDetailVo;
+import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProportionConversion;
@@ -70,26 +70,26 @@ public class NewOutInvoiceModel implements NewOutInvoiceContract.Model{
 
 
     @Override
-    public Observable<BaseResponse<InvoiceingDetailVo>> GetInvoiceDetail(String Id,
-                                                                         String InvId,
-                                                                         String ProductId,
-                                                                         String Batch,
-                                                                         String ActualQty,
-                                                                         String ExpectedQty,
-                                                                         String ComKey,
-                                                                         String SysKey) {
+    public Observable<BaseResponse<InvoicingDetailVo>> GetInvoiceDetail(String Id,
+                                                                        String InvId,
+                                                                        String ProductId,
+                                                                        String Batch,
+                                                                        String ActualQty,
+                                                                        String ExpectedQty,
+                                                                        String ComKey,
+                                                                        String SysKey) {
         return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).GetInvoiceDetail(Id, InvId, ProductId, Batch, ActualQty, ExpectedQty, ComKey, SysKey);
     }
 
     @Override
-    public Observable<BaseResponse<InvoiceingDetailVo>> InsertInvoiceDetail(String Id,
-                                                                            String InvId,
-                                                                            String ProductId,
-                                                                            String Batch,
-                                                                            String ActualQty,
-                                                                            String ExpectedQty,
-                                                                            String ComKey,
-                                                                            String SysKey) {
+    public Observable<BaseResponse<InvoicingDetailVo>> InsertInvoiceDetail(String Id,
+                                                                           String InvId,
+                                                                           String ProductId,
+                                                                           String Batch,
+                                                                           String ActualQty,
+                                                                           String ExpectedQty,
+                                                                           String ComKey,
+                                                                           String SysKey) {
         return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).InsertInvoiceDetail( Id,
                 InvId,
                 ProductId,
@@ -102,14 +102,14 @@ public class NewOutInvoiceModel implements NewOutInvoiceContract.Model{
     }
 
     @Override
-    public Observable<BaseResponse<InvoiceingDetailVo>> UpdateInvoiceDetail(String Id,
-                                                                            String InvId,
-                                                                            String ProductId,
-                                                                            String Batch,
-                                                                            String ActualQty,
-                                                                            String ExpectedQty,
-                                                                            String ComKey,
-                                                                            String SysKey) {
+    public Observable<BaseResponse<InvoicingDetailVo>> UpdateInvoiceDetail(String Id,
+                                                                           String InvId,
+                                                                           String ProductId,
+                                                                           String Batch,
+                                                                           String ActualQty,
+                                                                           String ExpectedQty,
+                                                                           String ComKey,
+                                                                           String SysKey) {
         return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).UpdateInvoiceDetail(Id,
                 InvId,
                 ProductId,

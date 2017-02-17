@@ -7,7 +7,7 @@ import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Company;
 import com.xologood.q8pad.bean.FirstUser;
 import com.xologood.q8pad.bean.Invoice;
-import com.xologood.q8pad.bean.InvoiceingDetailVo;
+import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProductBatch;
@@ -162,14 +162,14 @@ public interface ApiService {
      * @return
      */
     @GET(ApiConstants.INVOICING_GET_INVOICINGDETAIL)
-    Observable<BaseResponse<InvoiceingDetailVo>> GetInvoiceDetail(@Query("Id") String Id,
-                                                                  @Query("InvId") String InvId,
-                                                                  @Query("ProductId") String ProductId,
-                                                                  @Query("Batch") String Batch,
-                                                                  @Query("ActualQty") String ActualQty,
-                                                                  @Query("ExpectedQty") String ExpectedQty,
-                                                                  @Query("ComKey") String ComKey,
-                                                                  @Query("SysKey") String SysKey
+    Observable<BaseResponse<InvoicingDetailVo>> GetInvoiceDetail(@Query("Id") String Id,
+                                                                 @Query("InvId") String InvId,
+                                                                 @Query("ProductId") String ProductId,
+                                                                 @Query("Batch") String Batch,
+                                                                 @Query("ActualQty") String ActualQty,
+                                                                 @Query("ExpectedQty") String ExpectedQty,
+                                                                 @Query("ComKey") String ComKey,
+                                                                 @Query("SysKey") String SysKey
                                                                   );
 
     /**
@@ -185,14 +185,14 @@ public interface ApiService {
      * @return
      */
     @GET(ApiConstants.INVOICING_INSERT_DETAIL)
-    Observable<BaseResponse<InvoiceingDetailVo>> InsertInvoiceDetail(@Query("Id") String Id,
-                                                                  @Query("InvId") String InvId,
-                                                                  @Query("ProductId") String ProductId,
-                                                                  @Query("Batch") String Batch,
-                                                                  @Query("ActualQty") String ActualQty,
-                                                                  @Query("ExpectedQty") String ExpectedQty,
-                                                                  @Query("ComKey") String ComKey,
-                                                                  @Query("SysKey") String SysKey);
+    Observable<BaseResponse<InvoicingDetailVo>> InsertInvoiceDetail(@Query("Id") String Id,
+                                                                    @Query("InvId") String InvId,
+                                                                    @Query("ProductId") String ProductId,
+                                                                    @Query("Batch") String Batch,
+                                                                    @Query("ActualQty") String ActualQty,
+                                                                    @Query("ExpectedQty") String ExpectedQty,
+                                                                    @Query("ComKey") String ComKey,
+                                                                    @Query("SysKey") String SysKey);
     /**
      * 更新入库明细
      * @param Id            明细id  写死0
@@ -206,14 +206,14 @@ public interface ApiService {
      * @return
      */
     @GET(ApiConstants.INVOICING_UPDATE_INVOICINGDETAIL)
-    Observable<BaseResponse<InvoiceingDetailVo>> UpdateInvoiceDetail(@Query("Id") String Id,
-                                                                  @Query("InvId") String InvId,
-                                                                  @Query("ProductId") String ProductId,
-                                                                  @Query("Batch") String Batch,
-                                                                  @Query("ActualQty") String ActualQty,
-                                                                  @Query("ExpectedQty") String ExpectedQty,
-                                                                  @Query("ComKey") String ComKey,
-                                                                  @Query("SysKey") String SysKey
+    Observable<BaseResponse<InvoicingDetailVo>> UpdateInvoiceDetail(@Query("Id") String Id,
+                                                                    @Query("InvId") String InvId,
+                                                                    @Query("ProductId") String ProductId,
+                                                                    @Query("Batch") String Batch,
+                                                                    @Query("ActualQty") String ActualQty,
+                                                                    @Query("ExpectedQty") String ExpectedQty,
+                                                                    @Query("ComKey") String ComKey,
+                                                                    @Query("SysKey") String SysKey
                                                                   );
 
    // @GET(ApiConstants.INVOICING_INVMSG)

@@ -7,7 +7,7 @@ import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BarCodeLogList;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Company;
-import com.xologood.q8pad.bean.InvoiceingDetailVo;
+import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProportionConversion;
@@ -197,10 +197,10 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
                                  String ComKey,
                                  String SysKey) {
         mRxManager.add(mModel.GetInvoiceDetail(Id,InvId,ProductId,Batch,ActualQty,ExpectedQty,ComKey,SysKey)
-                .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
-                .subscribe(new Action1<BaseResponse<InvoiceingDetailVo>>() {
+                .compose(RxSchedulers.<BaseResponse<InvoicingDetailVo>>io_main())
+                .subscribe(new Action1<BaseResponse<InvoicingDetailVo>>() {
                     @Override
-                    public void call(BaseResponse<InvoiceingDetailVo> invoiceDetailBaseResponse) {
+                    public void call(BaseResponse<InvoicingDetailVo> invoiceDetailBaseResponse) {
                         int id = invoiceDetailBaseResponse.getData().getId();
       //                  mView.GetInvoiceDetailSuccess(id);
 
@@ -231,10 +231,10 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
                 ExpectedQty,
                 ComKey,
                 SysKey)
-                .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
-                .subscribe(new Action1<BaseResponse<InvoiceingDetailVo>>() {
+                .compose(RxSchedulers.<BaseResponse<InvoicingDetailVo>>io_main())
+                .subscribe(new Action1<BaseResponse<InvoicingDetailVo>>() {
                     @Override
-                    public void call(BaseResponse<InvoiceingDetailVo> invoiceingDetailVoBaseResponse) {
+                    public void call(BaseResponse<InvoicingDetailVo> invoiceingDetailVoBaseResponse) {
             //            mView.InsertInvoiceDetailSuccess(invoiceingDetailVoBaseResponse.getData().getId());
                     }
                 }, new Action1<Throwable>() {
@@ -264,10 +264,10 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
                 ExpectedQty,
                 ComKey,
                 SysKey)
-                .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
-                .subscribe(new Action1<BaseResponse<InvoiceingDetailVo>>() {
+                .compose(RxSchedulers.<BaseResponse<InvoicingDetailVo>>io_main())
+                .subscribe(new Action1<BaseResponse<InvoicingDetailVo>>() {
                     @Override
-                    public void call(BaseResponse<InvoiceingDetailVo> invoiceingDetailVoBaseResponse) {
+                    public void call(BaseResponse<InvoicingDetailVo> invoiceingDetailVoBaseResponse) {
            //             mView.UpdateInvoiceDetailSuccess(invoiceingDetailVoBaseResponse.getData().getId());
                     }
                 }, new Action1<Throwable>() {

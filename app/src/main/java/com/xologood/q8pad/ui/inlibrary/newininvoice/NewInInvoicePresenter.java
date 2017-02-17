@@ -6,7 +6,7 @@ import com.xologood.mvpframework.util.helper.RxSchedulers;
 import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Invoice;
-import com.xologood.q8pad.bean.InvoiceingDetailVo;
+import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProductBatch;
@@ -259,11 +259,11 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                                  String ComKey,
                                  String SysKey) {
         mRxManager.add(mModel.GetInvoiceDetail(Id,InvId,ProductId,Batch,ActualQty,ExpectedQty,ComKey,SysKey)
-                        .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
-                        .subscribe(new Action1<BaseResponse<InvoiceingDetailVo>>() {
+                        .compose(RxSchedulers.<BaseResponse<InvoicingDetailVo>>io_main())
+                        .subscribe(new Action1<BaseResponse<InvoicingDetailVo>>() {
                             @Override
-                            public void call(BaseResponse<InvoiceingDetailVo> invoiceDetailBaseResponse) {
-                                InvoiceingDetailVo data = invoiceDetailBaseResponse.getData();
+                            public void call(BaseResponse<InvoicingDetailVo> invoiceDetailBaseResponse) {
+                                InvoicingDetailVo data = invoiceDetailBaseResponse.getData();
                                 mView.GetInvoiceDetailSuccess(data.getId(),data.getInvId());
 
                             }
@@ -293,10 +293,10 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                                                   ExpectedQty,
                                                   ComKey,
                                                   SysKey)
-                             .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
-                             .subscribe(new RxSubscriber<BaseResponse<InvoiceingDetailVo>>(mContext,false) {
+                             .compose(RxSchedulers.<BaseResponse<InvoicingDetailVo>>io_main())
+                             .subscribe(new RxSubscriber<BaseResponse<InvoicingDetailVo>>(mContext,false) {
                                  @Override
-                                 protected void _onNext(BaseResponse<InvoiceingDetailVo> invoiceingDetailVoBaseResponse) {
+                                 protected void _onNext(BaseResponse<InvoicingDetailVo> invoiceingDetailVoBaseResponse) {
                                      mView.InsertInvoiceDetailSuccess(invoiceingDetailVoBaseResponse.getData().getId());
                                      mView.stopProgressDialog();
                                  }
@@ -327,10 +327,10 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                                                   ExpectedQty,
                                                   ComKey,
                                                   SysKey)
-                              .compose(RxSchedulers.<BaseResponse<InvoiceingDetailVo>>io_main())
-                              .subscribe(new RxSubscriber<BaseResponse<InvoiceingDetailVo>>(mContext,false) {
+                              .compose(RxSchedulers.<BaseResponse<InvoicingDetailVo>>io_main())
+                              .subscribe(new RxSubscriber<BaseResponse<InvoicingDetailVo>>(mContext,false) {
                                   @Override
-                                  protected void _onNext(BaseResponse<InvoiceingDetailVo> invoiceingDetailVoBaseResponse) {
+                                  protected void _onNext(BaseResponse<InvoicingDetailVo> invoiceingDetailVoBaseResponse) {
                                       mView.UpdateInvoiceDetailSuccess(invoiceingDetailVoBaseResponse.getData().getId());
                                       mView.stopProgressDialog();
                                   }
