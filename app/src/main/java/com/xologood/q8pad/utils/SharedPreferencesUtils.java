@@ -35,6 +35,18 @@ public class SharedPreferencesUtils {
 		return value;
 	}
 
+	public static void saveBooleanData(Context context,String key,boolean value) {
+		//	Editor sharedata = context.getSharedPreferences("submitTime", 0).edit();
+		editor.putBoolean(key, value);
+		editor.commit();
+	}
+
+	public static boolean getBooleanData(Context context,String key){
+		//	SharedPreferences sharedata = context.getSerences("submitTime", 0);
+		boolean value = sharedata.getBoolean(key, false);
+		return value;
+	}
+
 	public static void clearData(Context context) {
 		editor.clear().commit();
 	}

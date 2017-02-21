@@ -96,7 +96,7 @@
                     android:paddingRight="@dimen/common_padding5"
                     aaron:fieldEnabled="true"
                     aaron:fieldTitle="出库机构："
-                    aaron:fieldType="Select" />
+                    aaron:fieldType="Dialog" />
 
                 <com.mview.medittext.view.QpadEditText
                     android:id="@+id/wareHouse"
@@ -131,10 +131,22 @@
                         android:text="扫描" />
                 </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="已扫描条码列表" />
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="已扫描条码列表" />
+                    <TextView
+                        android:id="@+id/scanNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        />
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"

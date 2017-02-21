@@ -14,7 +14,6 @@ import com.mview.customdialog.view.dialog.NormalDialog;
 import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
 import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
 import com.xologood.mvpframework.baseapp.BaseApplication;
-import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.ui.abolishcode.AbolishCodeActivity;
 import com.xologood.q8pad.ui.fastoutlibrary.FastOutLibrary.FastOutLibraryActivity;
@@ -23,7 +22,6 @@ import com.xologood.q8pad.ui.login.LoginInActivity;
 import com.xologood.q8pad.ui.outlibrary.OutLibraryActivity;
 import com.xologood.q8pad.ui.replace.ReplaceActivity;
 import com.xologood.q8pad.ui.returngoods.ReturnGoodsActivity;
-import com.xologood.q8pad.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onBtnClick() {
                 normalDialog.dismiss();
-                SharedPreferencesUtils.clearData(Qpadapplication.getAppContext());
+              //  SharedPreferencesUtils.clearData(Qpadapplication.getAppContext());
                 Intent intent = new Intent(MainActivity.this, LoginInActivity.class);
                 startActivity(intent);
                 finish();

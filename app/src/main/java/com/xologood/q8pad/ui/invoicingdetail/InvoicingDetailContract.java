@@ -15,7 +15,7 @@ import rx.Observable;
 public interface InvoicingDetailContract {
     interface Model extends BaseModel {
         Observable<BaseResponse<Invoice>> GetInvoicingDetail(String invId);
-        Observable<BaseResponse<String>> CompleteSave(String invId,String userId,String userName);
+        Observable<BaseResponse<String>> CompleteSave(String invId, String userId, String userName);
     }
 
     interface View extends BaseView {

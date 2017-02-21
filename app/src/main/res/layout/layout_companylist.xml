@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aaron="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="5dp"
+    android:background="@drawable/dialog_setup_bg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/queryForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.mview.medittext.view.QpadEditText
+            android:id="@+id/companyNo"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/common_layout_middle"
+            android:background="@drawable/btn_layout_off_bg"
+            android:paddingLeft="@dimen/common_padding5"
+            android:paddingRight="@dimen/common_padding5"
+            aaron:fieldEnabled="true"
+            aaron:fieldTitle="机构编号"
+            aaron:fieldHint = "请输入机构编号"
+            aaron:fieldType="String" />
+        <com.mview.medittext.view.QpadEditText
+            android:id="@+id/companyName"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/common_layout_middle"
+            android:background="@drawable/btn_layout_off_bg"
+            android:paddingLeft="@dimen/common_padding5"
+            android:paddingRight="@dimen/common_padding5"
+            aaron:fieldEnabled="true"
+            aaron:fieldTitle="机构名称"
+            aaron:fieldHint = "请输入机构名称"
+            aaron:fieldType="String" />
+        <com.mview.medittext.view.QpadEditText
+            android:id="@+id/comTel"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/common_layout_middle"
+            android:background="@drawable/btn_layout_off_bg"
+            android:paddingLeft="@dimen/common_padding5"
+            android:paddingRight="@dimen/common_padding5"
+            aaron:fieldEnabled="true"
+            aaron:fieldTitle="电话号码"
+            aaron:fieldHint = "请输入电话号码"
+            aaron:fieldType="String" />
+        <Button
+            android:id="@+id/queryCompany"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="搜索" />
+    </LinearLayout>
+    <ListView
+        android:id="@+id/companyList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+    </ListView>
+</LinearLayout>

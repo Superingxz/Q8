@@ -44,7 +44,7 @@ public interface NewOutInvoiceContract {
          * @return
          */
         Observable<BaseResponse<ProportionConversion>> GetProportionConversio(String id, String Bunit, String count);
-        Observable<BaseResponse<String>> GetProportionConversionString(String id,String Bunit  ,String count);
+        Observable<BaseResponse<String>> GetProportionConversionString(String id, String Bunit, String count);
 
         /**
          * 获取仓库列表
@@ -53,7 +53,7 @@ public interface NewOutInvoiceContract {
          * @param IsUse  是否启用
          * @return
          */
-        Observable<BaseResponse<List<Warehouse>>> GetWareHouseList(String ComKey,  String IsUse);
+        Observable<BaseResponse<List<Warehouse>>> GetWareHouseList(String ComKey, String IsUse);
         /**
          * 获取产品列表
          *

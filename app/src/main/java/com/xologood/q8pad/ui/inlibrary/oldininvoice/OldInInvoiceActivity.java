@@ -178,6 +178,14 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!IsCommitSuccess) {
+            mPresenter.GetInvoicingDetail(mInvId);
+        }
+    }
+
     /**
      * @param invoicingBeanList
      */

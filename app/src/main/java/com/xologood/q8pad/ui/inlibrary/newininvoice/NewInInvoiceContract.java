@@ -40,7 +40,7 @@ public interface NewInInvoiceContract {
          * @param InvNumber
          * @return
          */
-        Observable<BaseResponse<InvoicingBean>> insertInv2(String SysKey,String InvNumber);
+        Observable<BaseResponse<InvoicingBean>> insertInv2(String SysKey, String InvNumber);
 
         /**
          * 获取单位比例
@@ -204,7 +204,7 @@ public interface NewInInvoiceContract {
         /**
          * 验证入库明细成功回调
          */
-        void GetInvoiceDetailSuccess(int id,String InvId);
+        void GetInvoiceDetailSuccess(int id, String InvId);
 
         /**
          * 增加入库明细成功回调

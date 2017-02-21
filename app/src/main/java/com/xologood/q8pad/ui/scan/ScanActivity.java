@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.mview.customdialog.view.dialog.NormalDialog;
 import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
 import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
+import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.utils.QpadJudgeUtils;
 import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.mvpframework.util.ToastUitl;
@@ -34,8 +36,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implements ScanContract.View {
-     static final int SUCCESS_SCAN = 100;
+public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> implements ScanContract.View {
+    static final int SUCCESS_SCAN = 100;
     @Bind(R.id.add)
     Button add;
     @Bind(R.id.btn_editywm)
@@ -69,6 +71,10 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
     TextView scan_count;
     @Bind(R.id.scan_msg)
     TextView scan_msg;
+    @Bind(R.id.scanNumber)
+    TextView scanNumber;
+    @Bind(R.id.isContinous)
+    CheckBox isContinous;
 
     private ArrayAdapter<String> smmAdapter;
     private List<String> smm = new ArrayList<>();
@@ -91,6 +97,7 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
 
     private int SuccessCount; //成功扫描数目
 
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_scan;
@@ -101,6 +108,8 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
         mSysKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEY);
         mComKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMKEY);
         mComName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMNAME);
+
+        isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));
 
         smm = new ArrayList<>();
         smmAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, smm);
@@ -133,18 +142,36 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
 
     @OnClick(R.id.scanywm)
     public void scanywm(View view) {
-        startActivityForResult(new Intent(ScanActivity.this, CaptureActivity.class), Config.REQUESTOK);
+        SharedPreferencesUtils.saveBooleanData(Qpadapplication.getAppContext(), "isContinous", isContinous.isChecked());
+        Intent intent = new Intent(ScanActivity.this, CaptureActivity.class);
+        intent.putExtra("isContinous", isContinous.isChecked());
+        startActivityForResult(intent, Config.REQUESTOK);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == CaptureActivity.RESULT_OK) {
+            List<String> continousSmm = new ArrayList<>();
+            if (isContinous.isChecked()) {
+                String ewm_nums = data.getStringExtra("ewm_num");
+                continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
+                smm.addAll(0,continousSmm);
+                smmAdapter.notifyDataSetChanged();
+                String continousMsg = ewm_nums.replace(",", "\n");
+                if (rbAdd.isChecked()) {
+                    scan_msg.setText(continousMsg + "\n添加成功！");
+                } else {
+                    scan_msg.setText(continousMsg + "\n删除成功！");
+                }
+                return;
+            }
+
             String ewm_num = data.getStringExtra("ewm_num");
             String ewm_type = data.getStringExtra("ewm_type");
             if (rbAdd.isChecked()) {
                 if (!smm.contains(ewm_num)) {
-                    smm.add(ewm_num);
+                    smm.add(0, ewm_num);
                     smmAdapter.notifyDataSetChanged();
                     scan_msg.setText(ewm_num + "添加成功！");
                 } else {
@@ -153,16 +180,41 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
             } else if (rbDelete.isChecked() && smm.contains(ewm_num)) {
                 smm.remove(ewm_num);
                 smmAdapter.notifyDataSetChanged();
-                scan_msg.setText(ewm_num+"删除成功！");
+                scan_msg.setText(ewm_num + "删除成功！");
             }
+
             if (SuccessCount > 0) {
                 scan_count.setVisibility(View.VISIBLE);
-                scan_count.setText("已扫描" + SuccessCount + "条");
+                scan_count.setText("已成功上传" + SuccessCount + "条");
             } else {
                 scan_count.setVisibility(View.GONE);
             }
+
+            if (smm.size() > 0) {
+                scanNumber.setVisibility(View.VISIBLE);
+                scanNumber.setText("已扫描" + smm.size() + "条");
+            } else {
+                scanNumber.setVisibility(View.GONE);
+            }
 //            ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
         }
+    }
+
+    private List<String> GetContinousSmm(String ewm_nums,List<String> smm,boolean isAdd) {
+        List<String> mIscontinousSmm = new ArrayList<>();
+        String[] mSmm = ewm_nums.split(",");
+        if (ewm_nums != null && smm != null && mSmm.length > 0) {
+            for (int i = 0; i < mSmm.length; i++) {
+                if (!smm.contains(mSmm[i])) {
+                    if (isAdd) {
+                        mIscontinousSmm.add(0, mSmm[i]);
+                    } else {
+                        mIscontinousSmm.remove(mSmm[i]);
+                    }
+                }
+            }
+        }
+        return mIscontinousSmm;
     }
 
     @Override
@@ -173,7 +225,7 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
             SuccessCount = GetSuccessCount(barCodeLogList);
             if (SuccessCount > 0) {
                 scan_count.setVisibility(View.VISIBLE);
-                scan_count.setText("已扫描" + SuccessCount + "条");
+                scan_count.setText("已成功上传" + SuccessCount + "条");
             } else {
                 scan_count.setVisibility(View.GONE);
             }
@@ -193,7 +245,7 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
             back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(barCodeLogDialog!=null && barCodeLogDialog.isShowing()){
+                    if (barCodeLogDialog != null && barCodeLogDialog.isShowing()) {
                         barCodeLogDialog.dismiss();
                     }
                 }
@@ -215,29 +267,35 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
         if (scan < 0) {
             needToScan.setText("0");
         } else {
-            needToScan.setText(scan+"");
+            needToScan.setText(scan + "");
         }
     }
 
     @OnClick(R.id.add)
-    public void add(View view){
+    public void add(View view) {
         String edit_smm = btnEditywm.getText().toString().trim();
         if (QpadJudgeUtils.isEmpty(edit_smm)) {
             ToastUitl.showShort("请输入条码！");
-        }else if (!smm.contains(edit_smm)) {
-            smm.add(edit_smm);
+        } else if (!smm.contains(edit_smm)) {
+            smm.add(0, edit_smm);
             smmAdapter.notifyDataSetChanged();
-            scan_count.setText("已扫描" + smm.size() + "条");
             scan_msg.setText(btnEditywm.getText().toString().trim() + "添加成功！");
         } else {
             btnEditywm.setText("");
             ToastUitl.showShort("已经添加此条码,请重新输入！");
         }
+        btnEditywm.setText("");
         if (SuccessCount > 0) {
             scan_count.setVisibility(View.VISIBLE);
-            scan_count.setText("已扫描" + SuccessCount + "条");
+            scan_count.setText("已成功上传" + SuccessCount + "条");
         } else {
             scan_count.setVisibility(View.GONE);
+        }
+        if (smm.size() > 0) {
+            scanNumber.setVisibility(View.VISIBLE);
+            scanNumber.setText("已扫描" + smm.size() + "条");
+        } else {
+            scanNumber.setVisibility(View.GONE);
         }
     }
 
@@ -266,14 +324,22 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
     }
 
     @OnClick(R.id.close)
-    public void close(View view){
+    public void close(View view) {
         Intent intent = new Intent();
         intent.putExtra("mActualQty", SuccessCount);
-        setResult(RESULT_OK,intent);
+        setResult(RESULT_OK, intent);
         finish();
     }
 
+    @Override
+    public void startProgressDialog(String msg) {
+        QpadProgressUtils.showProgress(this, msg);
+    }
 
+    @Override
+    public void stopProgressDialog() {
+        QpadProgressUtils.closeProgress();
+    }
 
 
     private int GetSuccessCount(List<BarCodeLog> barCodeLogList) {
@@ -298,11 +364,14 @@ public class ScanActivity extends BaseActivity<ScanPresenter,ScanModel> implemen
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK ||keyCode == KeyEvent.KEYCODE_HOME) {
+        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME) {
             Intent intent = new Intent();
             intent.putExtra("mActualQty", SuccessCount);
-            setResult(RESULT_OK,intent);
+            setResult(RESULT_OK, intent);
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
+
 }

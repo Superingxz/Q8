@@ -152,7 +152,7 @@ public interface NewFastOutInvoiceContract {
          * @param InvNumber
          * @return
          */
-        Observable<BaseResponse<InvoicingBean>> insertInv(String SysKey,String InvNumber);
+        Observable<BaseResponse<InvoicingBean>> insertInv(String SysKey, String InvNumber);
     }
 
     interface View extends BaseView {

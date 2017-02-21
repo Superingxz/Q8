@@ -118,7 +118,9 @@ public final class CaptureActivity extends Activity implements
 		  ZXING_LINK,
 		  NONE
 	}
-	 
+
+	private boolean isContinous = false;
+	private ArrayList<String> smm;
 	public ViewfinderView getViewfinderView() {
 		return viewfinderView;
 	}
@@ -131,16 +133,17 @@ public final class CaptureActivity extends Activity implements
 		return cameraManager;
 	}
 
+
 	Handler barHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
+			StringBuffer sb = new StringBuffer();
 			switch (msg.what) {
 			case PARSE_BARCODE_SUC:  //扫描成功
 				Log.e("扫描结果", msg.getData().getString("mMsgType") + ", " +msg.getData().getString("mMsgNum"));
 				Intent intent;
 				if("more".equals(mTextType)){
 					intent = new Intent(CaptureActivity.this, CaptureShowActivity.class);
-					intent.putExtra("ewm_num", msg.getData().getString("mMsgNum"));
 					intent.putExtra("ewm_type", msg.getData().getString("mMsgType"));
 					intent.putExtra("pict_width", CameraManager.width);
 					intent.putExtra("pict_height", CameraManager.height);
@@ -148,7 +151,14 @@ public final class CaptureActivity extends Activity implements
 					startActivity(intent);
 				}else{
 					intent = new Intent();
-					intent.putExtra("ewm_num", msg.getData().getString("mMsgNum"));
+					if (isContinous) {
+						sb.append(mMsgNum+",");
+						intent.putExtra("ewm_num", sb.toString().substring(0, sb.length() - 1));
+					} else {
+						intent.putExtra("ewm_num", mMsgNum);
+					}
+					String mMsgNum = msg.getData().getString("mMsgNum");
+					intent.putExtra("ewm_num", mMsgNum);
 					intent.putExtra("ewm_type", msg.getData().getString("mMsgType"));
 					intent.putExtra("pict_width", CameraManager.width);
 					intent.putExtra("pict_height", CameraManager.height);
@@ -156,7 +166,9 @@ public final class CaptureActivity extends Activity implements
 					setResult(RESULT_OK, intent);
 				}
 				T.showShort(mContext, "扫描成功!");
-				finish();
+				if (!isContinous) {
+					finish();
+				}
 				break;
 			case PARSE_BARCODE_FAIL:  //扫描失败
 				Log.e("扫描结果","扫描失败！");
@@ -174,7 +186,14 @@ public final class CaptureActivity extends Activity implements
 					startActivity(intent);
 				}else{
 					intent = new Intent();
-					intent.putExtra("ewm_num", msg.getData().getString("mMsgNum"));
+					String mMsgNum = msg.getData().getString("mMsgNum");
+					if (isContinous) {
+						sb.append(mMsgNum + ",");
+						String result = sb.toString().substring(0, sb.length() - 1);
+						intent.putExtra("ewm_num", result);
+					} else {
+						intent.putExtra("ewm_num", mMsgNum);
+					}
 					intent.putExtra("ewm_type", msg.getData().getString("mMsgType"));
 					intent.putExtra("pict_width", CameraManager.width);
 					intent.putExtra("pict_height", CameraManager.height);
@@ -183,7 +202,9 @@ public final class CaptureActivity extends Activity implements
 				}
 
 				T.showShort(mContext, "输入成功!");
-				finish();
+				if (!isContinous) {
+					finish();
+				}
 				break;
 
 			}
@@ -245,7 +266,10 @@ public final class CaptureActivity extends Activity implements
 	}
 	
 	private void initData() {
-		
+		smm = new ArrayList<>();
+		//是否连续扫码
+		isContinous = getIntent().getBooleanExtra("isContinous", false);
+
 		mTextType = (String) getIntent().getSerializableExtra("cameType"); 
 
 		if("0".equals(mTextType)){

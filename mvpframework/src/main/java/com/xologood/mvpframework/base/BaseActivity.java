@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.widget.ImageView;
 
 import com.xologood.mvpframework.baseapp.BaseApplication;
@@ -19,13 +20,18 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     public T mPresenter;
     public E mModel;
     public Context mContext;
-
+    public int width;
+    public int height;
 
     private ImageView ivShadow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DisplayMetrics metric = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metric);
+        width = metric.widthPixels;
+        height = metric.heightPixels;
       /*  SpUtil.init(mContext);
         isNight = SpUtil.isNight();
         setTheme(isNight ? R.style.AppThemeNight : R.style.AppThemeDay);*/

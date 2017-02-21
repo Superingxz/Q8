@@ -51,6 +51,7 @@
         android:paddingLeft="@dimen/common_padding5"
         android:paddingRight="@dimen/common_padding5"
         aaron:fieldEnabled="true"
+        aaron:fieldHint="请选择入库单号"
         aaron:fieldType="Select" />
 
     <LinearLayout

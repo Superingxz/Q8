@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,6 +66,8 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     QpadEditText company;
     @Bind(R.id.wareHouse)
     QpadEditText wareHouse;
+
+
     @Bind(R.id.saveNnit)
     Button saveNnit;
     @Bind(R.id.scanywm)
@@ -89,6 +92,8 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     Button upload;
     @Bind(R.id.commit)
     Button commit;
+    @Bind(R.id.scanNumber)
+    TextView scanNumber;
     private String LoginName;
     private String SysKey;
     private String ComKey;
@@ -116,8 +121,8 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     private List<String> smm = new ArrayList<>();
     private String mComkey;
 
-    private boolean isNewInvoicing  = false;  //是否新建出库单据
-    private boolean isUpload  = false; //是否上传
+    private boolean isNewInvoicing = false;  //是否新建出库单据
+    private boolean isUpload = false; //是否上传
 
     //已有出库单据扫码
     private Intent intent;
@@ -136,6 +141,11 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
     private List<CommonSelectData> mCommonSelectDataCompanyList;
     private boolean IsCommitSuccess = false;
+    private boolean hasNewOutInvoice = false;//是否已经新建订单
+
+
+    private ArrayList<String> queryCompanyNameList;
+    private ArrayAdapter companyAdapter;
 
     @Override
     public int getLayoutId() {
@@ -152,7 +162,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         mCommonSelectDataCompanyList = new ArrayList<>();
 
         intent = getIntent();
-        isOld = intent.getBooleanExtra("isOld",false);
+        isOld = intent.getBooleanExtra("isOld", false);
         oldInvNumber = intent.getStringExtra("InvNumber");
         oldInvDate = intent.getStringExtra("InvDate");
         oldReceivingWarehouseId = intent.getStringExtra("ReceivingWarehouseId");
@@ -160,7 +170,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         oldReceivingComName = intent.getStringExtra("ReceivingComName");
 
         if (isOld) {
-            invId = intent.getIntExtra("invId",0);
+            invId = intent.getIntExtra("invId", 0);
         }
 
         titleView.setTitle("新建订单出库");
@@ -180,7 +190,6 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         sysKeyBase = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEYBASE);
 
 
-
         mPresenter.GetAllCompList(ComKey, "2");
         mPresenter.GetWareHouseList(ComKey, IsUse);
         mPresenter.GetProductList(SysKey, IsUse);
@@ -193,6 +202,8 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             InvNumber.setFieldEnabled(false);
             InvTime.setFieldEnabled(false);
             saveNnit.setEnabled(false);
+            qetQueryCompany.setFieldEnabled(false);
+            btnQueryCompany.setEnabled(false);
         } else {
             InvNumber.setFieldTextAndValue(getInvNumber(2, UserId));
             InvTime.setFieldTextAndValue(InvDate);
@@ -206,14 +217,71 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
     @Override
     public void initListener() {
-        company.setOnChangeListener(new QpadEditText.OnChangeListener() {
+        /*company.setOnChangeListener(new QpadEditText.OnChangeListener() {
             @Override
             public void onChanged(CommonSelectData data) {
                 mCompanyName = data.getText();
                 mComkey = data.getValue();
                 if (mCompanyList.size() == 0) {
-                    mPresenter.GetAllCompList(ComKey,"2");
+                    mPresenter.GetAllCompList(ComKey, "2");
                 }
+            }
+        });*/
+
+        company.setOnDialogClickLister(new QpadEditText.OnDialogClickLister() {
+            @Override
+            public void OnDialogClick() {
+                queryCompanyNameList = new ArrayList<>();
+                //根据机构编号，机构名称，电话号码查询机构
+                if (mCompanyList.size() > 0) {
+                    for (int i = 0; i < mCompanyList.size(); i++) {
+                        Company company = mCompanyList.get(i);
+                        queryCompanyNameList.add(company.getCompanyName());
+                    }
+                }
+                companyAdapter = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, queryCompanyNameList);
+                View layout_layout_queryCompanyNameList = LayoutInflater.from(mContext).inflate(R.layout.layout_companylist, null);
+                final AlertDialog companyDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
+                companyDialog.setView(new EditText(mContext));
+                companyDialog.setCanceledOnTouchOutside(false);
+                companyDialog.show();
+                companyDialog.getWindow().setContentView(layout_layout_queryCompanyNameList);
+                WindowManager.LayoutParams lp_company = companyDialog.getWindow().getAttributes();
+                lp_company.width = (int) (width * 0.85);
+                lp_company.height = (int) (height * 0.85);
+                companyDialog.getWindow().setAttributes(lp_company);
+                final QpadEditText etCompanyNo = (QpadEditText) layout_layout_queryCompanyNameList.findViewById(R.id.companyNo);
+                final QpadEditText etcompanyName = (QpadEditText) layout_layout_queryCompanyNameList.findViewById(R.id.companyName);
+                final QpadEditText etcomTel = (QpadEditText) layout_layout_queryCompanyNameList.findViewById(R.id.comTel);
+                Button queryCompany = (Button) layout_layout_queryCompanyNameList.findViewById(R.id.queryCompany);
+                ListView companyListView = (ListView) layout_layout_queryCompanyNameList.findViewById(R.id.companyList);
+                companyListView.setAdapter(companyAdapter);
+                queryCompany.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //按条件查询机构
+                        if (queryCompanyNameList.size() > 0) {
+                            queryCompanyNameList.removeAll(queryCompanyNameList);
+                        }
+                        queryCompanyNameList.addAll(QueryCompanyList(etCompanyNo.getFieldText(),etcompanyName.getFieldText(),etcomTel.getFieldText(), mCompanyList));
+                        companyAdapter.notifyDataSetChanged();
+                    }
+                });
+                companyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        companyDialog.dismiss();
+                        if (companyAdapter.getCount() > 0 && mCompanyList.size() > 0) {
+                            for (int i = 0; i < mCompanyList.size(); i++) {
+                                if (queryCompanyNameList.get(position).equals(mCompanyList.get(i).getCompanyName())) {
+                                    mComkey = mCompanyList.get(i).getKeyValue();
+                                    mCompanyName = mCompanyList.get(i).getCompanyName();
+                                    company.setFieldTextAndValue(queryCompanyNameList.get(position));
+                                }
+                            }
+                        }
+                    }
+                });
             }
         });
 
@@ -230,7 +298,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             @Override
             public void onClick(View v) {
                 if (mCompanyList.size() == 0) {
-                    mPresenter.GetAllCompList(ComKey,"2");
+                    mPresenter.GetAllCompList(ComKey, "2");
                 }
             }
         });
@@ -238,7 +306,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             @Override
             public void onClick(View v) {
                 if (mWarehouseList.size() == 0) {
-                    mPresenter.GetWareHouseList(ComKey,IsUse);
+                    mPresenter.GetWareHouseList(ComKey, IsUse);
                 }
             }
         });
@@ -252,7 +320,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             String ewm_type = data.getStringExtra("ewm_type");
             if (rbAdd.isChecked()) {
                 if (!smm.contains(ewm_num)) {
-                    smm.add(ewm_num);
+                    smm.add(0, ewm_num);
                     smmAdapter.notifyDataSetChanged();
                     information.setText(etEditywm.getText().toString().trim() + "添加成功！");
                 } else {
@@ -261,16 +329,21 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             } else if (rbDelete.isChecked() && smm.contains(ewm_num)) {
                 smm.remove(ewm_num);
                 smmAdapter.notifyDataSetChanged();
-                information.setText(ewm_num+"删除成功！");
+                information.setText(ewm_num + "删除成功！");
             }
             if (SuccessCount > 0) {
                 count.setVisibility(View.VISIBLE);
-                count.setText("已扫描" + SuccessCount + "条");
+                count.setText("已成功上传" + SuccessCount + "条");
             } else {
                 count.setVisibility(View.GONE);
             }
-         //   ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
-
+            //   ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
+            if (smm.size() > 0) {
+                scanNumber.setVisibility(View.VISIBLE);
+                scanNumber.setText("已扫描" + smm.size() + "条");
+            } else {
+                scanNumber.setVisibility(View.GONE);
+            }
             //跳到详情页返回是否确认提交
             if (resultCode == InvoicingDetailActivity.RESULT_OK) {
                 IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
@@ -278,6 +351,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
         }
     }
+
 
     /**
      * 设置仓库列表
@@ -306,8 +380,11 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
     @Override
     public void SetAllCompList(List<Company> companyList) {
-        mCompanyList = companyList;
-        if (companyList != null && companyList.size() > 0) {
+        if (companyList.size() > 0) {
+            mCompanyList.removeAll(mCompanyList);
+        }
+        mCompanyList.addAll(companyList);
+       /* if (companyList != null && companyList.size() > 0) {
             for (int i = 0; i < companyList.size(); i++) {
                 Company mCompany = companyList.get(i);
                 mCommonSelectDataCompanyList.add(new CommonSelectData(mCompany.getCompanyName(), mCompany.getKeyValue() + ""));
@@ -316,6 +393,9 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             if (isOld) {
                 company.setFieldTextAndValue(oldReceivingComName);
             }
+        }*/
+        if (isOld) {
+            company.setFieldTextAndValue(oldReceivingComName);
         }
     }
 
@@ -326,10 +406,11 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
      */
     @Override
     public void insertInv(InvoicingBean invoicingBean) {
+        hasNewOutInvoice = true;
         isNewInvoicing = true;
         invId = invoicingBean.getInvId();
-        final NormalDialog IsNewInvoicing_Dialog =new NormalDialog(mContext);
-        QPadPromptDialogUtils.showOnePromptDialog(IsNewInvoicing_Dialog, "新出库单据:"+InvNumber.getFieldText()+"您可以前往扫码！", new OnBtnClickL() {
+        final NormalDialog IsNewInvoicing_Dialog = new NormalDialog(mContext);
+        QPadPromptDialogUtils.showOnePromptDialog(IsNewInvoicing_Dialog, "已创建了订单，请进行扫码操作！", new OnBtnClickL() {
             @Override
             public void onBtnClick() {
                 IsNewInvoicing_Dialog.dismiss();
@@ -344,6 +425,16 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
      */
     @OnClick(R.id.saveNnit)
     public void setSaveNnit(View view) {
+        if (hasNewOutInvoice || isOld) {//已经新建订单
+            final NormalDialog hasNewOutInvoice_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(hasNewOutInvoice_Dialog, "已创建了订单，请进行扫码操作！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    hasNewOutInvoice_Dialog.dismiss();
+                }
+            });
+            return;
+        }
         options = new HashMap<>();
         String CheckDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         if (isOld && QpadJudgeUtils.isEmpty(mCompanyName)) {
@@ -419,7 +510,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             SuccessCount = GetSuccessCount(barCodeLogList);
             if (SuccessCount > 0) {
                 count.setVisibility(View.VISIBLE);
-                count.setText("已扫描" + SuccessCount + "条");
+                count.setText("已成功上传" + SuccessCount + "条");
             } else {
                 count.setVisibility(View.GONE);
             }
@@ -454,6 +545,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     public void setScanywm(View view) {
         startActivityForResult(new Intent(NewOutInvoiceActivity.this, CaptureActivity.class), Config.REQUESTOK);
     }
+
     /**
      * 手动添加
      *
@@ -464,20 +556,27 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         String et_ywm = etEditywm.getText().toString().trim();
         if (QpadJudgeUtils.isEmpty(et_ywm)) {
             ToastUitl.showShort("请输入条码！");
-        }else if (!smm.contains(et_ywm)) {
-            smm.add(et_ywm);
+        } else if (!smm.contains(et_ywm)) {
+            smm.add(0, et_ywm);
             smmAdapter.notifyDataSetChanged();
-            count.setText("已扫描" + smm.size() + "条");
             information.setText(etEditywm.getText().toString().trim() + "添加成功！");
         } else {
             etEditywm.setText("");
             ToastUitl.showShort("已经添加此条码,请重新输入！");
         }
+        etEditywm.setText("");
         if (SuccessCount > 0) {
             count.setVisibility(View.VISIBLE);
             count.setText("已扫描" + SuccessCount + "条");
         } else {
             count.setVisibility(View.GONE);
+        }
+
+        if (smm.size() > 0) {
+            scanNumber.setVisibility(View.VISIBLE);
+            scanNumber.setText("已扫描" + smm.size() + "条");
+        } else {
+            scanNumber.setVisibility(View.GONE);
         }
     }
 
@@ -554,7 +653,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                         "true",
                         sysKeyBase
                 );
-            }else if (smm == null || smm.size() == 0) {
+            } else if (smm == null || smm.size() == 0) {
                 final NormalDialog IsNotScan_Dialog = new NormalDialog(mContext);
                 QPadPromptDialogUtils.showOnePromptDialog(IsNotScan_Dialog, "条码列表为空，请先扫码！", new OnBtnClickL() {
                     @Override
@@ -569,15 +668,15 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     @OnClick(R.id.commit)
     public void commit(View view) {
         if (!isOld && !isNewInvoicing) {
-                final NormalDialog IsEmpty_ywm_Dialog = new NormalDialog(mContext);
-                QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_ywm_Dialog, "未新建出库单据，请先新增订单！", new OnBtnClickL() {
-                    @Override
-                    public void onBtnClick() {
-                        IsEmpty_ywm_Dialog.dismiss();
-                    }
-                });
+            final NormalDialog IsEmpty_ywm_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsEmpty_ywm_Dialog, "未新建出库单据，请先新增订单！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsEmpty_ywm_Dialog.dismiss();
+                }
+            });
         } else {
-           if (!isUpload) {
+            if (!isUpload) {
                 final NormalDialog IsUpload_Dialog = new NormalDialog(mContext);
                 QPadPromptDialogUtils.showOnePromptDialog(IsUpload_Dialog, "请上传条码！", new OnBtnClickL() {
                     @Override
@@ -596,10 +695,10 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             } else {
                 Intent intent = new Intent(NewOutInvoiceActivity.this, InvoicingDetailActivity.class);
                 intent.putExtra("invId", invId + "");
-                startActivityForResult(intent,REQUEST_OK);
-               if (IsCommitSuccess) {
-                   finish();
-               }
+                startActivityForResult(intent, REQUEST_OK);
+                if (IsCommitSuccess) {
+                    finish();
+                }
             }
         }
         IsCommitSuccess = false;
@@ -607,15 +706,43 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
     @Override
     public void startProgressDialog(String msg) {
-        QpadProgressUtils.showProgress(this,msg);
+        QpadProgressUtils.showProgress(this, msg);
     }
 
     @Override
     public void stopProgressDialog() {
         QpadProgressUtils.closeProgress();
     }
+
+    /**
+     * 根据条件查询机构
+     * @param companyNo
+     * @param companyName
+     * @param comTel
+     * @param companyList
+     * @return
+     */
+    private List<String> QueryCompanyList(String companyNo, String companyName, String comTel, List<Company> companyList) {
+        List<String> companyNames= new ArrayList<>();
+        if (companyList == null) {
+            return null;
+        }
+        if (companyList.size() == 0) {
+            return null;
+        }
+        for (int i = 0; i < companyList.size(); i++) {
+            if (StringUtils.ifIndexOf(companyList.get(i).getComTel()+"", comTel)
+                    &&StringUtils.ifIndexOf(companyList.get(i).getCompanyNo()+"",companyNo)
+                    &&StringUtils.ifIndexOf(companyList.get(i).getCompanyName()+"",companyName)) {
+                companyNames.add(companyList.get(i).getCompanyName());
+            }
+        }
+        return companyNames;
+    }
+
     /**
      * 计算扫码成功数目
+     *
      * @param barCodeLogList
      * @return
      */
@@ -632,6 +759,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
     /**
      * 查询机构
+     *
      * @param view
      */
     @OnClick(R.id.btnQueryCompany)
@@ -658,9 +786,9 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     }
 
 
-
     /**
      * 拼接扫码
+     *
      * @param smm
      * @return
      */
@@ -686,4 +814,6 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         }
         return invNumber;
     }
+
+
 }

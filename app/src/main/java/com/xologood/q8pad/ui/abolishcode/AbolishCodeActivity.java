@@ -83,7 +83,7 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
             String ewm_type = data.getStringExtra("ewm_type");
             if (rbAdd.isChecked()) {
                 if (!smm.contains(ewm_num)) {
-                    smm.add(ewm_num);
+                    smm.add(0,ewm_num);
                     smmAdapter.notifyDataSetChanged();
                     information.setText(ewm_num + "添加成功！");
                 } else {
@@ -130,7 +130,7 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
         if (QpadJudgeUtils.isEmpty(edit_smm)) {
             ToastUitl.showShort("请输入条码！");
         }else if (!smm.contains(edit_smm)) {
-            smm.add(edit_smm);
+            smm.add(0,edit_smm);
             smmAdapter.notifyDataSetChanged();
             count.setText("已扫描" + smm.size() + "条");
             information.setText(etEditywm.getText().toString().trim() + "添加成功！");
@@ -138,6 +138,8 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
             etEditywm.setText("");
             ToastUitl.showShort("已经添加此条码,请重新输入！");
         }
+        etEditywm.setText("");
+
         if (smm.size() > 0) {
             count.setVisibility(View.VISIBLE);
             count.setText("已扫描" + smm.size() + "条");

@@ -68,7 +68,6 @@
             android:id="@+id/cbStore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:textColor="#cee9ff"
             android:text="是否保存密码" />
     </LinearLayout>

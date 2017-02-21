@@ -108,7 +108,7 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
             SuccessCount = GetSuccessCount(barCodeLogList);
             if (SuccessCount > 0) {
                 count.setVisibility(View.VISIBLE);
-                count.setText("已扫描" + SuccessCount + "条");
+                count.setText("已成功上传" + SuccessCount + "条");
             } else {
                 count.setVisibility(View.GONE);
             }
@@ -145,7 +145,7 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
             String ewm_type = data.getStringExtra("ewm_type");
             if (rbAdd.isChecked()) {
                 if (!smm.contains(ewm_num)) {
-                    smm.add(ewm_num);
+                    smm.add(0,ewm_num);
                     smmAdapter.notifyDataSetChanged();
                     information.setText(ewm_num + "添加成功！");
                 } else {
@@ -158,7 +158,7 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
             }
             if (SuccessCount > 0) {
                 count.setVisibility(View.VISIBLE);
-                count.setText("已扫描" + SuccessCount + "条");
+                count.setText("已成功上传" + SuccessCount + "条");
             } else {
                 count.setVisibility(View.GONE);
             }

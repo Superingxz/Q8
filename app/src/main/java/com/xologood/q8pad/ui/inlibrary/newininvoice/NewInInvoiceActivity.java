@@ -1,9 +1,13 @@
 package com.xologood.q8pad.ui.inlibrary.newininvoice;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -48,6 +52,8 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.OnClick;
 
+import static com.xologood.q8pad.R.id.productName;
+
 public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, NewInInvoiceModel>
         implements NewInInvoiceContract.View {
     private static final String TAG = "Superingxz";
@@ -83,6 +89,8 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     Button commit;
     @Bind(R.id.new_in_invoice_ll)
     LinearLayout newInInvoiceLl;
+    @Bind(R.id.btnAddProduceBatch)
+    Button btnAddProduceBatch;
 
     //已有入库传过来数据
     private Intent intent;
@@ -113,25 +121,24 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     private String mReceivingWarehouseId;
     private String mReceivingWarehouseName;
     private String InvDate;//开单时间
-
-    private NewInInvoiceAdpter newInInvoiceAdpter;
-
+    private NewInInvoiceAdpter newInInvoiceAdpter;//保存后明细列表adapter
+    private ArrayAdapter productAdapter;
     private Map<String, String> options; //保存入库主表请求参数
     private int invId; //入库单号
-
     private String ExpectedQty;
 
     private List<Warehouse> mWarehouseList;
-
     private List<Product> mProductList;
     private List<ProductBatch> mProductBatchList;
     private List<StandardUnit> mStandardUnitList;
     private List<InvoicingDetail> mInvoicingDetailList;
 
-    private boolean isSave = false;
-    private boolean HasSava = false;
+    private boolean isSave = false; //是否保存成功
     private boolean isReturn = false;
     private boolean IsCommitSuccess = false;
+
+    private boolean isClickSava; //是否点击保存按钮
+    private List<String> queryProductNameList;
 
     @Override
     public int getLayoutId() {
@@ -149,13 +156,15 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         mStandardUnitList = new ArrayList<>();
         mInvoicingDetailList = new ArrayList();
 
+        queryProductNameList = new ArrayList<>();
+
         intent = getIntent();
-        IsOld = intent.getBooleanExtra("isOld",false);
+        IsOld = intent.getBooleanExtra("isOld", false);
         oldInvNumber = intent.getStringExtra("InvNumber");
         oldInvDate = intent.getStringExtra("InvDate");
         oldWarehouseId = intent.getStringExtra("WarehouseId");
         if (IsOld) {
-            invId = intent.getIntExtra("invId",0);
+            invId = intent.getIntExtra("invId", 0);
         }
 
         date = new Date();
@@ -206,7 +215,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 intent.putExtra("StandardUnitName", invoicingDetail.getStandardUnitName());
                 int needScan = invoicingDetail.getExpectedQty() - invoicingDetail.getActualQty();
                 intent.putExtra("NeedToScan", String.valueOf(needScan));
-                if (needScan > 0 ) {
+                if (needScan > 0) {
                     startActivityForResult(intent, SCAN);
                 }
                 lv.setTag(invoicingDetail);
@@ -225,7 +234,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
         }
         if (IsCommitSuccess) {
-            mPresenter.GetInvoicingDetail(invId+"");
+            mPresenter.GetInvoicingDetail(invId + "");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -242,7 +251,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             }
         });
 
-        produceName.setOnChangeListener(new QpadEditText.OnChangeListener() {
+        /*produceName.setOnChangeListener(new QpadEditText.OnChangeListener() {
             @Override
             public void onChanged(CommonSelectData data) {
                 mProductId = data.getValue();
@@ -252,6 +261,68 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                     mPresenter.GetStandardUnitByProductId(mProductId, SysKey);
                 }
             }
+        });*/
+
+        produceName.setOnDialogClickLister(new QpadEditText.OnDialogClickLister() {
+            @Override
+            public void OnDialogClick() {
+                //根据产品编号，产品名称查询
+                //初始化产品名称列表
+                if (mProductList.size() > 0) {
+                    for (int i = 0; i < mProductList.size(); i++) {
+                        queryProductNameList.add(mProductList.get(i).getProductName());
+                    }
+                }
+                productAdapter = new ArrayAdapter(mContext,android.R.layout.simple_list_item_1, queryProductNameList);
+                View layout_layout_queryProductNameList = LayoutInflater.from(mContext).inflate(R.layout.layout_productlist, null);
+                final AlertDialog productDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
+                productDialog.setView(new EditText(mContext));
+                productDialog.setCanceledOnTouchOutside(false);
+                productDialog.show();
+                productDialog.getWindow().setContentView(layout_layout_queryProductNameList);
+                WindowManager.LayoutParams lp_product = productDialog.getWindow().getAttributes();
+                lp_product.width = (int) (width * 0.85);
+                lp_product.height = (int) (height * 0.85);
+                productDialog.getWindow().setAttributes(lp_product);
+                final QpadEditText etProductCode = (QpadEditText) layout_layout_queryProductNameList.findViewById(R.id.productCode);
+                final QpadEditText etProductName = (QpadEditText) layout_layout_queryProductNameList.findViewById(productName);
+                Button queryProduct = (Button) layout_layout_queryProductNameList.findViewById(R.id.queryProduct);
+                ListView productListView = (ListView) layout_layout_queryProductNameList.findViewById(R.id.productList);
+                productListView.setAdapter(productAdapter);
+                queryProduct.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //点击查询按钮查询
+                        if (queryProductNameList.size() > 0) {
+                            queryProductNameList.removeAll(queryProductNameList);
+                        }
+                        queryProductNameList.addAll(QueryProductList(etProductCode.getFieldText(),etProductName.getFieldText(),mProductList));
+                        productAdapter.notifyDataSetChanged();
+                    }
+                });
+                productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        productDialog.dismiss();
+                        //根据产品名称查找id
+                        if (productAdapter.getCount() > 0 && mProductList.size() > 0) {
+                            for (int i = 0; i < mProductList.size(); i++) {
+                                Product product = mProductList.get(i);
+                                if (queryProductNameList.get(position).equals(product.getProductName())) {
+                                    mProductId = product.getId() + "";
+                                }
+                            }
+                            mProductName = queryProductNameList.get(position);
+                            produceName.setFieldTextAndValue(mProductName);
+                            if (!QpadJudgeUtils.isEmpty(mProductId)) {
+                                mPresenter.GetProductBatchByProductId(mProductId);
+                                mPresenter.GetStandardUnitByProductId(mProductId, SysKey);
+                            }
+                        }
+                    }
+                });
+            }
+
         });
 
         produceBatch.setOnChangeListener(new QpadEditText.OnChangeListener() {
@@ -308,7 +379,14 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 }
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isSave) {
+            mPresenter.GetInvoicingDetail(invId + "");
+        }
     }
 
     /**
@@ -342,9 +420,12 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      * @param productList
      */
     @Override
-    public void SetProductList(List<Product> productList) {
-        mProductList = productList;
-        List<CommonSelectData> commonSelectProductList = new ArrayList<>();
+    public void SetProductList(final List<Product> productList) {
+        if (mProductList.size() > 0) {
+            mProductList.removeAll(mProductList);
+        }
+        mProductList.addAll(productList);
+      /*  List<CommonSelectData> commonSelectProductList = new ArrayList<>();
         if (productList != null && productList.size() > 0) {
             for (int i = 0; i < productList.size(); i++) {
                 String id = productList.get(i).getId() + "";
@@ -352,7 +433,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 commonSelectProductList.add(new CommonSelectData(productName, id));
             }
             produceName.setLists(commonSelectProductList);
-        }
+        }*/
     }
 
     /**
@@ -422,13 +503,12 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     /**
      * 验证入库明细(根据返回Id  "0" 则新增入库明细数据 否则 更新修改入库明细数据)
      *
-     * @param Id 明细id  写死0
+     * @param Id    明细id  写死0
      * @param InvId 单号
      */
     @Override
-    public void GetInvoiceDetailSuccess(int Id,String InvId) {
+    public void GetInvoiceDetailSuccess(int Id, String InvId) {
         if (Id == 0) {
-            // ToastUitl.showLong("增加入库明细:" + Id);
             mPresenter.InsertInvoiceDetail(Id + "", invId + "", mProductId, mBatch, "0", mExpectedQty, ComKey, SysKey);
         } else {
             mPresenter.UpdateInvoiceDetail(Id + "", invId + "", mProductId, mBatch, "0", mExpectedQty, ComKey, SysKey);
@@ -442,17 +522,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      */
     @Override
     public void InsertInvoiceDetailSuccess(int Id) {
-        //AddOrUpdate(Id);
-      /*  int batch = Integer.valueOf(mBatch).intValue();
-        int expectedQty = Integer.valueOf(mExpectedQty).intValue();
-        if (mStandardUnitList.size() > 0 && mStandardUnitList.get(0) != null) {
-            InvoicingDetail newInInvoice = new InvoicingDetail(Id, invId, mProductId, mProductName, batch,
-                    mBatchNo, expectedQty, 0, mCreationDate, mStandardUnitList.get(0).getStandardUnitName());
-            newInInvoiceList.add(newInInvoice);
-            newInInvoiceAdpter.notifyDataSetChanged();
-            isSave = true;
-        }*/
-        mPresenter.GetInvoicingDetail(invId+"");
+        mPresenter.GetInvoicingDetail(invId + "");
     }
 
     /**
@@ -462,9 +532,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      */
     @Override
     public void UpdateInvoiceDetailSuccess(int Id) {
-        //AddOrUpdate(Id);
-        //isSave = newInInvoiceAdpter.update(mExpectedQty, mProductName, mBatchNo);
-        mPresenter.GetInvoicingDetail(invId+"");
+        mPresenter.GetInvoicingDetail(invId + "");
     }
 
     @Override
@@ -475,7 +543,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             newInInvoiceAdpter.notifyDataSetChanged();
             isSave = true; //这里（更新 增加 和扫描后回来都执行到这里  isSave设置为保存成功）
             final NormalDialog IsSava_Success_Dialog = new NormalDialog(mContext);
-            if (!isReturn) {
+            if (!isReturn && isClickSava) {
                 QPadPromptDialogUtils.showOnePromptDialog(IsSava_Success_Dialog, "保存成功！", new OnBtnClickL() {
                     @Override
                     public void onBtnClick() {
@@ -484,14 +552,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 });
             }
         }
-    }
-
-    private void AddOrUpdate(int Id) {
-        int batch = Integer.valueOf(mBatch).intValue();
-        int expectedQty = Integer.valueOf(mExpectedQty).intValue();
-        InvoicingDetail newInInvoice = new InvoicingDetail(Id, invId, mProductId, mProductName, batch,
-                mBatchNo, expectedQty, 0, mCreationDate, mStandardUnit);
-        HasSava = newInInvoiceAdpter.AddOrUpdate(newInInvoice);
     }
 
     /**
@@ -576,6 +636,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      */
     @OnClick(R.id.saveBatch)
     public void setSaveBatch(View view) {
+        isClickSava = true;
         String addProductBatch = addProduceBatch.getFieldText();
         if (IsOld && QpadJudgeUtils.isEmpty(mProductName)) {
             final NormalDialog IsEmpty_Product_Dialog = new NormalDialog(mContext);
@@ -700,7 +761,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         if (isSave) {
             Intent intent = new Intent(NewInInvoiceActivity.this, InvoicingDetailActivity.class);
             intent.putExtra("invId", invId + "");
-            startActivityForResult(intent,REQUEST_OK);
+            startActivityForResult(intent, REQUEST_OK);
             if (IsCommitSuccess) {
                 finish();
             }
@@ -714,6 +775,47 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             });
         }
         IsCommitSuccess = false;
+    }
+
+    /**
+     * 根据条件查询产品
+     * @param productCode 产品编号
+     * @param productName 产品名称
+     * @param productList 产品列表
+     * @return
+     */
+    private List<String> QueryProductList(String productCode, String productName, List<Product> productList) {
+        List<String> productNames= new ArrayList<>();
+        if (productList == null) {
+            return null;
+        } else if (productList.size() == 0) {
+            return null;
+        }
+        if (QpadJudgeUtils.isEmpty(productCode) && !QpadJudgeUtils.isEmpty(productName)) {
+            for (int i = 0; i < productList.size(); i++) {
+                if (StringUtils.ifIndexOf(productList.get(i).getProductName(), productName)) {
+                    productNames.add(productList.get(i).getProductName());
+                }
+            }
+        } else if (!QpadJudgeUtils.isEmpty(productCode) && QpadJudgeUtils.isEmpty(productName)) {
+            for (int i = 0; i < productList.size(); i++) {
+                if (StringUtils.ifIndexOf(productList.get(i).getProductCode(), productCode)) {
+                    productNames.add(productList.get(i).getProductName());
+                }
+            }
+        } else if (!QpadJudgeUtils.isEmpty(productCode) && !QpadJudgeUtils.isEmpty(productName)) {
+            for (int i = 0; i < productList.size(); i++) {
+                if (StringUtils.ifIndexOf(productList.get(i).getProductCode(), productCode)
+                        && StringUtils.ifIndexOf(productList.get(i).getProductName(), productName)) {
+                    productNames.add(productList.get(i).getProductName());
+                }
+            }
+        } else {
+            for (int i = 0; i < productList.size(); i++) {
+                productNames.add(productList.get(i).getProductName());
+            }
+        }
+        return productNames;
     }
 
     private boolean isHasZero(List<InvoicingDetail> mInvoicingDetailList) {
@@ -731,7 +833,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
 
     @Override
     public void startProgressDialog(String msg) {
-        QpadProgressUtils.showProgress(this,msg);
+        QpadProgressUtils.showProgress(this, msg);
     }
 
     @Override
@@ -760,6 +862,13 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             invNumber = "L" + str + time + round;
         }
         return invNumber;
+    }
+
+
+    @OnClick(R.id.btnAddProduceBatch)
+    public void btnAddProduceBatch(View view){
+        addProduceBatch.setVisibility(View.VISIBLE);
+        saveBatch.setVisibility(View.VISIBLE);
     }
 }
 

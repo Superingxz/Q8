@@ -2,12 +2,21 @@ package com.xologood.q8pad.utils;
 
 import android.os.Environment;
 
+import com.xologood.q8pad.bean.ScanMessage;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Administrator on 17-2-9.
  */
 
 public class QpadStaticConfig {
-    /**缓存文件夹路径 参数配置 */
+
+    public List<ScanMessage> scen = new ArrayList<>();
+    /**
+     * 缓存文件夹路径 参数配置
+     */
     public final static class CACHE_PATH {
 
         public final static String SD_DATA = Environment
@@ -31,7 +40,9 @@ public class QpadStaticConfig {
                 + "/q8pad/imagecache";
     }
 
-    /** 获取屏幕尺寸 */
+    /**
+     * 获取屏幕尺寸
+     */
     public final static class SCREEN {
         public static int Width = 0;
         public static int Height = 0;

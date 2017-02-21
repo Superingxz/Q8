@@ -41,6 +41,8 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
 
     private int backCount = 1;//返回次数
 
+
+
     @OnClick(R.id.btnLogin)
     public void btnLogin(View view) {
        /* Log.i("superingxz", "btnLogin: 点击了登录！");
@@ -62,6 +64,7 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
             SharedPreferencesUtils.saveStringData(Qpadapplication.getAppContext(), Config.LOGINNAME, loginName);
             SharedPreferencesUtils.saveStringData(Qpadapplication.getAppContext(), Config.PASSWORD, passWord);
         }
+        SharedPreferencesUtils.saveBooleanData(Qpadapplication.getAppContext(), Config.ISCHECK, cbStore.isChecked());
     }
 
     @Override
@@ -72,23 +75,26 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
 
     @Override
     public void initView() {
-        String LoginName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.LOGINNAME);
-        String PassWord = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.PASSWORD);
-        if (!QpadJudgeUtils.isEmpty(LoginName) && !QpadJudgeUtils.isEmpty(PassWord)) {
-            etUser.setText(LoginName);
-            etPassword.setText(PassWord);
-        } else {
-            etUser.setText("");
-            etPassword.setText("");
-        }
-        if (Qpadapplication.getAppContext().IsLogin()&&!QpadJudgeUtils.isEmpty(LoginName) && !QpadJudgeUtils.isEmpty(PassWord)) {
-            Intent intent = new Intent(LoginInActivity.this,MainActivity.class);
-            startActivity(intent);
-        }
+
     }
 
     @Override
     public void initListener() {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String LoginName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.LOGINNAME);
+        String PassWord = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.PASSWORD);
+        boolean isChecked = SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCHECK);
+        cbStore.setChecked(isChecked);
+        if (!QpadJudgeUtils.isEmpty(LoginName) && !QpadJudgeUtils.isEmpty(PassWord)
+                &&cbStore.isChecked()) {
+            etUser.setText(LoginName);
+            etPassword.setText(PassWord);
+        }
 
     }
 
@@ -153,4 +159,6 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
             mHandler.sendEmptyMessageDelayed(0, 2000);
         }
     }
+
+
 }

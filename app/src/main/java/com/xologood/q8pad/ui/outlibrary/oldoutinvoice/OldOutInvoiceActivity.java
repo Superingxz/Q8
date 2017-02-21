@@ -133,7 +133,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                     intent.putExtra("InvDate", invoicingBean.getInvDate());
                     intent.putExtra("ReceivingWarehouseId", invoicingBean.getReceivingWarehouseId());
                     intent.putExtra("ReceivingComKey", invoicingBean.getReceivingComKey());
-                    intent.putExtra("ReceivingComName", invoicingBean.getComName());
+                    intent.putExtra("ReceivingComName", invoicingBean.getReceivingComName());
                 }
                 startActivity(intent);
             }
@@ -171,6 +171,14 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
             IsSelect = false;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!IsCommitSuccess) {
+            mPresenter.GetInvoicingDetail(mInvId + "");
+        }
     }
 
     /**
@@ -391,7 +399,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                         intent.putExtra("InvDate", invoicingBean.getInvDate());
                         intent.putExtra("ReceivingWarehouseId", invoicingBean.getReceivingWarehouseId());
                         intent.putExtra("ReceivingComKey", invoicingBean.getReceivingComKey());
-                        intent.putExtra("ReceivingComName", invoicingBean.getComName());
+                        intent.putExtra("ReceivingComName", invoicingBean.getReceivingComName());
                         startActivity(intent);
                     }
                     IsNoDetail_Dialog.dismiss();

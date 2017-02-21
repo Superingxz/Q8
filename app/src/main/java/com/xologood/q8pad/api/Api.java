@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder;
 import com.xologood.mvpframework.App;
 import com.xologood.mvpframework.util.NetWorkUtil;
 import com.xologood.q8pad.Qpadapplication;
+import com.xologood.q8pad.utils.AppUtils;
 import com.xologood.q8pad.utils.Keybase;
 import com.xologood.q8pad.utils.NetWorkUtils;
 
@@ -119,7 +120,7 @@ public class Api {
         if (retrofitManager == null) {
             retrofitManager = new Api(hostType, new Interceptor() {
                 @Override
-                public Response intercept(Interceptor.Chain chain) throws IOException {
+                public Response intercept(Chain chain) throws IOException {
                     Request oldRequest = chain.request();
                  //   Log.i(TAG, "intercept:旧host："+oldRequest.url().host()+"旧scheme："+oldRequest.url().scheme()+"旧url"+oldRequest.url());
                     // 添加新的参数
@@ -128,8 +129,8 @@ public class Api {
                             .scheme(oldRequest.url().scheme())
                             .host(oldRequest.url().host())
                             .addQueryParameter("keyBase", Keybase.getKeyBase())
-                            .addQueryParameter("versionBase", "4.0.3.7")
-                            .addQueryParameter("projectNameBase", "千里码Q8云战略合作平台-PDA")
+                            .addQueryParameter("versionBase", AppUtils.getVersionName(Qpadapplication.getAppContext()))
+                            .addQueryParameter("projectNameBase", "千里码Q8云战略合作平台-APP")
                             .addQueryParameter("recorderBase" ,recorderBase)
                             .addQueryParameter("sysKeyBase" ,sysKeyBase);
                     // 新的请求
@@ -217,7 +218,7 @@ public class Api {
 
     private final   Interceptor commoninterceptor = new Interceptor() {
             @Override
-            public Response intercept(Interceptor.Chain chain) throws IOException {
+            public Response intercept(Chain chain) throws IOException {
                 Request oldRequest = chain.request();
                 Log.i(TAG, "intercept:旧host："+oldRequest.url().host()+"旧scheme："+oldRequest.url().scheme()+"旧url"+oldRequest.url());
                 // 添加新的参数
@@ -226,10 +227,10 @@ public class Api {
                         .scheme(oldRequest.url().scheme())
                         .host(oldRequest.url().host())
                         .addQueryParameter("keyBase", Keybase.getKeyBase())
-                        .addQueryParameter("recorderBase", "2")
-                        .addQueryParameter("versionBase", "4.0.3.7")
-                        .addQueryParameter("projectNameBase", "千里码Q8云战略合作平台-PDA")
-                        .addQueryParameter("sysKeyBase", "150623155902966stlt");
+                        .addQueryParameter("recorderBase", "1")
+                        .addQueryParameter("versionBase", AppUtils.getVersionName(Qpadapplication.getAppContext()))
+                        .addQueryParameter("projectNameBase", "千里码Q8云战略合作平台-APP")
+                        .addQueryParameter("sysKeyBase", "系统登陆");
                 // 新的请求
                 Request newRequest = oldRequest.newBuilder()
                         .method(oldRequest.method(), oldRequest.body())

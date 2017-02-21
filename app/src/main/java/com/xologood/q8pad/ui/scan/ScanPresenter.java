@@ -1,5 +1,6 @@
 package com.xologood.q8pad.ui.scan;
 
+import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.BarCodeLogList;
 import com.xologood.q8pad.bean.BaseResponse;
@@ -24,15 +25,22 @@ public class ScanPresenter extends ScanContract.Presenter{
                                                  ComName,
                                                  SysKey,
                                                  ReceivingWarehouseId)
-                               .subscribe(new Action1<BaseResponse<BarCodeLogList>>() {
+                               .subscribe(new RxSubscriber<BaseResponse<BarCodeLogList>>(mContext,false) {
                                    @Override
-                                   public void call(BaseResponse<BarCodeLogList> listBaseResponse) {
-                                       List<BarCodeLog> data = listBaseResponse.getData().getBarCodeLogList();
-                                       mView.SetBarCodeList(data);
+                                   public void onStart() {
+                                       super.onStart();
+                                       mView.startProgressDialog("正在上传...");
                                    }
-                               }, new Action1<Throwable>() {
+
                                    @Override
-                                   public void call(Throwable throwable) {
+                                   protected void _onNext(BaseResponse<BarCodeLogList> barCodeLogListBaseResponse) {
+                                       List<BarCodeLog> data = barCodeLogListBaseResponse.getData().getBarCodeLogList();
+                                       mView.SetBarCodeList(data);
+                                       mView.stopProgressDialog();
+                                   }
+
+                                   @Override
+                                   protected void _onError(String message) {
 
                                    }
                                }));

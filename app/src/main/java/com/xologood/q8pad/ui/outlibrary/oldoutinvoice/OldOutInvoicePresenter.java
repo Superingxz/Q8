@@ -60,7 +60,7 @@ public class OldOutInvoicePresenter extends OldOutInvoiceContract.Presenter {
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        mView.GetInvoiceMsg(throwable.getMessage());
+         //               mView.GetInvoiceMsg(throwable.getMessage());
                     }
                 }));
     }

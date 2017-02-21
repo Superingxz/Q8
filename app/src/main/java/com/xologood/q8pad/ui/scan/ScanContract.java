@@ -38,6 +38,15 @@ public interface ScanContract {
         void UploadBarCodeError(String msg);
 
         void SetCheckBarCode(String needToScan);
+
+        /**
+         * 开启加载进度条
+         */
+        public void startProgressDialog(String msg) ;
+        /**
+         * 停止加载进度条
+         */
+        public void stopProgressDialog() ;
     }
 
     abstract class Presenter extends BasePresenter<Model, View> {

@@ -22,7 +22,8 @@ public class Config {
 
 
     public static final int REQUESTOK = 601;
-
+    public static final String ISCHECK = "602";
+    public static final String ISCONTINOUS = "603"; //是否连续扫描
 
 
     /** 获取屏幕尺寸 */

@@ -20,12 +20,28 @@
             android:orientation="vertical"
             >
 
-            <TextView
-                style="@style/TextViewStyle"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:gravity="center_vertical"
-                android:text="已扫码列表"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    style="@style/TextViewStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:text="已扫码列表"
+                    android:id="@+id/textView5" />
+
+                <TextView
+                    android:id="@+id/scanNumber"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+            </RelativeLayout>
 
 
             <RelativeLayout
@@ -107,7 +123,13 @@
                     />
             </RadioGroup>
 
-            <TextView
+            <CheckBox
+                android:id="@+id/isContinous"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="连续扫描"/>
+
+          <TextView
                 android:id="@+id/scan_msg"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -130,7 +152,7 @@
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="扫描二维码"/>
+                android:text="扫描条形码"/>
 
             <Button
                 android:id="@+id/upload"
