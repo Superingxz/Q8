@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
+import com.xologood.q8pad.adapter.CompanyListAdapter;
 import com.xologood.q8pad.adapter.ScanBarCodeAdpater;
 import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.Company;
@@ -94,6 +96,8 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     Button commit;
     @Bind(R.id.scanNumber)
     TextView scanNumber;
+    @Bind(R.id.isContinous)
+    CheckBox isContinous;
     private String LoginName;
     private String SysKey;
     private String ComKey;
@@ -144,8 +148,8 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     private boolean hasNewOutInvoice = false;//是否已经新建订单
 
 
-    private ArrayList<String> queryCompanyNameList;
-    private ArrayAdapter companyAdapter;
+    private ArrayList<Company> queryCompanyList;
+    private CompanyListAdapter companyAdapter;
 
     @Override
     public int getLayoutId() {
@@ -189,6 +193,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
         sysKeyBase = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEYBASE);
 
+        isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));//初始化是否连续扫码状态
 
         mPresenter.GetAllCompList(ComKey, "2");
         mPresenter.GetWareHouseList(ComKey, IsUse);
@@ -231,15 +236,13 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         company.setOnDialogClickLister(new QpadEditText.OnDialogClickLister() {
             @Override
             public void OnDialogClick() {
-                queryCompanyNameList = new ArrayList<>();
+                queryCompanyList = new ArrayList<>();
                 //根据机构编号，机构名称，电话号码查询机构
-                if (mCompanyList.size() > 0) {
-                    for (int i = 0; i < mCompanyList.size(); i++) {
-                        Company company = mCompanyList.get(i);
-                        queryCompanyNameList.add(company.getCompanyName());
-                    }
+                if (queryCompanyList.size() > 0) {
+                    queryCompanyList.removeAll(queryCompanyList);
                 }
-                companyAdapter = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, queryCompanyNameList);
+                queryCompanyList.addAll(mCompanyList);
+                companyAdapter = new CompanyListAdapter(queryCompanyList,mContext);
                 View layout_layout_queryCompanyNameList = LayoutInflater.from(mContext).inflate(R.layout.layout_companylist, null);
                 final AlertDialog companyDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
                 companyDialog.setView(new EditText(mContext));
@@ -260,10 +263,10 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                     @Override
                     public void onClick(View v) {
                         //按条件查询机构
-                        if (queryCompanyNameList.size() > 0) {
-                            queryCompanyNameList.removeAll(queryCompanyNameList);
+                        if (queryCompanyList.size() > 0) {
+                            queryCompanyList.removeAll(queryCompanyList);
                         }
-                        queryCompanyNameList.addAll(QueryCompanyList(etCompanyNo.getFieldText(),etcompanyName.getFieldText(),etcomTel.getFieldText(), mCompanyList));
+                        queryCompanyList.addAll(QueryCompanyList(etCompanyNo.getFieldText(), etcompanyName.getFieldText(), etcomTel.getFieldText(), mCompanyList));
                         companyAdapter.notifyDataSetChanged();
                     }
                 });
@@ -271,14 +274,10 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         companyDialog.dismiss();
-                        if (companyAdapter.getCount() > 0 && mCompanyList.size() > 0) {
-                            for (int i = 0; i < mCompanyList.size(); i++) {
-                                if (queryCompanyNameList.get(position).equals(mCompanyList.get(i).getCompanyName())) {
-                                    mComkey = mCompanyList.get(i).getKeyValue();
-                                    mCompanyName = mCompanyList.get(i).getCompanyName();
-                                    company.setFieldTextAndValue(queryCompanyNameList.get(position));
-                                }
-                            }
+                        if (companyAdapter.getCount() > 0 ) {
+                            mComkey = queryCompanyList.get(position).getKeyValue();
+                            mCompanyName = queryCompanyList.get(position).getCompanyName();
+                            company.setFieldTextAndValue(queryCompanyList.get(position).getCompanyName());
                         }
                     }
                 });
@@ -313,9 +312,31 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == CaptureActivity.RESULT_OK) {
+            //连续扫码
+            List<String> continousSmm = new ArrayList<>();
+            if (isContinous.isChecked()) {
+                String ewm_nums = data.getStringExtra("ewm_num");
+                continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
+                smm.addAll(0,continousSmm);
+                smmAdapter.notifyDataSetChanged();
+                String continousMsg = ewm_nums.replace(",", "\n");
+                if (rbAdd.isChecked()) {
+                    information.setText(continousMsg + "\n添加成功！");
+                } else {
+                    information.setText(continousMsg + "\n删除成功！");
+                }
+                return;
+            }
+
             String ewm_num = data.getStringExtra("ewm_num");
             String ewm_type = data.getStringExtra("ewm_type");
             if (rbAdd.isChecked()) {
@@ -352,6 +373,24 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         }
     }
 
+    private List<String> GetContinousSmm(String ewm_nums,List<String> smm,boolean isAdd) {
+        List<String> mIscontinousSmm = new ArrayList<>();
+        String[] mSmm = ewm_nums.split(",");
+        mSmm = condition(mSmm);//删除重复的
+        if (ewm_nums != null && smm != null && mSmm.length > 0) {
+            for (int i = 0; i < mSmm.length; i++) {
+                if (!smm.contains(mSmm[i])) {
+                    if (isAdd) {
+                        mIscontinousSmm.add(0, mSmm[i]);
+                    } else {
+                        mIscontinousSmm.remove(mSmm[i]);
+                    }
+                }
+            }
+        }
+        return mIscontinousSmm;
+    }
+
 
     /**
      * 设置仓库列表
@@ -382,6 +421,11 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     public void SetAllCompList(List<Company> companyList) {
         if (companyList.size() > 0) {
             mCompanyList.removeAll(mCompanyList);
+        }
+        for (int i = 0; i < companyList.size(); i++) {
+            if (ComKey.equals(companyList.get(i).getComKey())) {
+                companyList.remove(i);
+            }
         }
         mCompanyList.addAll(companyList);
        /* if (companyList != null && companyList.size() > 0) {
@@ -543,7 +587,10 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
      */
     @OnClick(R.id.scanywm)
     public void setScanywm(View view) {
-        startActivityForResult(new Intent(NewOutInvoiceActivity.this, CaptureActivity.class), Config.REQUESTOK);
+        SharedPreferencesUtils.saveBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS, isContinous.isChecked());
+        Intent intent = new Intent(NewOutInvoiceActivity.this, CaptureActivity.class);
+        intent.putExtra("isContinous", isContinous.isChecked());
+        startActivityForResult(intent, Config.REQUESTOK);
     }
 
     /**
@@ -716,14 +763,15 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
     /**
      * 根据条件查询机构
+     *
      * @param companyNo
      * @param companyName
      * @param comTel
      * @param companyList
      * @return
      */
-    private List<String> QueryCompanyList(String companyNo, String companyName, String comTel, List<Company> companyList) {
-        List<String> companyNames= new ArrayList<>();
+    private List<Company> QueryCompanyList(String companyNo, String companyName, String comTel, List<Company> companyList) {
+        List<Company> companys = new ArrayList<>();
         if (companyList == null) {
             return null;
         }
@@ -731,13 +779,13 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             return null;
         }
         for (int i = 0; i < companyList.size(); i++) {
-            if (StringUtils.ifIndexOf(companyList.get(i).getComTel()+"", comTel)
-                    &&StringUtils.ifIndexOf(companyList.get(i).getCompanyNo()+"",companyNo)
-                    &&StringUtils.ifIndexOf(companyList.get(i).getCompanyName()+"",companyName)) {
-                companyNames.add(companyList.get(i).getCompanyName());
+            if (StringUtils.ifIndexOf(companyList.get(i).getComTel() + "", comTel)
+                    && StringUtils.ifIndexOf(companyList.get(i).getCompanyNo() + "", companyNo)
+                    && StringUtils.ifIndexOf(companyList.get(i).getCompanyName() + "", companyName)) {
+                companys.add(companyList.get(i));
             }
         }
-        return companyNames;
+        return companys;
     }
 
     /**
@@ -786,6 +834,25 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     }
 
 
+    private String[] condition(String[] mSmm) {
+        List<String> result = new ArrayList<>();
+        boolean flag = false;
+        for (int i = 0; i < mSmm.length; i++) {
+            flag = false;
+            for (int j = 0; j < result.size(); j++) {
+                if (mSmm[i].equals(result.get(j))) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                result.add(mSmm[i]);
+            }
+        }
+        return (String[]) result.toArray(new String[result.size()]);
+
+    }
+
     /**
      * 拼接扫码
      *
@@ -814,6 +881,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         }
         return invNumber;
     }
+
 
 
 }

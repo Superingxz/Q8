@@ -23,6 +23,17 @@
         android:maxLines="1"
         android:textColor="@color/text_333333"
         android:textSize="@dimen/common_text_middle" />
+    <EditText
+        android:id="@+id/border_edittext"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="5dp"
+        android:background="@color/transparent"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="@color/text_333333"
+        android:textSize="@dimen/common_text_middle"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/textview"

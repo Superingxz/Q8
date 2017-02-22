@@ -121,6 +121,7 @@ public final class CaptureActivity extends Activity implements
 
 	private boolean isContinous = false;
 	private ArrayList<String> smm;
+	private StringBuffer sb ;
 	public ViewfinderView getViewfinderView() {
 		return viewfinderView;
 	}
@@ -137,7 +138,6 @@ public final class CaptureActivity extends Activity implements
 	Handler barHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			StringBuffer sb = new StringBuffer();
 			switch (msg.what) {
 			case PARSE_BARCODE_SUC:  //扫描成功
 				Log.e("扫描结果", msg.getData().getString("mMsgType") + ", " +msg.getData().getString("mMsgNum"));
@@ -151,20 +151,31 @@ public final class CaptureActivity extends Activity implements
 					startActivity(intent);
 				}else{
 					intent = new Intent();
+					mMsgNum = msg.getData().getString("mMsgNum");
 					if (isContinous) {
-						sb.append(mMsgNum+",");
-						intent.putExtra("ewm_num", sb.toString().substring(0, sb.length() - 1));
-					} else {
+						sb.append(mMsgNum + ",");
+						String result = sb.toString().substring(0, sb.length() - 1);
+						intent.putExtra("ewm_num", result);
+					} else {CameraManager.scanframe = 2;
+						chosenIVSrcAndTVColor(1);
+						unChosenIVSrcAndTVColor(0);
+						unChosenIVSrcAndTVColor(2);
+						onPause();
+						onResume();
 						intent.putExtra("ewm_num", mMsgNum);
 					}
-					String mMsgNum = msg.getData().getString("mMsgNum");
-					intent.putExtra("ewm_num", mMsgNum);
 					intent.putExtra("ewm_type", msg.getData().getString("mMsgType"));
 					intent.putExtra("pict_width", CameraManager.width);
 					intent.putExtra("pict_height", CameraManager.height);
 					intent.putExtra("pict_bundle", msg.getData().getBundle("mBundle"));
 					setResult(RESULT_OK, intent);
 				}
+				CameraManager.scanframe = 2;
+				chosenIVSrcAndTVColor(1);
+				unChosenIVSrcAndTVColor(0);
+				unChosenIVSrcAndTVColor(2);
+				onPause();
+				onResume();
 				T.showShort(mContext, "扫描成功!");
 				if (!isContinous) {
 					finish();
@@ -201,6 +212,12 @@ public final class CaptureActivity extends Activity implements
 					setResult(RESULT_OK, intent);
 				}
 
+				CameraManager.scanframe = 2;
+				chosenIVSrcAndTVColor(1);
+				unChosenIVSrcAndTVColor(0);
+				unChosenIVSrcAndTVColor(2);
+				onPause();
+				onResume();
 				T.showShort(mContext, "输入成功!");
 				if (!isContinous) {
 					finish();
@@ -267,6 +284,7 @@ public final class CaptureActivity extends Activity implements
 	
 	private void initData() {
 		smm = new ArrayList<>();
+		sb = new StringBuffer();
 		//是否连续扫码
 		isContinous = getIntent().getBooleanExtra("isContinous", false);
 
@@ -568,7 +586,7 @@ public final class CaptureActivity extends Activity implements
 			Intent wrapperIntent = Intent.createChooser(innerIntent, "选择二维码图片");
 			this.startActivityForResult(wrapperIntent, ConfigUtils.QRCODE_PICTURE_NUM);
 
-		} else if (i == R.id.capture_btn_qrcode) {
+		} else if (i == R.id.capture_btn_qrcode) {  //手动输入
 			onPause();
 			final BarCodeEditDialog edit_dialog = new BarCodeEditDialog(mContext, R.style.Login_dialog);
 			edit_dialog.setEditOnClickL(new EditOnClickL() {
@@ -600,7 +618,7 @@ public final class CaptureActivity extends Activity implements
 			});
 			edit_dialog.show();
 
-		} else if (i == R.id.capture_relayout_smewm) {
+		} else if (i == R.id.capture_relayout_smewm) {  //扫描二维码
 			if (!mBottomChosenLists[0] == true) {
 				CameraManager.scanframe = 1;
 				chosenIVSrcAndTVColor(0);
@@ -611,7 +629,7 @@ public final class CaptureActivity extends Activity implements
 			}
 
 
-		} else if (i == R.id.capture_relayout_smtxm) {
+		} else if (i == R.id.capture_relayout_smtxm) { //扫描条形码
 			if (!mBottomChosenLists[1] == true) {
 				CameraManager.scanframe = 2;
 				chosenIVSrcAndTVColor(1);
@@ -621,7 +639,7 @@ public final class CaptureActivity extends Activity implements
 				onResume();
 			}
 
-		} else if (i == R.id.capture_relayout_dksgd) {
+		} else if (i == R.id.capture_relayout_dksgd) { //闪光灯
 			if (mBottomChosenLists[2] == false) {
 				chosenIVSrcAndTVColor(2);
 				cameraManager.setTorch(true);

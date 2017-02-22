@@ -2,12 +2,12 @@ package com.xologood.q8pad.ui.outlibrary.oldoutinvoice;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +24,7 @@ import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
+import com.xologood.q8pad.adapter.InvoicingBeanAdapter;
 import com.xologood.q8pad.adapter.NewOutInvoiceAdapter;
 import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.FirstUser;
@@ -100,6 +101,8 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     private String mSysKeyBase;
     private boolean IsCommitSuccess = false;//是否确认完成成功
 
+    private InvoicingBeanAdapter invoicingBeanAdapter;
+    private List<InvoicingBean> queryInvoicingBeanList;
 
     @Override
     public int getLayoutId() {
@@ -111,6 +114,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         titleView.setTitle("已有订单出库");
 
         mInvoicingBeanList = new ArrayList<>();
+        queryInvoicingBeanList = new ArrayList<>();
 
         SysKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEY);
         ComKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMKEY);
@@ -151,7 +155,59 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
 
     @Override
     public void initListener() {
+     /*   invoiceInvlist.setOnChangeListener(new QpadEditText.OnChangeListener() {
+            @Override
+            public void onChanged(CommonSelectData data) {
+                mInvId = GetInvId(data.getText(), mInvoicingBeanList);
+                Log.i("superingxz", "onChanged: " + mInvId);
+                mPresenter.GetInvoicingDetail(mInvId + "");
+            }
+        });*/
 
+        invoiceInvlist.setOnDialogClickLister(new QpadEditText.OnDialogClickLister() {
+            @Override
+            public void OnDialogClick() {
+                //清空然后重新添加
+                if (queryInvoicingBeanList.size() > 0) {
+                    queryInvoicingBeanList.removeAll(queryInvoicingBeanList);
+                }
+                queryInvoicingBeanList.addAll(mInvoicingBeanList);
+
+                invoicingBeanAdapter = new InvoicingBeanAdapter(queryInvoicingBeanList, mContext);
+                View layout_queryinvoicingbeanlist = LayoutInflater.from(mContext).inflate(R.layout.layout_invoicingbeanlist, null);
+                final AlertDialog invoicingbeanDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
+                invoicingbeanDialog.setView(new EditText(mContext));
+                invoicingbeanDialog.setCanceledOnTouchOutside(false);
+                invoicingbeanDialog.show();
+                invoicingbeanDialog.getWindow().setContentView(layout_queryinvoicingbeanlist);
+                WindowManager.LayoutParams lp_invoicingbean = invoicingbeanDialog.getWindow().getAttributes();
+                lp_invoicingbean.width = (int) (width * 0.85);
+                lp_invoicingbean.height = (int) (height * 0.85);
+                invoicingbeanDialog.getWindow().setAttributes(lp_invoicingbean);
+                final QpadEditText etInvNumber = (QpadEditText) layout_queryinvoicingbeanlist.findViewById(R.id.InvNumber);
+                Button queryInvoicingBean = (Button) layout_queryinvoicingbeanlist.findViewById(R.id.queryInvNumber);
+                final ListView invoicingBeanListView = (ListView) layout_queryinvoicingbeanlist.findViewById(R.id.InvoicingBeanList);
+                invoicingBeanListView.setAdapter(invoicingBeanAdapter);
+                queryInvoicingBean.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //点击查询按钮查询
+                        if (queryInvoicingBeanList.size() > 0) {
+                            queryInvoicingBeanList.removeAll(queryInvoicingBeanList);
+                        }
+                        queryInvoicingBeanList.addAll(queryInvoicingBeanList(etInvNumber.getFieldText(),mInvoicingBeanList));
+                        invoicingBeanAdapter.notifyDataSetChanged();
+                    }
+                });
+                invoicingBeanListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        mInvId = queryInvoicingBeanList.get(position).getInvId();
+                        mPresenter.GetInvoicingDetail(mInvId+"");
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -196,15 +252,6 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
             }
             invoiceInvlist.setLists(commonSelectDataInvoicingBeanList);
         }
-        invoiceInvlist.setOnChangeListener(new QpadEditText.OnChangeListener() {
-            @Override
-            public void onChanged(CommonSelectData data) {
-                mInvId = GetInvId(data.getText(), invoicingBeanList);
-                Log.i("superingxz", "onChanged: " + mInvId);
-                mPresenter.GetInvoicingDetail(mInvId + "");
-            }
-        });
-
     }
 
     @Override
@@ -457,6 +504,30 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         }
         return count;
     }
+
+    /**
+     * 根据InvNumber查询单据
+     * @param InvNumber
+     * @param mInvoicingBeans
+     * @return
+     */
+    private List<InvoicingBean> queryInvoicingBeanList(String InvNumber, List<InvoicingBean> mInvoicingBeans) {
+        List<InvoicingBean> InvoicingBeans = new ArrayList<>();
+        if (mInvoicingBeans == null) {
+            return null;
+        }
+        if (mInvoicingBeans.size() == 0) {
+            return null;
+        }
+
+        for (int i = 0; i < mInvoicingBeans.size(); i++) {
+            if (StringUtils.ifIndexOf(mInvoicingBeans.get(i).getInvNumber(),InvNumber)) {
+                InvoicingBeans.add(mInvoicingBeans.get(i));
+            }
+        }
+        return InvoicingBeans;
+    }
+
 
     /**
      * 预计数量和实际数量是否为0

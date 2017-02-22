@@ -49,6 +49,7 @@
         <attr name="fieldEnabled" format="boolean" />
         <attr name="fieldLines" format="integer" />
         <attr name="fieldTextSize" format="integer"/>
+        <attr name="fieldBordingBackground" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="base_tab">

@@ -13,38 +13,25 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <com.mview.medittext.view.QpadEditText
-            android:id="@+id/productCode"
-            android:layout_width="match_parent"
+            android:id="@+id/InvNumber"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/common_layout_middle"
             android:background="@drawable/btn_layout_off_bg"
             android:paddingLeft="@dimen/common_padding5"
             android:paddingRight="@dimen/common_padding5"
             aaron:fieldEnabled="true"
-            aaron:fieldTitle="产品编号："
-            aaron:fieldHint = "请输入产品编号"
+            aaron:fieldTitle="入库单号"
+            aaron:fieldHint = "请输入入库单号"
             aaron:fieldType="String" />
-        <com.mview.medittext.view.QpadEditText
-            android:id="@+id/productName"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/common_layout_middle"
-            android:background="@drawable/btn_layout_off_bg"
-            android:paddingLeft="@dimen/common_padding5"
-            android:paddingRight="@dimen/common_padding5"
-            aaron:fieldEnabled="true"
-            aaron:fieldTitle="产品名称："
-            aaron:fieldHint = "请输入产品名称"
-            aaron:fieldType="String" />
-
         <Button
-            android:id="@+id/queryProduct"
+            android:id="@+id/queryInvNumber"
             style="@style/ButtonStyle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="查询" />
+            android:text="搜索" />
     </LinearLayout>
-
     <ListView
-        android:id="@+id/productList"
+        android:id="@+id/InvoicingBeanList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >

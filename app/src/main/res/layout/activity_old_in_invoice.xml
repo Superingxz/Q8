@@ -52,7 +52,7 @@
         android:paddingRight="@dimen/common_padding5"
         aaron:fieldEnabled="true"
         aaron:fieldHint="请选择入库单号"
-        aaron:fieldType="Select" />
+        aaron:fieldType="Dialog" />
 
     <LinearLayout
         android:layout_width="match_parent"

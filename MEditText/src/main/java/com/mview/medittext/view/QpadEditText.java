@@ -58,6 +58,7 @@ public class QpadEditText extends LinearLayout  implements View.OnClickListener{
     private float fieldTextSize;
     private String fieldText;
     private int fieldBindData;
+    private boolean fieldBordingBackground;
     private KTAlertDialog dialog;
     private List<CommonSelectData> lists = new ArrayList<CommonSelectData>();
     private boolean fieldEnabled;
@@ -66,6 +67,9 @@ public class QpadEditText extends LinearLayout  implements View.OnClickListener{
     private OnDialogClickLister onDialogClickLister;
 
     private Calendar calendar = null;
+    private boolean mIsAddBorderLine = false;
+
+    private EditText border_edittext;
 
     public QpadEditText(Context context) {
         super(context);
@@ -89,7 +93,7 @@ public class QpadEditText extends LinearLayout  implements View.OnClickListener{
         fieldEnabled = typedArray.getBoolean(R.styleable.kingteller_edittext_fieldEnabled, true);
         fieldLines = typedArray.getInt(R.styleable.kingteller_edittext_fieldLines, 1);
         fieldTextSize = typedArray.getInt(R.styleable.kingteller_edittext_fieldTextSize, 16);
-
+        fieldBordingBackground = typedArray.getBoolean(R.styleable.kingteller_edittext_fieldBordingBackground, false);
         if (!QpadJudgeUtils.isEmpty(fieldText) && QpadJudgeUtils.isEmpty(fieldValue)){
             fieldValue = fieldText;
         }else if (!QpadJudgeUtils.isEmpty(fieldValue) && QpadJudgeUtils.isEmpty(fieldText)){
@@ -117,7 +121,12 @@ public class QpadEditText extends LinearLayout  implements View.OnClickListener{
 
     private void initView(Context context) {
         LayoutInflater.from(mContext).inflate(R.layout.qpad_edittext, this);
-        edittext = (EditText) findViewById(R.id.edittext);
+        if (!fieldBordingBackground) {
+            edittext = (EditText) findViewById(R.id.edittext);
+        } else {
+            edittext = (EditText) findViewById(R.id.border_edittext);
+            edittext.setVisibility(View.VISIBLE);
+        }
         title = (TextView) findViewById(R.id.title);
         textview = (TextView) findViewById(R.id.textview);
 
@@ -151,6 +160,8 @@ public class QpadEditText extends LinearLayout  implements View.OnClickListener{
             title.setTextColor(getResources().getColor(R.color.orange));
         }
     }
+
+
 
     /**
      * 获取标题

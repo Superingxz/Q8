@@ -14,44 +14,45 @@
         android:orientation="vertical">
         <com.mview.medittext.view.QpadEditText
             android:id="@+id/companyNo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/common_layout_middle"
             android:background="@drawable/btn_layout_off_bg"
             android:paddingLeft="@dimen/common_padding5"
             android:paddingRight="@dimen/common_padding5"
             aaron:fieldEnabled="true"
-            aaron:fieldTitle="机构编号"
+            aaron:fieldTitle="机构编号："
             aaron:fieldHint = "请输入机构编号"
             aaron:fieldType="String" />
         <com.mview.medittext.view.QpadEditText
             android:id="@+id/companyName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/common_layout_middle"
             android:background="@drawable/btn_layout_off_bg"
             android:paddingLeft="@dimen/common_padding5"
             android:paddingRight="@dimen/common_padding5"
             aaron:fieldEnabled="true"
-            aaron:fieldTitle="机构名称"
+            aaron:fieldTitle="机构名称："
             aaron:fieldHint = "请输入机构名称"
             aaron:fieldType="String" />
         <com.mview.medittext.view.QpadEditText
             android:id="@+id/comTel"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/common_layout_middle"
             android:background="@drawable/btn_layout_off_bg"
             android:paddingLeft="@dimen/common_padding5"
             android:paddingRight="@dimen/common_padding5"
             aaron:fieldEnabled="true"
-            aaron:fieldTitle="电话号码"
+            aaron:fieldTitle="电话号码："
             aaron:fieldHint = "请输入电话号码"
             aaron:fieldType="String" />
         <Button
             android:id="@+id/queryCompany"
             style="@style/ButtonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="搜索" />
+            android:text="查询" />
     </LinearLayout>
+
     <ListView
         android:id="@+id/companyList"
         android:layout_width="match_parent"

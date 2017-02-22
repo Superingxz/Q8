@@ -109,6 +109,7 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
         mComKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMKEY);
         mComName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMNAME);
 
+
         isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));
 
         smm = new ArrayList<>();
@@ -140,12 +141,10 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
 
     }
 
-    @OnClick(R.id.scanywm)
-    public void scanywm(View view) {
-        SharedPreferencesUtils.saveBooleanData(Qpadapplication.getAppContext(), "isContinous", isContinous.isChecked());
-        Intent intent = new Intent(ScanActivity.this, CaptureActivity.class);
-        intent.putExtra("isContinous", isContinous.isChecked());
-        startActivityForResult(intent, Config.REQUESTOK);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));
     }
 
     @Override
@@ -203,6 +202,7 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
     private List<String> GetContinousSmm(String ewm_nums,List<String> smm,boolean isAdd) {
         List<String> mIscontinousSmm = new ArrayList<>();
         String[] mSmm = ewm_nums.split(",");
+        mSmm = condition(mSmm);//删除重复的
         if (ewm_nums != null && smm != null && mSmm.length > 0) {
             for (int i = 0; i < mSmm.length; i++) {
                 if (!smm.contains(mSmm[i])) {
@@ -215,6 +215,25 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
             }
         }
         return mIscontinousSmm;
+    }
+
+    private String[] condition(String[] mSmm) {
+        List<String> result = new ArrayList<>();
+        boolean flag = false;
+        for (int i = 0; i < mSmm.length; i++) {
+            flag = false;
+            for (int j = 0; j < result.size(); j++) {
+                if (mSmm[i].equals(result.get(j))) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                result.add(mSmm[i]);
+            }
+        }
+        return (String[]) result.toArray(new String[result.size()]);
+
     }
 
     @Override
@@ -253,11 +272,11 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
         }
     }
 
-
     @Override
     public void UploadBarCodeError(String msg) {
         ToastUitl.showLong(msg);
     }
+
 
     @Override
     public void SetCheckBarCode(String NeedToScan) {
@@ -321,6 +340,14 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
                 }
             });
         }
+    }
+
+    @OnClick(R.id.scanywm)
+    public void scanywm(View view) {
+        SharedPreferencesUtils.saveBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS, isContinous.isChecked());
+        Intent intent = new Intent(ScanActivity.this, CaptureActivity.class);
+        intent.putExtra("isContinous", isContinous.isChecked());
+        startActivityForResult(intent, Config.REQUESTOK);
     }
 
     @OnClick(R.id.close)

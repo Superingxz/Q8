@@ -56,7 +56,7 @@
                 android:paddingLeft="@dimen/common_padding5"
                 android:paddingRight="@dimen/common_padding5"
                 aaron:fieldEnabled="true"
-                aaron:fieldType="Select" />
+                aaron:fieldType="Dialog" />
 
             <Button
                 android:id="@+id/information"
