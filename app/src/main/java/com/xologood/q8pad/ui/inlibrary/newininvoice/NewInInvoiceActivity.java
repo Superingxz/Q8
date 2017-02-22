@@ -122,22 +122,21 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     private String mReceivingWarehouseName;
     private String InvDate;//开单时间
     private NewInInvoiceAdpter newInInvoiceAdpter;//保存后明细列表adapter
-    private ProductListAdpater productAdapter;
     private Map<String, String> options; //保存入库主表请求参数
     private int invId; //入库单号
     private String ExpectedQty;
-
     private List<Warehouse> mWarehouseList;
+
     private List<Product> mProductList;
     private List<ProductBatch> mProductBatchList;
     private List<StandardUnit> mStandardUnitList;
     private List<InvoicingDetail> mInvoicingDetailList;
-
     private boolean isSave = false; //是否保存成功
-    private boolean isReturn = false;
-    private boolean IsCommitSuccess = false;
 
-    private boolean isClickSava; //是否点击保存按钮
+    private boolean IsCommitSuccess = false;//是否成功确认提交单据
+    private boolean isClickSava = false; //是否点击保存按钮
+
+    private ProductListAdpater productAdapter;
     private List<Product> queryProductList;
 
     @Override
@@ -468,7 +467,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      */
     @Override
     public void insertInv(InvoicingBean invoicingBean) {
-        isReturn = false;
         mPresenter.insertInv(SysKey, InvNumber.getFieldText());
     }
 
@@ -526,7 +524,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             newInInvoiceAdpter.notifyDataSetChanged();
             isSave = true; //这里（更新 增加 和扫描后回来都执行到这里  isSave设置为保存成功）
             final NormalDialog IsSava_Success_Dialog = new NormalDialog(mContext);
-            if (!isReturn && isClickSava) {
+            if (isClickSava) {
                 QPadPromptDialogUtils.showOnePromptDialog(IsSava_Success_Dialog, "保存成功！", new OnBtnClickL() {
                     @Override
                     public void onBtnClick() {
