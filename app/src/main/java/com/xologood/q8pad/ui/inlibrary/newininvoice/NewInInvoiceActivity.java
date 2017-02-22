@@ -156,25 +156,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         mInvoicingDetailList = new ArrayList();
         queryProductList = new ArrayList<>();
 
-        intent = getIntent();
-        IsOld = intent.getBooleanExtra("isOld", false);
-        oldInvNumber = intent.getStringExtra("InvNumber");
-        oldInvDate = intent.getStringExtra("InvDate");
-        oldWarehouseId = intent.getStringExtra("WarehouseId");
-        //初始化单号 创建时间
-        if (IsOld) { //如果是已有出库
-            invId = intent.getIntExtra("invId", 0);
-            InvNumber.setFieldTextAndValue(oldInvNumber);
-            InvTime.setFieldTextAndValue(oldInvDate);
-            wareHouse.setFieldEnabled(false);
-            InvNumber.setFieldEnabled(false);
-            InvTime.setFieldEnabled(false);
-        } else {
-            InvNumber.setFieldTextAndValue(getInvNumber(1, UserId));
-            InvTime.setFieldTextAndValue(InvDate);
-        }
-
-
         date = new Date();
         InvDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
         options = new HashMap<>();
