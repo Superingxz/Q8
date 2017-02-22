@@ -155,6 +155,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
                 invoicingBeanListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        invoicingbeanDialog.dismiss();
                         mInvId = queryInvoicingBeanList.get(position).getInvId();
                         mPresenter.GetInvoicingDetail(mInvId+"");
                     }

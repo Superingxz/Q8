@@ -274,11 +274,9 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         companyDialog.dismiss();
-                        if (companyAdapter.getCount() > 0 ) {
-                            mComkey = queryCompanyList.get(position).getKeyValue();
-                            mCompanyName = queryCompanyList.get(position).getCompanyName();
-                            company.setFieldTextAndValue(queryCompanyList.get(position).getCompanyName());
-                        }
+                        mComkey = queryCompanyList.get(position).getKeyValue();
+                        mCompanyName = queryCompanyList.get(position).getCompanyName();
+                        company.setFieldTextAndValue(queryCompanyList.get(position).getCompanyName());
                     }
                 });
             }

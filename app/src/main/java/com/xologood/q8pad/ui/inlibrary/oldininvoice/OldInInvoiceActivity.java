@@ -204,6 +204,7 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
                 invoicingBeanListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        invoicingbeanDialog.dismiss();
                         mInvId = queryInvoicingBeanList.get(position).getInvId() + "";
                         mPresenter.GetInvoicingDetail(mInvId);
                     }
