@@ -172,6 +172,19 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         date = new Date();
         InvDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
 
+        SysKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEY);
+        ComKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMKEY);
+        ComName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMNAME);
+        sysKeyBase = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEYBASE);
+
+        LoginName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.LOGINNAME);
+        UserName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERNAME);
+        UserId = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERID);
+        IsUse = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.ISUSE);
+
+        isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));//初始化是否连续扫码状态
+
+
         Intent intent = getIntent();
         isOld = intent.getBooleanExtra("isOld", false);
         oldInvNumber = intent.getStringExtra("InvNumber");
@@ -194,18 +207,6 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             InvNumber.setFieldTextAndValue(getInvNumber(2, UserId));
             InvTime.setFieldTextAndValue(InvDate);
         }
-
-        SysKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEY);
-        ComKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMKEY);
-        ComName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMNAME);
-        sysKeyBase = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEYBASE);
-
-        LoginName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.LOGINNAME);
-        UserName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERNAME);
-        UserId = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERID);
-        IsUse = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.ISUSE);
-
-        isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));//初始化是否连续扫码状态
 
         mPresenter.GetAllCompList(ComKey, "2");
         mPresenter.GetWareHouseList(ComKey, IsUse);

@@ -188,6 +188,25 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         UserId = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERID);
         IsUse = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.ISUSE);
 
+
+        intent = getIntent();
+        IsOld = intent.getBooleanExtra("isOld", false);
+        oldInvNumber = intent.getStringExtra("InvNumber");
+        oldInvDate = intent.getStringExtra("InvDate");
+        oldWarehouseId = intent.getStringExtra("WarehouseId");
+        //初始化单号 创建时间
+        if (IsOld) { //如果是已有出库
+            invId = intent.getIntExtra("invId", 0);
+            InvNumber.setFieldTextAndValue(oldInvNumber);
+            InvTime.setFieldTextAndValue(oldInvDate);
+            wareHouse.setFieldEnabled(false);
+            InvNumber.setFieldEnabled(false);
+            InvTime.setFieldEnabled(false);
+        } else {
+            InvNumber.setFieldTextAndValue(getInvNumber(1, UserId));
+            InvTime.setFieldTextAndValue(InvDate);
+        }
+
         //获取仓库名称列表 产品列表
         mPresenter.GetWareHouseList(ComKey, IsUse);
         mPresenter.GetProductList(SysKey, IsUse);

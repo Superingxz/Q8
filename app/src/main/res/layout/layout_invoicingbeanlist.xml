@@ -14,7 +14,7 @@
         android:orientation="vertical">
         <com.mview.medittext.view.QpadEditText
             android:id="@+id/InvNumber"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/common_layout_middle"
             android:background="@drawable/btn_layout_off_bg"
             android:paddingLeft="@dimen/common_padding5"
@@ -26,7 +26,7 @@
         <Button
             android:id="@+id/queryInvNumber"
             style="@style/ButtonStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="搜索" />
     </LinearLayout>
