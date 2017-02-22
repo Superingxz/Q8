@@ -423,7 +423,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             mCompanyList.removeAll(mCompanyList);
         }
         for (int i = 0; i < companyList.size(); i++) {
-            if (ComKey.equals(companyList.get(i).getComKey())) {
+            if (ComKey.equals(companyList.get(i).getKeyValue())) {
                 companyList.remove(i);
             }
         }
