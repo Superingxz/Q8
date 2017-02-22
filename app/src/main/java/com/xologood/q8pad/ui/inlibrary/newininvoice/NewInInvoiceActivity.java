@@ -288,8 +288,10 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                         if (queryProductList.size() > 0) {
                             queryProductList.removeAll(queryProductList);
                         }
-                        queryProductList.addAll(QueryProductList(etProductCode.getFieldText(),etProductName.getFieldText(),mProductList));
-                        productAdapter.notifyDataSetChanged();
+                        if (mProductList != null && mProductList.size() > 0) {
+                            queryProductList.addAll(QueryProductList(etProductCode.getFieldText(), etProductName.getFieldText(), mProductList));
+                            productAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
                 productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -195,8 +195,10 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                         if (queryInvoicingBeanList.size() > 0) {
                             queryInvoicingBeanList.removeAll(queryInvoicingBeanList);
                         }
-                        queryInvoicingBeanList.addAll(queryInvoicingBeanList(etInvNumber.getFieldText(),mInvoicingBeanList));
-                        invoicingBeanAdapter.notifyDataSetChanged();
+                        if (mInvoicingBeanList != null && mInvoicingBeanList.size() > 0) {
+                            queryInvoicingBeanList.addAll(queryInvoicingBeanList(etInvNumber.getFieldText(), mInvoicingBeanList));
+                            invoicingBeanAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
                 invoicingBeanListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

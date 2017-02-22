@@ -260,8 +260,10 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                         if (queryCompanyList.size() > 0) {
                             queryCompanyList.removeAll(queryCompanyList);
                         }
-                        queryCompanyList.addAll(QueryCompanyList(etCompanyNo.getFieldText(), etcompanyName.getFieldText(), etcomTel.getFieldText(), mCompanyList));
-                        companyAdapter.notifyDataSetChanged();
+                        if (mCompanyList != null && mCompanyList.size() > 0) {
+                            queryCompanyList.addAll(QueryCompanyList(etCompanyNo.getFieldText(), etcompanyName.getFieldText(), etcomTel.getFieldText(), mCompanyList));
+                            companyAdapter.notifyDataSetChanged();
+                        }
                     }
                 });
                 companyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
