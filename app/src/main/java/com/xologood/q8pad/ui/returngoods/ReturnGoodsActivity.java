@@ -119,7 +119,6 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
                 continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
                 smm.addAll(0,continousSmm);
                 smmAdapter.notifyDataSetChanged();
-                String continousMsg = ewm_nums.replace(",", "\n");
                 if (rbAdd.isChecked()) {
                     information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
                 } else {

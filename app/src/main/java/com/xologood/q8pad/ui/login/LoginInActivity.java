@@ -159,6 +159,4 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
             mHandler.sendEmptyMessageDelayed(0, 2000);
         }
     }
-
-
 }

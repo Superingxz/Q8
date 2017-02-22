@@ -164,28 +164,13 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         titleView.setTitle("新建订单出库");
 
         mBarCodeLogList = new ArrayList<>();
-
         mCompanyList = new ArrayList<>();
         mProductList = new ArrayList<>();
         mProductBatchList = new ArrayList<>();
-
         mCommonSelectDataCompanyList = new ArrayList<>();
 
         date = new Date();
         InvDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
-
-        SysKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEY);
-        ComKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMKEY);
-        ComName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMNAME);
-        sysKeyBase = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEYBASE);
-
-        LoginName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.LOGINNAME);
-        UserName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERNAME);
-        UserId = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERID);
-        IsUse = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.ISUSE);
-
-        isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));//初始化是否连续扫码状态
-
 
         Intent intent = getIntent();
         isOld = intent.getBooleanExtra("isOld", false);
@@ -194,16 +179,8 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         oldReceivingComKey = intent.getStringExtra("ReceivingComKey");
         oldReceivingComName = intent.getStringExtra("ReceivingComName");
         oldReceivingWarehouseId = intent.getStringExtra("ReceivingWarehouseId");
-
         if (isOld) {
             invId = intent.getIntExtra("invId", 0);
-        }
-
-        mPresenter.GetAllCompList(ComKey, "2");
-        mPresenter.GetWareHouseList(ComKey, IsUse);
-        mPresenter.GetProductList(SysKey, IsUse);
-
-        if (isOld) {
             InvNumber.setFieldTextAndValue(oldInvNumber);
             InvTime.setFieldTextAndValue(oldInvDate);
             mCompanyName = oldReceivingComName;
@@ -217,6 +194,22 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             InvNumber.setFieldTextAndValue(getInvNumber(2, UserId));
             InvTime.setFieldTextAndValue(InvDate);
         }
+
+        SysKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEY);
+        ComKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMKEY);
+        ComName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMNAME);
+        sysKeyBase = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEYBASE);
+
+        LoginName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.LOGINNAME);
+        UserName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERNAME);
+        UserId = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERID);
+        IsUse = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.ISUSE);
+
+        isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));//初始化是否连续扫码状态
+
+        mPresenter.GetAllCompList(ComKey, "2");
+        mPresenter.GetWareHouseList(ComKey, IsUse);
+        mPresenter.GetProductList(SysKey, IsUse);
 
         //扫码
         smm = new ArrayList<>();
@@ -233,7 +226,6 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                 mComkey = data.getValue();
             }
         });*/
-
         company.setOnDialogClickLister(new QpadEditText.OnDialogClickLister() {
             @Override
             public void OnDialogClick() {
@@ -373,7 +365,6 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             }
 
             String ewm_num = data.getStringExtra("ewm_num");
-            String ewm_type = data.getStringExtra("ewm_type");
             if (rbAdd.isChecked()) {
                 if (!smm.contains(ewm_num)) {
                     smm.add(ewm_num);

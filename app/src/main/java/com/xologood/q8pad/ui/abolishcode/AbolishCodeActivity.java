@@ -98,7 +98,6 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
                 continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
                 smm.addAll(0,continousSmm);
                 smmAdapter.notifyDataSetChanged();
-                String continousMsg = ewm_nums.replace(",", "\n");
                 if (rbAdd.isChecked()) {
                     information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
                 } else {
@@ -128,7 +127,6 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
             } else {
                 count.setVisibility(View.GONE);
             }
-            //   ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
         }
     }
 

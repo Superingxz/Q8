@@ -158,13 +158,13 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
 
     @Override
     public void initView() {
+        titleView.setTitle("新建订单出库");
         mBarCodeLogList = new ArrayList<>();
-
         mWarehouseList = new ArrayList<>();
         mCompanyList = new ArrayList<>();
-
         mCommonSelectDataCompanyList = new ArrayList<>();
 
+        //旧单据
         intent = getIntent();
         isOld = intent.getBooleanExtra("isOld", false);
         oldInvNumber = intent.getStringExtra("InvNumber");
@@ -172,12 +172,23 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         oldReceivingWarehouseId = intent.getStringExtra("ReceivingWarehouseId");
         oldReceivingComKey = intent.getStringExtra("ReceivingComKey");
         oldReceivingComName = intent.getStringExtra("ReceivingComName");
-
         if (isOld) {
             invId = intent.getIntExtra("invId", 0);
+            InvNumber.setFieldTextAndValue(oldInvNumber);
+            InvTime.setFieldTextAndValue(oldInvDate);
+            mCompanyName = oldReceivingComName;
+            company.setFieldEnabled(false);
+            wareHouse.setFieldEnabled(false);
+            InvNumber.setFieldEnabled(false);
+            InvTime.setFieldEnabled(false);
+            saveNnit.setEnabled(false);
+            qetQueryCompany.setFieldEnabled(false);
+            btnQueryCompany.setEnabled(false);
+        } else {
+            InvNumber.setFieldTextAndValue(getInvNumber(2, UserId));
+            InvTime.setFieldTextAndValue(InvDate);
         }
 
-        titleView.setTitle("新建订单出库");
 
         date = new Date();
         InvDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
@@ -199,21 +210,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         mPresenter.GetWareHouseList(ComKey, IsUse);
         mPresenter.GetProductList(SysKey, IsUse);
 
-        if (isOld) {
-            InvNumber.setFieldTextAndValue(oldInvNumber);
-            InvTime.setFieldTextAndValue(oldInvDate);
-            mCompanyName = oldReceivingComName;
-            company.setFieldEnabled(false);
-            wareHouse.setFieldEnabled(false);
-            InvNumber.setFieldEnabled(false);
-            InvTime.setFieldEnabled(false);
-            saveNnit.setEnabled(false);
-            qetQueryCompany.setFieldEnabled(false);
-            btnQueryCompany.setEnabled(false);
-        } else {
-            InvNumber.setFieldTextAndValue(getInvNumber(2, UserId));
-            InvTime.setFieldTextAndValue(InvDate);
-        }
+
 
         //扫码
         smm = new ArrayList<>();
@@ -327,7 +324,6 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                 continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
                 smm.addAll(0,continousSmm);
                 smmAdapter.notifyDataSetChanged();
-                String continousMsg = ewm_nums.replace(",", "\n");
                 if (rbAdd.isChecked()) {
                     information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
                 } else {
@@ -337,7 +333,6 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             }
 
             String ewm_num = data.getStringExtra("ewm_num");
-            String ewm_type = data.getStringExtra("ewm_type");
             if (rbAdd.isChecked()) {
                 if (!smm.contains(ewm_num)) {
                     smm.add(0, ewm_num);
@@ -357,7 +352,6 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             } else {
                 count.setVisibility(View.GONE);
             }
-            //   ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
             if (smm.size() > 0) {
                 scanNumber.setVisibility(View.VISIBLE);
                 scanNumber.setText("已扫描" + smm.size() + "条");

@@ -155,7 +155,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         mProductBatchList = new ArrayList<>();
         mStandardUnitList = new ArrayList<>();
         mInvoicingDetailList = new ArrayList();
-
         queryProductList = new ArrayList<>();
 
         intent = getIntent();
@@ -163,9 +162,19 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         oldInvNumber = intent.getStringExtra("InvNumber");
         oldInvDate = intent.getStringExtra("InvDate");
         oldWarehouseId = intent.getStringExtra("WarehouseId");
-        if (IsOld) {
+        //初始化单号 创建时间
+        if (IsOld) { //如果是已有出库
             invId = intent.getIntExtra("invId", 0);
+            InvNumber.setFieldTextAndValue(oldInvNumber);
+            InvTime.setFieldTextAndValue(oldInvDate);
+            wareHouse.setFieldEnabled(false);
+            InvNumber.setFieldEnabled(false);
+            InvTime.setFieldEnabled(false);
+        } else {
+            InvNumber.setFieldTextAndValue(getInvNumber(1, UserId));
+            InvTime.setFieldTextAndValue(InvDate);
         }
+
 
         date = new Date();
         InvDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
@@ -184,18 +193,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         mPresenter.GetWareHouseList(ComKey, IsUse);
         mPresenter.GetProductList(SysKey, IsUse);
 
-        //初始化单号 创建时间
-        if (IsOld) { //如果是已有出库
-            InvNumber.setFieldTextAndValue(oldInvNumber);
-            InvTime.setFieldTextAndValue(oldInvDate);
 
-            wareHouse.setFieldEnabled(false);
-            InvNumber.setFieldEnabled(false);
-            InvTime.setFieldEnabled(false);
-        } else {
-            InvNumber.setFieldTextAndValue(getInvNumber(1, UserId));
-            InvTime.setFieldTextAndValue(InvDate);
-        }
 
 
         newInInvoiceAdpter = new NewInInvoiceAdpter(mInvoicingDetailList, this);
@@ -226,11 +224,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-       /* InvoicingDetail ClickInvoicingDetail = (InvoicingDetail) lv.getTag();
-        if (resultCode == ScanActivity.RESULT_OK) {
-            int mActualQty = data.getIntExtra("mActualQty", 0);
-            newInInvoiceAdpter.updateActualQty(mActualQty, ClickInvoicingDetail.getProductName(), ClickInvoicingDetail.getBatchNO());
-        }*/
         if (resultCode == InvoicingDetailActivity.RESULT_OK) {
             IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
         }
@@ -405,13 +398,11 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             } else {
                 wareHouse.setFieldTextAndValue(commonSelectWarehouse.get(0));
             }
-
         }
     }
 
     /**
      * 设置产品列表
-     *
      * @param productList
      */
     @Override
@@ -433,7 +424,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
 
     /**
      * 设置产品批次列表
-     *
      * @param productBatchList
      */
     @Override
@@ -456,7 +446,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
 
     /**
      * 设置单位列表
-     *
      * @param standardUnitList
      */
     @Override
@@ -475,7 +464,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
 
     /**
      * 添加入库主表成功回调
-     *
      * @param invoicingBean
      */
     @Override

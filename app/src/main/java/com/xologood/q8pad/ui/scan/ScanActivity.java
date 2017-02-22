@@ -157,7 +157,6 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
                 continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
                 smm.addAll(0,continousSmm);
                 smmAdapter.notifyDataSetChanged();
-                String continousMsg = ewm_nums.replace(",", "\n");
                 if (rbAdd.isChecked()) {
                     scan_msg.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
                 } else {
@@ -167,7 +166,6 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
             }
 
             String ewm_num = data.getStringExtra("ewm_num");
-            String ewm_type = data.getStringExtra("ewm_type");
             if (rbAdd.isChecked()) {
                 if (!smm.contains(ewm_num)) {
                     smm.add(0, ewm_num);
@@ -195,7 +193,6 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
             } else {
                 scanNumber.setVisibility(View.GONE);
             }
-//            ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
         }
     }
 
