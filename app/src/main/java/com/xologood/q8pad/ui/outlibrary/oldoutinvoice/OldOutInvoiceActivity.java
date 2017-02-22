@@ -235,7 +235,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!IsCommitSuccess) {
+        if (!IsCommitSuccess&&!QpadJudgeUtils.isEmpty(mInvId)) {
             mPresenter.GetInvoicingDetail(mInvId + "");
         }
     }

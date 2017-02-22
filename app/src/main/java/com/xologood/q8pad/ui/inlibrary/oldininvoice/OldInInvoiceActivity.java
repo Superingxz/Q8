@@ -240,8 +240,8 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
     @Override
     protected void onResume() {
         super.onResume();
-        if (!IsCommitSuccess) {
-            mPresenter.GetInvoicingDetail(mInvId);
+        if (!IsCommitSuccess&&!QpadJudgeUtils.isEmpty(mInvId)) {
+            mPresenter.GetInvoicingDetail(mInvId + "");
         }
     }
 
