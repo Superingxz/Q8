@@ -206,6 +206,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         if (isOld) {
             InvNumber.setFieldTextAndValue(oldInvNumber);
             InvTime.setFieldTextAndValue(oldInvDate);
+            mCompanyName = oldReceivingComName;
             company.setFieldEnabled(false);
             wareHouse.setFieldEnabled(false);
             InvNumber.setFieldEnabled(false);
@@ -437,10 +438,11 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                 company.setFieldTextAndValue(oldReceivingComName);
             }
         }*/
-
         if (isOld) {
             company.setFieldTextAndValue(oldReceivingComName);
         }
+
+
     }
 
     @Override

@@ -202,6 +202,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         if (isOld) {
             InvNumber.setFieldTextAndValue(oldInvNumber);
             InvTime.setFieldTextAndValue(oldInvDate);
+            mCompanyName = oldReceivingComName;
             company.setFieldEnabled(false);
             wareHouse.setFieldEnabled(false);
             InvNumber.setFieldEnabled(false);

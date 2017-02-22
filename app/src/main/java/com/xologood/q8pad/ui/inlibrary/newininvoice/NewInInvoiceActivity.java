@@ -188,6 +188,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         if (IsOld) { //如果是已有出库
             InvNumber.setFieldTextAndValue(oldInvNumber);
             InvTime.setFieldTextAndValue(oldInvDate);
+
             wareHouse.setFieldEnabled(false);
             InvNumber.setFieldEnabled(false);
             InvTime.setFieldEnabled(false);

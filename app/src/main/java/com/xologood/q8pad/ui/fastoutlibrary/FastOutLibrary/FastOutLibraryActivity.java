@@ -126,7 +126,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
                 }
                 queryInvoicingBeanList.addAll(mInvoicingBeanList);
 
-                invoicingBeanAdapter = new InvoicingBeanAdapter(mInvoicingBeanList, mContext);
+                invoicingBeanAdapter = new InvoicingBeanAdapter(queryInvoicingBeanList, mContext);
                 View layout_queryinvoicingbeanlist = LayoutInflater.from(mContext).inflate(R.layout.layout_invoicingbeanlist, null);
                 final AlertDialog invoicingbeanDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
                 invoicingbeanDialog.setView(new EditText(mContext));
@@ -342,7 +342,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
         }
 
         for (int i = 0; i < mInvoicingBeans.size(); i++) {
-            if (InvNumber.equals(mInvoicingBeans.get(i).getInvNumber())) {
+            if (StringUtils.ifIndexOf(mInvoicingBeans.get(i).getInvNumber(),InvNumber)) {
                 InvoicingBeans.add(mInvoicingBeans.get(i));
             }
         }
