@@ -102,6 +102,12 @@
                         android:text="删除" />
                 </RadioGroup>
 
+                <CheckBox
+                    android:id="@+id/isContinous"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="连续扫描"/>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"

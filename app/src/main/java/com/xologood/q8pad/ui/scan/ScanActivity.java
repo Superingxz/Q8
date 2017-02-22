@@ -159,9 +159,9 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
                 smmAdapter.notifyDataSetChanged();
                 String continousMsg = ewm_nums.replace(",", "\n");
                 if (rbAdd.isChecked()) {
-                    scan_msg.setText(continousMsg + "\n添加成功！");
+                    scan_msg.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
                 } else {
-                    scan_msg.setText(continousMsg + "\n删除成功！");
+                    scan_msg.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
                 }
                 return;
             }
@@ -381,12 +381,30 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
         return count;
     }
 
+    /**
+     * 非连续扫码时拼接
+     * @param smm
+     * @return
+     */
     private String GetBarCodeString4List(List<String> smm) {
         StringBuffer sb = new StringBuffer();
         for (String s : smm) {
             sb.append(s).append(",");
         }
         return sb.toString().substring(0, sb.length() - 1);
+    }
+
+    /**
+     * 连续扫码时拼接
+     * @param smm
+     * @return
+     */
+    private String GetBarCodeString4List2(List<String> smm) {
+        StringBuffer sb = new StringBuffer();
+        for (String s : smm) {
+            sb.append(s).append("\n");
+        }
+        return sb.toString();
     }
 
     @Override

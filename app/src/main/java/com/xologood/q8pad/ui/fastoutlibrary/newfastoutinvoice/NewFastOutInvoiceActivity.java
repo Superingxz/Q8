@@ -364,11 +364,10 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                 continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
                 smm.addAll(0,continousSmm);
                 smmAdapter.notifyDataSetChanged();
-                String continousMsg = ewm_nums.replace(",", "\n");
                 if (rbAdd.isChecked()) {
-                    information.setText(continousMsg + "\n添加成功！");
+                    information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
                 } else {
-                    information.setText(continousMsg + "\n删除成功！");
+                    information.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
                 }
                 return;
             }
@@ -395,10 +394,16 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             } else {
                 count.setVisibility(View.GONE);
             }
-            // ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
         }
     }
 
+    /**
+     * 连续扫码，如果选择添加就从已有扫码列表里添加不重复的，否则删除
+     * @param ewm_nums 拼凑起来的新的扫码
+     * @param smm  旧的扫码列表
+     * @param isAdd
+     * @return
+     */
     private List<String> GetContinousSmm(String ewm_nums,List<String> smm,boolean isAdd) {
         List<String> mIscontinousSmm = new ArrayList<>();
         String[] mSmm = ewm_nums.split(",");
@@ -895,6 +900,11 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         return count;
     }
 
+    /**
+     * 非连续扫码时拼接
+     * @param smm
+     * @return
+     */
     private String GetBarCodeString4List(List<String> smm) {
         StringBuffer sb = new StringBuffer();
         for (String s : smm) {
@@ -903,6 +913,18 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         return sb.toString().substring(0, sb.length() - 1);
     }
 
+    /**
+     * 连续扫码时拼接
+     * @param smm
+     * @return
+     */
+    private String GetBarCodeString4List2(List<String> smm) {
+        StringBuffer sb = new StringBuffer();
+        for (String s : smm) {
+            sb.append(s).append("\n");
+        }
+        return sb.toString();
+    }
     public static String getInvNumber(int i, String userId) {
         DecimalFormat df = new DecimalFormat("000000");
         String str = df.format(Integer.parseInt(userId));
@@ -918,6 +940,11 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         return invNumber;
     }
 
+    /**
+     * 去除重复
+     * @param mSmm
+     * @return
+     */
     private String[] condition(String[] mSmm) {
         List<String> result = new ArrayList<>();
         boolean flag = false;

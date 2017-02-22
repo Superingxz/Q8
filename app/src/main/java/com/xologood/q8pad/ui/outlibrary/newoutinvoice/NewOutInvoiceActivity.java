@@ -329,9 +329,9 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                 smmAdapter.notifyDataSetChanged();
                 String continousMsg = ewm_nums.replace(",", "\n");
                 if (rbAdd.isChecked()) {
-                    information.setText(continousMsg + "\n添加成功！");
+                    information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
                 } else {
-                    information.setText(continousMsg + "\n删除成功！");
+                    information.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
                 }
                 return;
             }
@@ -853,8 +853,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     }
 
     /**
-     * 拼接扫码
-     *
+     * 非连续扫码时拼接
      * @param smm
      * @return
      */
@@ -864,6 +863,19 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             sb.append(s).append(",");
         }
         return sb.toString().substring(0, sb.length() - 1);
+    }
+
+    /**
+     * 连续扫码时拼接
+     * @param smm
+     * @return
+     */
+    private String GetBarCodeString4List2(List<String> smm) {
+        StringBuffer sb = new StringBuffer();
+        for (String s : smm) {
+            sb.append(s).append("\n");
+        }
+        return sb.toString();
     }
 
     public static String getInvNumber(int i, String userId) {

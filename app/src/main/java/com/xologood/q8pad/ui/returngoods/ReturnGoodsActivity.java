@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.ScanBarCodeAdpater;
 import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.ReturnGoodsResponse;
+import com.xologood.q8pad.ui.scan.ScanActivity;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.view.TitileView;
@@ -55,6 +57,8 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
     Button scanywm;
     @Bind(R.id.upload)
     Button upload;
+    @Bind(R.id.isContinous)
+    CheckBox isContinous;
 
     private Date date;
     private String InvDate;
@@ -90,10 +94,99 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
         SysKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEY);
         ComKey = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMKEY);
         ComName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.COMNAME);
+
+        isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));
     }
 
     @Override
     public void initListener() {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isContinous.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == CaptureActivity.RESULT_OK) {
+            List<String> continousSmm = new ArrayList<>();
+            if (isContinous.isChecked()) {
+                String ewm_nums = data.getStringExtra("ewm_num");
+                continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
+                smm.addAll(0,continousSmm);
+                smmAdapter.notifyDataSetChanged();
+                String continousMsg = ewm_nums.replace(",", "\n");
+                if (rbAdd.isChecked()) {
+                    information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
+                } else {
+                    information.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
+                }
+                return;
+            }
+
+            String ewm_num = data.getStringExtra("ewm_num");
+            String ewm_type = data.getStringExtra("ewm_type");
+            if (rbAdd.isChecked()) {
+                if (!smm.contains(ewm_num)) {
+                    smm.add(0, ewm_num);
+                    smmAdapter.notifyDataSetChanged();
+                    information.setText(ewm_num + "添加成功！");
+                } else {
+                    ToastUitl.showShort("此条码已经扫描，请重新扫码！");
+                }
+            } else if (rbDelete.isChecked() && smm.contains(ewm_num)) {
+                smm.remove(ewm_num);
+                smmAdapter.notifyDataSetChanged();
+                information.setText(ewm_num + "删除成功！");
+            }
+            if (SuccessCount > 0) {
+                count.setVisibility(View.VISIBLE);
+                count.setText("已成功上传" + SuccessCount + "条");
+            } else {
+                count.setVisibility(View.GONE);
+            }
+//            ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
+        }
+    }
+
+    private List<String> GetContinousSmm(String ewm_nums,List<String> smm,boolean isAdd) {
+        List<String> mIscontinousSmm = new ArrayList<>();
+        String[] mSmm = ewm_nums.split(",");
+        mSmm = condition(mSmm);//删除重复的
+        if (ewm_nums != null && smm != null && mSmm.length > 0) {
+            for (int i = 0; i < mSmm.length; i++) {
+                if (!smm.contains(mSmm[i])) {
+                    if (isAdd) {
+                        mIscontinousSmm.add(0, mSmm[i]);
+                    } else {
+                        mIscontinousSmm.remove(mSmm[i]);
+                    }
+                }
+            }
+        }
+        return mIscontinousSmm;
+    }
+
+    private String[] condition(String[] mSmm) {
+        List<String> result = new ArrayList<>();
+        boolean flag = false;
+        for (int i = 0; i < mSmm.length; i++) {
+            flag = false;
+            for (int j = 0; j < result.size(); j++) {
+                if (mSmm[i].equals(result.get(j))) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                result.add(mSmm[i]);
+            }
+        }
+        return (String[]) result.toArray(new String[result.size()]);
 
     }
 
@@ -129,7 +222,7 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
             back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(barCodeLogDialog!=null && barCodeLogDialog.isShowing()){
+                    if (barCodeLogDialog != null && barCodeLogDialog.isShowing()) {
                         barCodeLogDialog.dismiss();
                     }
                 }
@@ -137,41 +230,14 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == CaptureActivity.RESULT_OK) {
-            String ewm_num = data.getStringExtra("ewm_num");
-            String ewm_type = data.getStringExtra("ewm_type");
-            if (rbAdd.isChecked()) {
-                if (!smm.contains(ewm_num)) {
-                    smm.add(0,ewm_num);
-                    smmAdapter.notifyDataSetChanged();
-                    information.setText(ewm_num + "添加成功！");
-                } else {
-                    ToastUitl.showShort("此条码已经扫描，请重新扫码！");
-                }
-            } else if (rbDelete.isChecked() && smm.contains(ewm_num)) {
-                smm.remove(ewm_num);
-                smmAdapter.notifyDataSetChanged();
-                information.setText(ewm_num+"删除成功！");
-            }
-            if (SuccessCount > 0) {
-                count.setVisibility(View.VISIBLE);
-                count.setText("已成功上传" + SuccessCount + "条");
-            } else {
-                count.setVisibility(View.GONE);
-            }
-//            ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
-        }
-    }
-
 
     @OnClick(R.id.scanywm)
-    public void scanywm(View view){
-        startActivityForResult(new Intent(ReturnGoodsActivity.this, CaptureActivity.class), Config.REQUESTOK);
+    public void scanywm(View view) {
+        SharedPreferencesUtils.saveBooleanData(Qpadapplication.getAppContext(), Config.ISCONTINOUS, isContinous.isChecked());
+        Intent intent = new Intent(ReturnGoodsActivity.this, CaptureActivity.class);
+        intent.putExtra("isContinous", isContinous.isChecked());
+        startActivityForResult(intent, Config.REQUESTOK);
     }
-
 
 
     @OnClick(R.id.upload)
@@ -180,44 +246,44 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
         if (smm != null && smm.size() > 0) {
             if ("160530104723186i5ya".equals(SysKey)) {
                 mPresenter.ReturnGoodsDefault(UserId,
-                                                UserName,
-                                                getInvNumber(UserId),
-                                                InvDate,
-                                                "暂无",
-                                                "APP",
-                                                "7",
-                                                "false",
-                                                "4",
-                                                "false",
-                                                ComKey,
-                                                ComName,
-                                                SysKey,
-                                                ComKey,
-                                                CheckDate,
-                                                UserId,
-                                                UserName,
-                                                "暂无",
-                                                GetBarCodeString4List(smm));
-            }else{
+                        UserName,
+                        getInvNumber(UserId),
+                        InvDate,
+                        "暂无",
+                        "APP",
+                        "7",
+                        "false",
+                        "4",
+                        "false",
+                        ComKey,
+                        ComName,
+                        SysKey,
+                        ComKey,
+                        CheckDate,
+                        UserId,
+                        UserName,
+                        "暂无",
+                        GetBarCodeString4List(smm));
+            } else {
                 mPresenter.ReturnGoods(UserId,
-                                                UserName,
-                                                getInvNumber(UserId),
-                                                InvDate,
-                                                "暂无",
-                                                "APP",
-                                                "7",
-                                                "false",
-                                                "4",
-                                                "false",
-                                                ComKey,
-                                                ComName,
-                                                SysKey,
-                                                ComKey,
-                                                CheckDate,
-                                                UserId,
-                                                UserName,
-                                                "暂无",
-                                                GetBarCodeString4List(smm));
+                        UserName,
+                        getInvNumber(UserId),
+                        InvDate,
+                        "暂无",
+                        "APP",
+                        "7",
+                        "false",
+                        "4",
+                        "false",
+                        ComKey,
+                        ComName,
+                        SysKey,
+                        ComKey,
+                        CheckDate,
+                        UserId,
+                        UserName,
+                        "暂无",
+                        GetBarCodeString4List(smm));
             }
         } else {
             final NormalDialog IsNotScan_Dialog = new NormalDialog(mContext);
@@ -232,7 +298,7 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
 
     @Override
     public void startProgressDialog(String msg) {
-        QpadProgressUtils.showProgress(this,msg);
+        QpadProgressUtils.showProgress(this, msg);
     }
 
     @Override
@@ -242,6 +308,7 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
 
     /**
      * 计算扫码成功数目
+     *
      * @param barCodeLogList
      * @return
      */
@@ -256,6 +323,11 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
         return count;
     }
 
+    /**
+     * 非连续扫码时拼接
+     * @param smm
+     * @return
+     */
     private String GetBarCodeString4List(List<String> smm) {
         StringBuffer sb = new StringBuffer();
         for (String s : smm) {
@@ -263,6 +335,20 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
         }
         return sb.toString().substring(0, sb.length() - 1);
     }
+
+    /**
+     * 连续扫码时拼接
+     * @param smm
+     * @return
+     */
+    private String GetBarCodeString4List2(List<String> smm) {
+        StringBuffer sb = new StringBuffer();
+        for (String s : smm) {
+            sb.append(s).append("\n");
+        }
+        return sb.toString();
+    }
+
     public static String getInvNumber(String userId) {
         DecimalFormat df = new DecimalFormat("000000");
         String str = df.format(Integer.parseInt(userId));
@@ -272,4 +358,6 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
         return "S" + str + time + round;
 
     }
+
+
 }
