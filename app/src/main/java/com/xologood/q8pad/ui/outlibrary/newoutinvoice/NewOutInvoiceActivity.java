@@ -349,7 +349,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                 if (!smm.contains(ewm_num)) {
                     smm.add(0, ewm_num);
                     smmAdapter.notifyDataSetChanged();
-                    information.setText(etEditywm.getText().toString().trim() + "添加成功！");
+                    information.setText(ewm_num + "添加成功！");
                 } else {
                     ToastUitl.showShort("此条码已经扫描，请重新扫码！");
                 }
