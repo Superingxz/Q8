@@ -64,7 +64,7 @@ public class NewOutInvoiceAdapter extends BaseAdapter {
         }
         if (invoiceList != null && invoiceList.size() > 0) {
             InvoicingDetail invoicingDetail = invoiceList.get(position);
-            invoiceViewHolder.productId.setText(invoicingDetail.getProductId()+"");
+            invoiceViewHolder.productId.setText(invoicingDetail.getProductCode()+"");
             invoiceViewHolder.productName.setText(invoicingDetail.getProductName());
             if (invoicingDetail.getCreationDate() != null) {
                 invoiceViewHolder.creationDate.setText(StringUtils.GetCreationDate(invoicingDetail.getCreationDate()));
