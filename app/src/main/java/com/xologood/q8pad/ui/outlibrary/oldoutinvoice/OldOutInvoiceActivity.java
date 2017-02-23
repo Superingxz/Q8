@@ -288,26 +288,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         /*Intent intent = new Intent(OldOutInvoiceActivity.this, FirstUserDetail.class);
         intent.putExtra("firstUser", firstUser);
         startActivity(intent);*/
-        View layout_get_first_user_by_comkey_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_get_first_user_by_comkey, null);
-        final AlertDialog firstUserDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
-        firstUserDialog.setCanceledOnTouchOutside(false);
-        firstUserDialog.getWindow().setContentView(layout_get_first_user_by_comkey_dialog);
-        WindowManager.LayoutParams lp_firstUser = firstUserDialog.getWindow().getAttributes();
-        lp_firstUser.width = (int) (QpadConfigUtils.SCREEN.Width * 0.85);
-        Button back = (Button) layout_get_first_user_by_comkey_dialog.findViewById(R.id.back);
-        TextView weChat = (TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.weChat);
-        TextView tel = (TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.tel);
-        TextView address = (TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.address);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (firstUserDialog != null && firstUserDialog.isShowing()) {
-                    firstUserDialog.dismiss();
-                }
-            }
-        });
         if (!IsSelect || QpadJudgeUtils.isEmpty(mInvId)) {
-            firstUserDialog.dismiss();
             final NormalDialog IsNotSelect_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showOnePromptDialog(IsNotSelect_Dialog, "未选择！", new OnBtnClickL() {
                 @Override
@@ -320,12 +301,10 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
 
         final NormalDialog IsNotFirstUser_Dialog = new NormalDialog(mContext);
         if (firstUser != null) {
-            firstUserDialog.show();
             String mWeChat = firstUser.getWeChat();
             String mTel = firstUser.getTel();
             String mAddress = firstUser.getAddres();
             if (QpadJudgeUtils.isEmpty(mWeChat) && QpadJudgeUtils.isEmpty(mTel) && QpadJudgeUtils.isEmpty(mAddress)) {
-                firstUserDialog.dismiss();
                 QPadPromptDialogUtils.showOnePromptDialog(IsNotFirstUser_Dialog, "暂无信息！", new OnBtnClickL() {
                     @Override
                     public void onBtnClick() {
@@ -334,6 +313,25 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                 });
                 return;
             }
+            View layout_get_first_user_by_comkey_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_get_first_user_by_comkey, null);
+            final AlertDialog firstUserDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
+            firstUserDialog.setCanceledOnTouchOutside(false);
+            firstUserDialog.show();
+            firstUserDialog.getWindow().setContentView(layout_get_first_user_by_comkey_dialog);
+            WindowManager.LayoutParams lp_firstUser = firstUserDialog.getWindow().getAttributes();
+            lp_firstUser.width = (int) (QpadConfigUtils.SCREEN.Width * 0.85);
+            Button back = (Button) layout_get_first_user_by_comkey_dialog.findViewById(R.id.back);
+            TextView weChat = (TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.weChat);
+            TextView tel = (TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.tel);
+            TextView address = (TextView) layout_get_first_user_by_comkey_dialog.findViewById(R.id.address);
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (firstUserDialog != null && firstUserDialog.isShowing()) {
+                        firstUserDialog.dismiss();
+                    }
+                }
+            });
             if (!QpadJudgeUtils.isEmpty(mWeChat)) {
                 weChat.setVisibility(View.VISIBLE);
                 weChat.setText("微信号:" + mWeChat);
