@@ -232,7 +232,17 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     @OnClick(R.id.addProduce)
     public void addProduce(View view) {
-        if (invoicingBean != null && IsSelect) {
+        if (!IsSelect) {
+            final NormalDialog IsSelect_Dialog = new NormalDialog(mContext);
+            QPadPromptDialogUtils.showOnePromptDialog(IsSelect_Dialog, "未选择！", new OnBtnClickL() {
+                @Override
+                public void onBtnClick() {
+                    IsSelect_Dialog.dismiss();
+                }
+            });
+            return;
+        }
+        if (invoicingBean != null ) {
             Intent intent = new Intent(this, NewFastOutInvoiceActivity.class);
             intent.putExtra("isOld", true);
             intent.putExtra("InvNumber", invoicingBean.getInvNumber());

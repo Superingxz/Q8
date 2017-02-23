@@ -237,7 +237,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     @Override
     protected void onResume() {
         super.onResume();
-        if (!IsCommitSuccess&&!QpadJudgeUtils.isEmpty(mInvId)) {
+        if (!IsCommitSuccess && mInvId != 0) {
             mPresenter.GetInvoicingDetail(mInvId + "");
         }
     }
@@ -306,7 +306,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                 }
             }
         });
-        if (!IsSelect) {
+        if (!IsSelect || QpadJudgeUtils.isEmpty(mInvId)) {
             firstUserDialog.dismiss();
             final NormalDialog IsNotSelect_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showOnePromptDialog(IsNotSelect_Dialog, "未选择！", new OnBtnClickL() {
