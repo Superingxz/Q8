@@ -197,15 +197,17 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                         }
                         if (mInvoicingBeanList != null && mInvoicingBeanList.size() > 0) {
                             queryInvoicingBeanList.addAll(queryInvoicingBeanList(etInvNumber.getFieldText(), mInvoicingBeanList));
-                            invoicingBeanAdapter.notifyDataSetChanged();
                         }
+                        invoicingBeanAdapter.notifyDataSetChanged();
                     }
                 });
                 invoicingBeanListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         invoicingbeanDialog.dismiss();
-                        mInvId = queryInvoicingBeanList.get(position).getInvId();
+                        InvoicingBean invoicingBean = queryInvoicingBeanList.get(position);
+                        mInvId = invoicingBean.getInvId();
+                        invoiceInvlist.setFieldTextAndValue(invoicingBean.getInvNumber(), invoicingBean.getInvId() + "");
                         mPresenter.GetInvoicingDetail(mInvId+"");
                     }
                 });
@@ -524,7 +526,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         }
 
         for (int i = 0; i < mInvoicingBeans.size(); i++) {
-            if (StringUtils.ifIndexOf(mInvoicingBeans.get(i).getInvNumber(),InvNumber)) {
+            if (StringUtils.ifIndexOf(mInvoicingBeans.get(i).getInvNumber()+"",InvNumber)) {
                 InvoicingBeans.add(mInvoicingBeans.get(i));
             }
         }

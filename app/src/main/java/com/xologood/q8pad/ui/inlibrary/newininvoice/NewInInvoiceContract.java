@@ -204,7 +204,7 @@ public interface NewInInvoiceContract {
         /**
          * 验证入库明细成功回调
          */
-        void GetInvoiceDetailSuccess(int id, String InvId);
+        void GetInvoiceDetailSuccess(int id, String InvId, String ExpectedQty);
 
         /**
          * 增加入库明细成功回调

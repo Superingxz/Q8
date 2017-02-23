@@ -148,17 +148,19 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
                         if (queryInvoicingBeanList.size() > 0) {
                             queryInvoicingBeanList.removeAll(queryInvoicingBeanList);
                         }
-                        if (mInvoicingDetailList != null && mInvoicingDetailList.size() > 0) {
+                        if (mInvoicingBeanList != null && mInvoicingBeanList.size() > 0) {
                             queryInvoicingBeanList.addAll(queryInvoicingBeanList(etInvNumber.getFieldText(), mInvoicingBeanList));
-                            invoicingBeanAdapter.notifyDataSetChanged();
                         }
+                        invoicingBeanAdapter.notifyDataSetChanged();
                     }
                 });
                 invoicingBeanListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         invoicingbeanDialog.dismiss();
-                        mInvId = queryInvoicingBeanList.get(position).getInvId();
+                        InvoicingBean invoicingBean = queryInvoicingBeanList.get(position);
+                        mInvId = invoicingBean.getInvId();
+                        invoiceInvlist.setFieldTextAndValue(invoicingBean.getInvNumber(), invoicingBean.getInvId() + "");
                         mPresenter.GetInvoicingDetail(mInvId+"");
                     }
                 });

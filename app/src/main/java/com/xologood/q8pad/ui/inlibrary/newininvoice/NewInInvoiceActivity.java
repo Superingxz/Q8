@@ -69,8 +69,8 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     QpadEditText wareHouse;
     @Bind(R.id.produceName)
     QpadEditText produceName;
-    @Bind(R.id.queryName)
-    Button queryName;
+//    @Bind(R.id.queryName)
+//    Button queryName;
     @Bind(R.id.addProduceBatch)
     QpadEditText addProduceBatch;
     @Bind(R.id.saveBatch)
@@ -290,8 +290,8 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                         }
                         if (mProductList != null && mProductList.size() > 0) {
                             queryProductList.addAll(QueryProductList(etProductCode.getFieldText(), etProductName.getFieldText(), mProductList));
-                            productAdapter.notifyDataSetChanged();
                         }
+                        productAdapter.notifyDataSetChanged();
                     }
                 });
                 productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -302,7 +302,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                         if (productAdapter.getCount() > 0 && mProductList.size() > 0) {
                             mProductId = queryProductList.get(position).getId()+"";
                             mProductName = queryProductList.get(position).getProductName();
-                            produceName.setFieldTextAndValue(mProductName);
+                            produceName.setFieldTextAndValue(mProductName,mProductId);
                             if (!QpadJudgeUtils.isEmpty(mProductId)) {
                                 mPresenter.GetProductBatchByProductId(mProductId);
                                 mPresenter.GetStandardUnitByProductId(mProductId, SysKey);
@@ -490,7 +490,10 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
      * @param InvId 单号
      */
     @Override
-    public void GetInvoiceDetailSuccess(int Id, String InvId) {
+    public void GetInvoiceDetailSuccess(int Id, String InvId,String ExpectedQty) {
+        if (mExpectedQty != null && ExpectedQty != null) {
+            mExpectedQty = (Integer.valueOf(mExpectedQty) + Integer.valueOf(ExpectedQty)) + "";
+        }
         if (Id == 0) {
             mPresenter.InsertInvoiceDetail(Id + "", invId + "", mProductId, mBatch, "0", mExpectedQty, ComKey, SysKey);
         } else {
@@ -603,14 +606,14 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
         ToastUitl.showLong(msg);
     }
 
-    /**
-     * 搜索
-     *
-     * @param view
-     */
-    @OnClick(R.id.queryName)
-    public void setQueryName(View view) {
-    }
+//    /**
+//     * 搜索
+//     *
+//     * @param view
+//     */
+//    @OnClick(R.id.queryName)
+//    public void setQueryName(View view) {
+//    }
 
     /**
      * 保存批次

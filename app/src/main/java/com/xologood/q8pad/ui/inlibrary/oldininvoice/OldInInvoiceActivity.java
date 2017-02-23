@@ -53,8 +53,8 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
     TitileView titleView;
     @Bind(R.id.queryOrder)
     QpadEditText queryOrder;
-    @Bind(R.id.query)
-    Button query;
+   @Bind(R.id.query)
+   Button query;
     @Bind(R.id.invoiceInvlist)
     QpadEditText invoiceInvlist;
     @Bind(R.id.textView3)
@@ -91,7 +91,7 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
     private InvoicingBean mInvoicingBean;
 
     private int mActualQty;
-    private String mInvId;
+    private int mInvId;
     private boolean IsSelect = false;//是否选择已有
     private List<InvoicingDetail> invoicingDetailList;
     private boolean IsCommitSuccess  = false;//是否确认成功
@@ -197,18 +197,20 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
                         if (queryInvoicingBeanList.size() > 0) {
                             queryInvoicingBeanList.removeAll(queryInvoicingBeanList);
                         }
-                        if (mInvoicingDetailList != null && mInvoicingDetailList.size() > 0) {
+                        if (mInvoicingBeanList != null && mInvoicingBeanList.size() > 0) {
                             queryInvoicingBeanList.addAll(queryInvoicingBeanList(etInvNumber.getFieldText(), mInvoicingBeanList));
-                            invoicingBeanAdapter.notifyDataSetChanged();
                         }
+                        invoicingBeanAdapter.notifyDataSetChanged();
                     }
                 });
                 invoicingBeanListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         invoicingbeanDialog.dismiss();
-                        mInvId = queryInvoicingBeanList.get(position).getInvId() + "";
-                        mPresenter.GetInvoicingDetail(mInvId);
+                        InvoicingBean invoicingBean = queryInvoicingBeanList.get(position);
+                        mInvId = invoicingBean.getInvId();
+                        invoiceInvlist.setFieldTextAndValue(invoicingBean.getInvNumber(), invoicingBean.getInvId()+"");
+                        mPresenter.GetInvoicingDetail(mInvId+"");
                     }
                 });
             }

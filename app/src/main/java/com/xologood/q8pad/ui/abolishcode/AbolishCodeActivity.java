@@ -21,6 +21,7 @@ import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
+import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.view.TitileView;
 import com.xologood.zxing.activity.CaptureActivity;
@@ -96,13 +97,13 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
             if (isContinous.isChecked()) {
                 String ewm_nums = data.getStringExtra("ewm_num");
                 continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
-                smm.addAll(0,continousSmm);
                 smmAdapter.notifyDataSetChanged();
                 if (rbAdd.isChecked()) {
                     information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
                 } else {
                     information.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
                 }
+
                 return;
             }
 
@@ -129,24 +130,35 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
             }
         }
     }
-
+    /**
+     * 连续扫码，如果选择添加就从已有扫码列表里添加不重复的，否则删除
+     * @param ewm_nums 拼凑起来的新的扫码
+     * @param smm  旧的扫码列表
+     * @param isAdd
+     * @return
+     */
     private List<String> GetContinousSmm(String ewm_nums,List<String> smm,boolean isAdd) {
-        List<String> mIscontinousSmm = new ArrayList<>();
+        List<String> mIscontinousSmm = new ArrayList<>();//记录成功添加或者删除的条码
         String[] mSmm = ewm_nums.split(",");
         mSmm = condition(mSmm);//删除重复的
         if (ewm_nums != null && smm != null && mSmm.length > 0) {
             for (int i = 0; i < mSmm.length; i++) {
-                if (!smm.contains(mSmm[i])) {
-                    if (isAdd) {
-                        mIscontinousSmm.add(0, mSmm[i]);
-                    } else {
-                        mIscontinousSmm.remove(mSmm[i]);
+                if (isAdd) {
+                    if (!smm.contains(mSmm[i])) {
+                        smm.add(0, mSmm[i]);
+                        mIscontinousSmm.add(mSmm[i]);
+                    }
+                } else {
+                    if (smm.contains(mSmm[i])) {
+                        smm.remove(mSmm[i]);
+                        mIscontinousSmm.add(mSmm[i]);
                     }
                 }
             }
         }
         return mIscontinousSmm;
     }
+
 
     private String[] condition(String[] mSmm) {
         List<String> result = new ArrayList<>();
@@ -245,7 +257,16 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
         QpadProgressUtils.closeProgress();
     }
 
-
+    private int GetSuccessCount(List<BarCodeLog> barCodeLogList) {
+        int count = 0;
+        for (int i = 0; i < barCodeLogList.size(); i++) {
+            BarCodeLog barCodeLog = barCodeLogList.get(i);
+            if (barCodeLog.isIsOk()) {
+                count++;
+            }
+        }
+        return count;
+    }
     /**
      * 非连续扫码时拼接
      * @param smm

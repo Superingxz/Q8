@@ -24,7 +24,6 @@ import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.ScanBarCodeAdpater;
 import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.ReturnGoodsResponse;
-import com.xologood.q8pad.ui.scan.ScanActivity;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.view.TitileView;
@@ -59,6 +58,8 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
     Button upload;
     @Bind(R.id.isContinous)
     CheckBox isContinous;
+    @Bind(R.id.scanNumber)
+    TextView scanNumber;
 
     private Date date;
     private String InvDate;
@@ -116,13 +117,19 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
             List<String> continousSmm = new ArrayList<>();
             if (isContinous.isChecked()) {
                 String ewm_nums = data.getStringExtra("ewm_num");
-                continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
-                smm.addAll(0,continousSmm);
+                continousSmm = GetContinousSmm(ewm_nums, smm, rbAdd.isChecked());
                 smmAdapter.notifyDataSetChanged();
                 if (rbAdd.isChecked()) {
                     information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
                 } else {
                     information.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
+                }
+
+                if (smm.size() > 0) {
+                    scanNumber.setVisibility(View.VISIBLE);
+                    scanNumber.setText("已扫描" + smm.size() + "条");
+                } else {
+                    scanNumber.setVisibility(View.GONE);
                 }
                 return;
             }
@@ -148,27 +155,47 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
             } else {
                 count.setVisibility(View.GONE);
             }
+
+            if (smm.size() > 0) {
+                scanNumber.setVisibility(View.VISIBLE);
+                scanNumber.setText("已扫描" + smm.size() + "条");
+            } else {
+                scanNumber.setVisibility(View.GONE);
+            }
 //            ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
         }
     }
 
-    private List<String> GetContinousSmm(String ewm_nums,List<String> smm,boolean isAdd) {
-        List<String> mIscontinousSmm = new ArrayList<>();
+    /**
+     * 连续扫码，如果选择添加就从已有扫码列表里添加不重复的，否则删除
+     *
+     * @param ewm_nums 拼凑起来的新的扫码
+     * @param smm      旧的扫码列表
+     * @param isAdd
+     * @return
+     */
+    private List<String> GetContinousSmm(String ewm_nums, List<String> smm, boolean isAdd) {
+        List<String> mIscontinousSmm = new ArrayList<>();//记录成功添加或者删除的条码
         String[] mSmm = ewm_nums.split(",");
         mSmm = condition(mSmm);//删除重复的
         if (ewm_nums != null && smm != null && mSmm.length > 0) {
             for (int i = 0; i < mSmm.length; i++) {
-                if (!smm.contains(mSmm[i])) {
-                    if (isAdd) {
-                        mIscontinousSmm.add(0, mSmm[i]);
-                    } else {
-                        mIscontinousSmm.remove(mSmm[i]);
+                if (isAdd) {
+                    if (!smm.contains(mSmm[i])) {
+                        smm.add(0, mSmm[i]);
+                        mIscontinousSmm.add(mSmm[i]);
+                    }
+                } else {
+                    if (smm.contains(mSmm[i])) {
+                        smm.remove(mSmm[i]);
+                        mIscontinousSmm.add(mSmm[i]);
                     }
                 }
             }
         }
         return mIscontinousSmm;
     }
+
 
     private String[] condition(String[] mSmm) {
         List<String> result = new ArrayList<>();
@@ -204,7 +231,12 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
             } else {
                 count.setVisibility(View.GONE);
             }
-
+            if (smm.size() > 0) {
+                scanNumber.setVisibility(View.VISIBLE);
+                scanNumber.setText("已扫描" + smm.size() + "条");
+            } else {
+                scanNumber.setVisibility(View.GONE);
+            }
             ScanBarCodeAdpater scanBarCodeAdpater = new ScanBarCodeAdpater(barCodeLogList, mContext);
             View layout_scanbarcode_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_scanbarcode_dialog, null);
             final AlertDialog barCodeLogDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
@@ -324,6 +356,7 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
 
     /**
      * 非连续扫码时拼接
+     *
      * @param smm
      * @return
      */
@@ -337,6 +370,7 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
 
     /**
      * 连续扫码时拼接
+     *
      * @param smm
      * @return
      */
@@ -357,6 +391,7 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
         return "S" + str + time + round;
 
     }
+
 
 
 }

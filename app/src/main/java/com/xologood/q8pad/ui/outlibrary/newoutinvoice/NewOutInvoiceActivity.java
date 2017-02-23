@@ -267,17 +267,18 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                         }
                         if (mCompanyList != null && mCompanyList.size() > 0) {
                             queryCompanyList.addAll(QueryCompanyList(etCompanyNo.getFieldText(), etcompanyName.getFieldText(), etcomTel.getFieldText(), mCompanyList));
-                            companyAdapter.notifyDataSetChanged();
                         }
+                        companyAdapter.notifyDataSetChanged();
                     }
                 });
                 companyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         companyDialog.dismiss();
-                        mComkey = queryCompanyList.get(position).getKeyValue();
-                        mCompanyName = queryCompanyList.get(position).getCompanyName();
-                        company.setFieldTextAndValue(queryCompanyList.get(position).getCompanyName());
+                        Company company = queryCompanyList.get(position);
+                        mComkey = company.getKeyValue();
+                        mCompanyName = company.getCompanyName();
+                        NewOutInvoiceActivity.this.company.setFieldTextAndValue(company.getCompanyName(), ((String) company.getComKey()));
                     }
                 });
             }
@@ -325,12 +326,18 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             if (isContinous.isChecked()) {
                 String ewm_nums = data.getStringExtra("ewm_num");
                 continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
-                smm.addAll(0,continousSmm);
                 smmAdapter.notifyDataSetChanged();
                 if (rbAdd.isChecked()) {
                     information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
                 } else {
                     information.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
+                }
+
+                if (smm.size() > 0) {
+                    scanNumber.setVisibility(View.VISIBLE);
+                    scanNumber.setText("已扫描" + smm.size() + "条");
+                } else {
+                    scanNumber.setVisibility(View.GONE);
                 }
                 return;
             }
@@ -369,17 +376,28 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         }
     }
 
+    /**
+     * 连续扫码，如果选择添加就从已有扫码列表里添加不重复的，否则删除
+     * @param ewm_nums 拼凑起来的新的扫码
+     * @param smm  旧的扫码列表
+     * @param isAdd
+     * @return
+     */
     private List<String> GetContinousSmm(String ewm_nums,List<String> smm,boolean isAdd) {
-        List<String> mIscontinousSmm = new ArrayList<>();
+        List<String> mIscontinousSmm = new ArrayList<>();//记录成功添加或者删除的条码
         String[] mSmm = ewm_nums.split(",");
         mSmm = condition(mSmm);//删除重复的
         if (ewm_nums != null && smm != null && mSmm.length > 0) {
             for (int i = 0; i < mSmm.length; i++) {
-                if (!smm.contains(mSmm[i])) {
-                    if (isAdd) {
-                        mIscontinousSmm.add(0, mSmm[i]);
-                    } else {
-                        mIscontinousSmm.remove(mSmm[i]);
+                if (isAdd) {
+                    if (!smm.contains(mSmm[i])) {
+                        smm.add(0, mSmm[i]);
+                        mIscontinousSmm.add(mSmm[i]);
+                    }
+                } else {
+                    if (smm.contains(mSmm[i])) {
+                        smm.remove(mSmm[i]);
+                        mIscontinousSmm.add(mSmm[i]);
                     }
                 }
             }
@@ -553,6 +571,12 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                 count.setText("已成功上传" + SuccessCount + "条");
             } else {
                 count.setVisibility(View.GONE);
+            }
+            if (smm.size() > 0) {
+                scanNumber.setVisibility(View.VISIBLE);
+                scanNumber.setText("已扫描" + smm.size() + "条");
+            } else {
+                scanNumber.setVisibility(View.GONE);
             }
             ScanBarCodeAdpater scanBarCodeAdpater = new ScanBarCodeAdpater(barCodeLogList, mContext);
             View layout_scanbarcode_dialog = LayoutInflater.from(mContext).inflate(R.layout.layout_scanbarcode_dialog, null);

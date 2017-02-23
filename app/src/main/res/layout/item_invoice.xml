@@ -6,6 +6,7 @@
     app:cardElevation="10dp"
     app:cardCornerRadius="10dp"
     android:elevation="10dp"
+    android:layout_margin="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
@@ -143,8 +144,6 @@
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
             android:paddingRight="50dp"
-            android:textColor="@color/black"
-            android:textSize="20sp"
             android:text="点击\n进入\n扫码\n界面"
             />
     </RelativeLayout>

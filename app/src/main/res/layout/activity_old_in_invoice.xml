@@ -20,7 +20,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
 
         <com.mview.medittext.view.QpadEditText
             android:id="@+id/queryOrder"

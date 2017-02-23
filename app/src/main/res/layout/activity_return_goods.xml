@@ -28,12 +28,28 @@
                 android:orientation="vertical">
 
 
-                <TextView
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="@color/black"
-                    android:text="已扫描条码列表" />
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        style="@style/TextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:text="已扫码列表"
+                        android:id="@+id/textView5" />
+
+                    <TextView
+                        android:id="@+id/scanNumber"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                </RelativeLayout>
 
                 <ListView
                     android:id="@+id/lv"

@@ -264,7 +264,7 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                             @Override
                             public void call(BaseResponse<InvoicingDetailVo> invoiceDetailBaseResponse) {
                                 InvoicingDetailVo data = invoiceDetailBaseResponse.getData();
-                                mView.GetInvoiceDetailSuccess(data.getId(),data.getInvId());
+                                mView.GetInvoiceDetailSuccess(data.getId(),data.getInvId(),data.getExpectedQty());
 
                             }
                         }, new Action1<Throwable>() {

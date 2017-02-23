@@ -6,5 +6,5 @@
         android:id="@+id/productName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/common_text_middle"/>
+        android:textSize="@dimen/common_text_middleer"/>
 </LinearLayout>

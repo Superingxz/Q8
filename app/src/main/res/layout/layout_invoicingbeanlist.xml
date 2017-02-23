@@ -20,7 +20,7 @@
             android:paddingLeft="@dimen/common_padding5"
             android:paddingRight="@dimen/common_padding5"
             aaron:fieldEnabled="true"
-            aaron:fieldTitle="入库单号"
+            aaron:fieldTitle="出库单号："
             aaron:fieldHint = "请输入入库单号"
             aaron:fieldType="String" />
         <Button
