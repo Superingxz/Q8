@@ -11,6 +11,7 @@
         android:id="@+id/queryForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#f6f6f6"
         android:orientation="vertical">
         <com.mview.medittext.view.QpadEditText
             android:id="@+id/productCode"
@@ -40,6 +41,7 @@
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
             android:text="查询" />
     </LinearLayout>
 
@@ -47,7 +49,6 @@
         android:id="@+id/productList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
         >
     </ListView>
 </LinearLayout>

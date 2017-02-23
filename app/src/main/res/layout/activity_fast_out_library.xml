@@ -3,7 +3,6 @@
     xmlns:aaron="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="10dp"
     android:orientation="vertical">
     <com.xologood.q8pad.view.TitileView
         android:id="@+id/title_view"
@@ -13,8 +12,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:orientation="vertical"
         >
         <LinearLayout
@@ -58,6 +57,7 @@
             android:background="@drawable/btn_layout_off_bg"
             android:paddingLeft="@dimen/common_padding5"
             android:paddingRight="@dimen/common_padding5"
+            aaron:fieldHint="请选择出库单号"
             aaron:fieldEnabled="true"
             aaron:fieldType="Dialog" />
 
@@ -138,42 +138,43 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:text="收货人：" />
 
-                <TextView
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="收货人："/>
-
-                <TextView
-                    android:id="@+id/consignee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/consignee"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <TextView
-                    style="@style/TextViewStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="审核人：" />
-
-                <TextView
-                    android:id="@+id/checkUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="" />
-            </LinearLayout>
+                android:text="" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="审核人：" />
+
+            <TextView
+                android:id="@+id/checkUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -184,6 +185,7 @@
 
             <ListView
                 android:id="@+id/lv"
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
@@ -213,6 +215,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:background="#005dab"
             android:textColor="#ffffffff"
             android:text="确认发货"

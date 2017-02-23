@@ -4,7 +4,8 @@
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/InvNumber"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/common_text_small"/>
+        android:padding="5dp"
+        android:textSize="@dimen/common_text_middle" />
 </LinearLayout>

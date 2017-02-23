@@ -39,7 +39,7 @@
             android:layout_gravity="center_horizontal|center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="二维码扫描"
+            android:text="扫描"
             android:textColor="#FFFFFF"
             android:textSize="18.0dip" />
 

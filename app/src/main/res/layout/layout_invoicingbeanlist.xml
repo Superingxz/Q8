@@ -11,6 +11,7 @@
         android:id="@+id/queryForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#f6f6f6"
         android:orientation="vertical">
         <com.mview.medittext.view.QpadEditText
             android:id="@+id/InvNumber"
@@ -21,20 +22,20 @@
             android:paddingRight="@dimen/common_padding5"
             aaron:fieldEnabled="true"
             aaron:fieldTitle="出库单号："
-            aaron:fieldHint = "请输入入库单号"
+            aaron:fieldHint = "请输入出库单号"
             aaron:fieldType="String" />
         <Button
             android:id="@+id/queryInvNumber"
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
             android:text="搜索" />
     </LinearLayout>
     <ListView
         android:id="@+id/InvoicingBeanList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="none"
         >
     </ListView>
 </LinearLayout>

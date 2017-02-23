@@ -120,17 +120,20 @@
                     <Button
                         android:id="@+id/saveNnit"
                         style="@style/ButtonStyle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:text="新增订单" />
 
                     <Button
                         android:id="@+id/scanywm"
                         style="@style/ButtonStyle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="30dp"
-                        android:text="扫描" />
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="扫码" />
                 </LinearLayout>
 
                 <RelativeLayout
@@ -166,6 +169,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <Button
@@ -214,6 +218,10 @@
                         android:text="删除" />
                 </RadioGroup>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/white" />
                 <CheckBox
                     android:id="@+id/isContinous"
                     android:layout_width="wrap_content"
@@ -222,7 +230,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:background="@color/white" />
 
                 <TextView
@@ -234,7 +242,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="1dp"
                     android:background="@color/white" />
 
                 <TextView
