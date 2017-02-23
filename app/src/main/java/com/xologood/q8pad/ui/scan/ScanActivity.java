@@ -156,10 +156,12 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
                 String ewm_nums = data.getStringExtra("ewm_num");
                 continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
                 smmAdapter.notifyDataSetChanged();
-                if (rbAdd.isChecked()) {
-                    scan_msg.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
-                } else {
-                    scan_msg.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
+                if (continousSmm.size() > 0) {
+                    if (rbAdd.isChecked()) {
+                        scan_msg.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
+                    } else {
+                        scan_msg.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
+                    }
                 }
                 if (smm.size() > 0) {
                     scanNumber.setVisibility(View.VISIBLE);

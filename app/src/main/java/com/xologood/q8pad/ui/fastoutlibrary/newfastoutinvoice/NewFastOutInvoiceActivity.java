@@ -359,10 +359,12 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                 String ewm_nums = data.getStringExtra("ewm_num");
                 continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
                 smmAdapter.notifyDataSetChanged();
-                if (rbAdd.isChecked()) {
-                    information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
-                } else {
-                    information.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
+                if (continousSmm.size() > 0) {
+                    if (rbAdd.isChecked()) {
+                        information.setText(GetBarCodeString4List2(continousSmm) + "\n添加成功！");
+                    } else {
+                        information.setText(GetBarCodeString4List2(continousSmm) + "\n删除成功！");
+                    }
                 }
 
                 if (smm.size() > 0) {
