@@ -12,6 +12,8 @@ import com.xologood.q8pad.bean.InvoicingBean;
 
 import java.util.List;
 
+import static com.xologood.q8pad.utils.DisplayUtil.dip2px;
+
 /**
  * Created by Administrator on 17-2-22.
  */
@@ -44,11 +46,16 @@ public class InvoicingBeanAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        int left = 18;
+        int top = dip2px(10);
+        int right = 0;
+        int bottom = dip2px(10);
         InvoicingBeanViewHelper invoicingBeanViewHelper = null;
         if (convertView == null) {
             invoicingBeanViewHelper = new InvoicingBeanViewHelper();
             convertView = inflater.inflate(R.layout.item_invoicintbean, parent, false);
             invoicingBeanViewHelper.InvNumber = (TextView) convertView.findViewById(R.id.InvNumber);
+            invoicingBeanViewHelper.InvNumber.setPadding(left,top,right,bottom);
             convertView.setTag(invoicingBeanViewHelper);
         } else {
             invoicingBeanViewHelper = (InvoicingBeanViewHelper) convertView.getTag();

@@ -12,6 +12,8 @@ import com.xologood.q8pad.bean.Product;
 
 import java.util.List;
 
+import static com.xologood.q8pad.utils.DisplayUtil.dip2px;
+
 /**
  * Created by Administrator on 17-2-22.
  */
@@ -44,11 +46,16 @@ public class ProductListAdpater extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        int left = 18;
+        int top = dip2px(10);
+        int right = 0;
+        int bottom = dip2px(10);
         ProductViewHelper productViewHelper = null;
         if (convertView == null) {
             productViewHelper = new ProductViewHelper();
             convertView = inflater.inflate(R.layout.item_product, parent, false);
             productViewHelper.productName = (TextView) convertView.findViewById(R.id.productName);
+            productViewHelper.productName.setPadding(left,top,right,bottom);
             convertView.setTag(productViewHelper);
         } else {
             productViewHelper = (ProductViewHelper) convertView.getTag();

@@ -47,7 +47,7 @@ public class ScanBarCodeAdpater extends BaseAdapter {
         ScanBarCodeViewHolder scanBarCodeViewHolder = null;
         if (convertView == null) {
             scanBarCodeViewHolder = new ScanBarCodeViewHolder();
-            convertView = inflater.inflate(R.layout.layout_scanbarcode_item, parent, false);
+            convertView = inflater.inflate(R.layout.item_scanbarcode, parent, false);
             scanBarCodeViewHolder.Remark = (TextView) convertView.findViewById(R.id.Remark);
             convertView.setTag(scanBarCodeViewHolder);
         } else {
