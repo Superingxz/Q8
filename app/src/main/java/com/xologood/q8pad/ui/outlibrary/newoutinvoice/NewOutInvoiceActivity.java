@@ -53,7 +53,8 @@ import butterknife.OnClick;
 
 public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, NewOutInvoiceModel>
         implements NewOutInvoiceContract.View {
-    private static final int REQUEST_OK = 101;
+    public static final int NEWOUTINVOICE_OK = 101;
+    private static final int REQUEST_OK = 100;
     @Bind(R.id.title_view)
     TitileView titleView;
     @Bind(R.id.InvNumber)
@@ -320,6 +321,15 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == InvoicingDetailActivity.INVOICINGDETAIL_OK) {
+            IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
+            Intent intent = new Intent();
+            intent.putExtra("isCommitSuccess", IsCommitSuccess);
+            setResult(NEWOUTINVOICE_OK,intent);
+            if (IsCommitSuccess) {
+                finish();
+            }
+        }
         if (resultCode == CaptureActivity.RESULT_OK) {
             //连续扫码
             List<String> continousSmm = new ArrayList<>();
@@ -374,7 +384,6 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             if (resultCode == InvoicingDetailActivity.RESULT_OK) {
                 IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
             }
-
         }
     }
 
@@ -765,12 +774,8 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                 Intent intent = new Intent(NewOutInvoiceActivity.this, InvoicingDetailActivity.class);
                 intent.putExtra("invId", invId + "");
                 startActivityForResult(intent, REQUEST_OK);
-                if (IsCommitSuccess) {
-                    finish();
-                }
             }
         }
-        IsCommitSuccess = false;
     }
 
     @Override

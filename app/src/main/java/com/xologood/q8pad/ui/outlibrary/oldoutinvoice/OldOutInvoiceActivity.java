@@ -139,7 +139,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
                     intent.putExtra("ReceivingComKey", invoicingBean.getReceivingComKey());
                     intent.putExtra("ReceivingComName", invoicingBean.getReceivingComName());
                 }
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_OK);
             }
         });
         //没有数据重新获取
@@ -217,19 +217,12 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == InvoicingDetailActivity.RESULT_OK) {
+        if (resultCode == NewOutInvoiceActivity.NEWOUTINVOICE_OK
+                ||resultCode == InvoicingDetailActivity.INVOICINGDETAIL_OK) {
             IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
-        }
-       if (IsCommitSuccess) {
-            wareHouse.setText("");
-            invDate.setText("");
-            checkDate.setText("");
-            consignee.setText("");
-            checkUserName.setText("");
-            invoiceInvlist.setFieldTextAndValue("");
-            mInvoicingDetailList.removeAll(mInvoicingDetailList);
-            newOutInvoiceAdpter.notifyDataSetChanged();
-            IsSelect = false;
+            if (IsCommitSuccess) {
+                finish();
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -470,7 +463,6 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
         Intent intent = new Intent(OldOutInvoiceActivity.this, InvoicingDetailActivity.class);
         intent.putExtra("invId", mInvId + "");
         startActivityForResult(intent,REQUEST_OK);
-        finish();
     }
 
     /**

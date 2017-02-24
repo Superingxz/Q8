@@ -171,19 +171,12 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == InvoicingDetailActivity.RESULT_OK) {
+        if (resultCode == InvoicingDetailActivity.INVOICINGDETAIL_OK
+                ||resultCode == NewFastOutInvoiceActivity.NEWFASTOUTINVOICE_OK) {
             IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
-        }
-        if (IsCommitSuccess) {
-            warehouse.setText("");
-            invTime.setText("");
-            checkDate.setText("");
-            consignee.setText("");
-            checkUserName.setText("");
-            invoiceInvlist.setFieldTextAndValue("");
-            IsSelect = false;
-            mInvoicingDetailList.removeAll(mInvoicingDetailList);
-            newOutInvoiceAdpter.notifyDataSetChanged();
+            if (IsCommitSuccess) {
+               finish();
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -250,7 +243,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
             intent.putExtra("ReceivingComKey", invoicingBean.getReceivingComKey());
             intent.putExtra("ReceivingComName", invoicingBean.getReceivingComName());
             intent.putExtra("ReceivingWarehouseId", invoicingBean.getReceivingWarehouseId());
-            startActivity(intent);
+            startActivityForResult(intent,REQUEST_OK);
         }
     }
 

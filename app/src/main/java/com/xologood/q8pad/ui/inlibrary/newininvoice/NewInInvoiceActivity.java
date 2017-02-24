@@ -223,11 +223,11 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == InvoicingDetailActivity.RESULT_OK) {
+        if (resultCode == InvoicingDetailActivity.INVOICINGDETAIL_OK) {
             IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
-        }
-        if (IsCommitSuccess) {
-            mPresenter.GetInvoicingDetail(invId + "");
+            if (IsCommitSuccess) {
+                finish();
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -594,6 +594,9 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     @Override
     public void InsertProductBatch(String msg) {
         ToastUitl.showLong(msg);
+        if (!QpadJudgeUtils.isEmpty(mProductId)) {
+            mPresenter.GetProductBatchByProductId(mProductId);
+        }
     }
 
     /**
@@ -662,9 +665,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             });
         } else {
             mPresenter.InsertProductBatch(addProductBatch, mProductId, SysKey, InvDate, LoginName);
-            if (!QpadJudgeUtils.isEmpty(mProductId)) {
-                mPresenter.GetProductBatchByProductId(mProductId);
-            }
         }
     }
 
@@ -748,9 +748,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
             Intent intent = new Intent(NewInInvoiceActivity.this, InvoicingDetailActivity.class);
             intent.putExtra("invId", invId + "");
             startActivityForResult(intent, REQUEST_OK);
-            if (IsCommitSuccess) {
-                finish();
-            }
         } else {
             final NormalDialog IsSava_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showOnePromptDialog(IsSava_Dialog, "数据未保存，请先保存数据！", new OnBtnClickL() {
@@ -760,7 +757,6 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
                 }
             });
         }
-        IsCommitSuccess = false;
     }
 
     /**

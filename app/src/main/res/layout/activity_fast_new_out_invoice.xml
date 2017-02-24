@@ -116,7 +116,7 @@
                     android:paddingRight="@dimen/common_padding5"
                     aaron:fieldEnabled="true"
                     aaron:fieldTitle="产品名称："
-                    aaron:fieldType="Select" />
+                    aaron:fieldType="Dialog" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

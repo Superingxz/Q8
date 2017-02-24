@@ -28,6 +28,7 @@ import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.CompanyListAdapter;
+import com.xologood.q8pad.adapter.ProductListAdpater;
 import com.xologood.q8pad.adapter.ScanBarCodeAdpater;
 import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.Company;
@@ -52,8 +53,12 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.OnClick;
 
+import static com.xologood.q8pad.R.id.productName;
+
 public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePresenter, NewFastOutInvoiceModel>
         implements NewFastOutInvoiceContract.View {
+    private static final int REQUEST_OK = 100;
+    public static final int NEWFASTOUTINVOICE_OK = 102;
     @Bind(R.id.title_view)
     TitileView titleView;
     @Bind(R.id.InvNumber)
@@ -154,6 +159,11 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
 
     private Map options;
 
+
+    private ProductListAdpater productAdapter;
+    private List<Product> queryProductList;
+    private boolean IsCommitSuccess  = false;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_fast_new_out_invoice;
@@ -167,6 +177,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         mCompanyList = new ArrayList<>();
         mProductList = new ArrayList<>();
         mProductBatchList = new ArrayList<>();
+        queryProductList = new ArrayList<>();
         mCommonSelectDataCompanyList = new ArrayList<>();
 
         date = new Date();
@@ -193,7 +204,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         oldReceivingComName = intent.getStringExtra("ReceivingComName");
         oldReceivingWarehouseId = intent.getStringExtra("ReceivingWarehouseId");
         if (isOld) {
-            invId = intent.getIntExtra("invId", 0);
+            mInvId = intent.getIntExtra("invId", 0);
             InvNumber.setFieldTextAndValue(oldInvNumber);
             InvTime.setFieldTextAndValue(oldInvDate);
             mCompanyName = oldReceivingComName;
@@ -289,7 +300,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             }
         });
 
-        produceName.setOnChangeListener(new QpadEditText.OnChangeListener() {
+       /* produceName.setOnChangeListener(new QpadEditText.OnChangeListener() {
             @Override
             public void onChanged(CommonSelectData data) {
                 mProductId = data.getValue();
@@ -298,6 +309,63 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                     mPresenter.GetProductBatchByProductId(mProductId);
                 }
             }
+        });*/
+
+        produceName.setOnDialogClickLister(new QpadEditText.OnDialogClickLister() {
+            @Override
+            public void OnDialogClick() {
+                //根据产品编号，产品名称查询
+                //初始化产品名称列表
+                if (queryProductList.size() > 0) {
+                    queryProductList.removeAll(queryProductList);
+                }
+                queryProductList.addAll(mProductList);
+                productAdapter = new ProductListAdpater(queryProductList,mContext);
+                View layout_queryProductNameList = LayoutInflater.from(mContext).inflate(R.layout.layout_productlist, null);
+                final AlertDialog productDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
+                productDialog.setView(new EditText(mContext));
+                productDialog.setCanceledOnTouchOutside(false);
+                productDialog.show();
+                productDialog.getWindow().setContentView(layout_queryProductNameList);
+                WindowManager.LayoutParams lp_product = productDialog.getWindow().getAttributes();
+                lp_product.width = (int) (width * 0.85);
+                lp_product.height = (int) (height * 0.85);
+                productDialog.getWindow().setAttributes(lp_product);
+                final QpadEditText etProductCode = (QpadEditText) layout_queryProductNameList.findViewById(R.id.productCode);
+                final QpadEditText etProductName = (QpadEditText) layout_queryProductNameList.findViewById(productName);
+                Button queryProduct = (Button) layout_queryProductNameList.findViewById(R.id.queryProduct);
+                ListView productListView = (ListView) layout_queryProductNameList.findViewById(R.id.productList);
+                productListView.setAdapter(productAdapter);
+                queryProduct.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //点击查询按钮查询
+                        if (queryProductList.size() > 0) {
+                            queryProductList.removeAll(queryProductList);
+                        }
+                        if (mProductList != null && mProductList.size() > 0) {
+                            queryProductList.addAll(QueryProductList(etProductCode.getFieldText(), etProductName.getFieldText(), mProductList));
+                        }
+                        productAdapter.notifyDataSetChanged();
+                    }
+                });
+                productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        productDialog.dismiss();
+                        //根据产品名称查找id
+                        if (productAdapter.getCount() > 0 && mProductList.size() > 0) {
+                            mProductId = queryProductList.get(position).getId()+"";
+                            mProductName = queryProductList.get(position).getProductName();
+                            produceName.setFieldTextAndValue(mProductName,mProductId);
+                            if (!QpadJudgeUtils.isEmpty(mProductId)) {
+                                mPresenter.GetProductBatchByProductId(mProductId);
+                            }
+                        }
+                    }
+                });
+            }
+
         });
 
         produceBatch.setOnChangeListener(new QpadEditText.OnChangeListener() {
@@ -352,6 +420,15 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == InvoicingDetailActivity.INVOICINGDETAIL_OK) {
+            IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
+            Intent intent = new Intent();
+            intent.putExtra("isCommitSuccess", IsCommitSuccess);
+            setResult(NEWFASTOUTINVOICE_OK,intent);
+            if (IsCommitSuccess) {
+                finish();
+            }
+        }
         if (resultCode == CaptureActivity.RESULT_OK) {
             //连续扫码
             List<String> continousSmm = new ArrayList<>();
@@ -526,6 +603,9 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
     @Override
     public void InsertProductBatch(String msg) {
         ToastUitl.showLong(msg);
+        if (!QpadJudgeUtils.isEmpty(mProductId)) {
+            mPresenter.GetProductBatchByProductId(mProductId);
+        }
     }
 
     /**
@@ -619,9 +699,6 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             });
         } else {
             mPresenter.InsertProductBatch(addProductBatch, mProductId, SysKey, InvDate, LoginName);
-            if (!QpadJudgeUtils.isEmpty(mProductId)) {
-                mPresenter.GetProductBatchByProductId(mProductId);
-            }
         }
     }
 
@@ -840,8 +917,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         } else {
             Intent intent = new Intent(this, InvoicingDetailActivity.class);
             intent.putExtra("invId", mInvId + "");
-            startActivity(intent);
-            finish();
+            startActivityForResult(intent,REQUEST_OK);
         }
     }
 
@@ -907,6 +983,48 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         }
         return companys;
     }
+
+    /**
+     * 根据条件查询产品
+     * @param productCode 产品编号
+     * @param productName 产品名称
+     * @param productList 产品列表
+     * @return
+     */
+    private List<Product> QueryProductList(String productCode, String productName, List<Product> productList) {
+        List<Product> products= new ArrayList<>();
+        if (productList == null) {
+            return null;
+        } else if (productList.size() == 0) {
+            return null;
+        }
+        if (QpadJudgeUtils.isEmpty(productCode) && !QpadJudgeUtils.isEmpty(productName)) {
+            for (int i = 0; i < productList.size(); i++) {
+                if (StringUtils.ifIndexOf(productList.get(i).getProductName(), productName)) {
+                    products.add(productList.get(i));
+                }
+            }
+        } else if (!QpadJudgeUtils.isEmpty(productCode) && QpadJudgeUtils.isEmpty(productName)) {
+            for (int i = 0; i < productList.size(); i++) {
+                if (StringUtils.ifIndexOf(productList.get(i).getProductCode(), productCode)) {
+                    products.add(productList.get(i));
+                }
+            }
+        } else if (!QpadJudgeUtils.isEmpty(productCode) && !QpadJudgeUtils.isEmpty(productName)) {
+            for (int i = 0; i < productList.size(); i++) {
+                if (StringUtils.ifIndexOf(productList.get(i).getProductCode(), productCode)
+                        && StringUtils.ifIndexOf(productList.get(i).getProductName(), productName)) {
+                    products.add(productList.get(i));
+                }
+            }
+        } else {
+            for (int i = 0; i < productList.size(); i++) {
+                products.add(productList.get(i));
+            }
+        }
+        return products;
+    }
+
 
     /**
      * 计算扫码成功数目

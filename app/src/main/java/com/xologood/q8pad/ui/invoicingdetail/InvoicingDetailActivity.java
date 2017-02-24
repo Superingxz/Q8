@@ -30,8 +30,7 @@ import butterknife.OnClick;
 
 public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresenter, InvoicingDetailModel>
         implements InvoicingDetailContract.View ,SwipeRefreshLayout.OnRefreshListener {
-
-
+    public static final int INVOICINGDETAIL_OK = 105;
     @Bind(R.id.title_view)
     TitileView titleView;
     @Bind(R.id.InvId)
@@ -130,7 +129,7 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
         Intent intent = new Intent();
         boolean IsCommit = true;
         intent.putExtra("isCommitSuccess", IsCommit);
-        setResult(RESULT_OK,intent);
+        setResult(INVOICINGDETAIL_OK,intent);
         final NormalDialog dialog_detail = new NormalDialog(mContext);
         QPadPromptDialogUtils.showOnePromptDialog(dialog_detail, msg, new OnBtnClickL() {
             @Override

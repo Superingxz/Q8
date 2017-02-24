@@ -37,7 +37,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> implements ScanContract.View {
-    static final int SUCCESS_SCAN = 100;
+    public static final int SUCCESS_SCAN = 100;
     @Bind(R.id.add)
     Button add;
     @Bind(R.id.btn_editywm)

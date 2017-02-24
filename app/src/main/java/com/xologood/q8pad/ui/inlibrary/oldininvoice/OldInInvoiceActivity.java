@@ -219,22 +219,15 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        InvoicingDetail ClickInvoicingDetail = (InvoicingDetail) lv.getTag();
-        if (resultCode == InvoicingDetailActivity.RESULT_OK) {
-            int mActualQty = data.getIntExtra("mActualQty", 0);
+        if (resultCode == InvoicingDetailActivity.INVOICINGDETAIL_OK) {
             IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
+            if (IsCommitSuccess) {
+                finish();
+            }
+        } else if (resultCode == ScanActivity.SUCCESS_SCAN) {
+            InvoicingDetail ClickInvoicingDetail = (InvoicingDetail) lv.getTag();
+            int mActualQty = data.getIntExtra("mActualQty", 0);
             newInInvoiceAdpter.updateActualQty(mActualQty, ClickInvoicingDetail.getProductName(), ClickInvoicingDetail.getBatchNO());
-        }
-        if (IsCommitSuccess) {
-            wareHouse.setText("");
-            invDate.setText("");
-            checkDate.setText("");
-            checkUserName.setText("");
-            consignee.setText("");
-            invoiceInvlist.setFieldTextAndValue("");
-            mInvoicingDetailList.removeAll(mInvoicingDetailList);
-            newInInvoiceAdpter.notifyDataSetChanged();
-            IsSelect = false;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -381,10 +374,8 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
             return;
         }
         Intent intent = new Intent(OldInInvoiceActivity.this, InvoicingDetailActivity.class);
-        intent.putExtra("invId", mInvId);
+        intent.putExtra("invId", mInvId+"");
         startActivityForResult(intent,REQUEST_OK);
-        finish();
-
     }
 
     @Override
