@@ -55,6 +55,7 @@ public class NewInInvoiceAdpter extends BaseAdapter {
             invoiceViewHolder.expectedQty = (TextView) convertView.findViewById(R.id.expectedQty);
             invoiceViewHolder.actualQty = (TextView) convertView.findViewById(R.id.actualQty);
             invoiceViewHolder.standardUnitName = (TextView) convertView.findViewById(R.id.standardUnitName);
+
             convertView.setTag(invoiceViewHolder);
         } else {
             invoiceViewHolder = (InvoiceViewHolder) convertView.getTag();
@@ -63,11 +64,12 @@ public class NewInInvoiceAdpter extends BaseAdapter {
             InvoicingDetail invoicingDetail = invoiceList.get(position);
             invoiceViewHolder.productName.setText(invoicingDetail.getProductName());
             invoiceViewHolder.batchNO.setText(invoicingDetail.getBatchNO());
+
             if (invoicingDetail.getCreationDate() != null) {
                 invoiceViewHolder.creationDate.setText(StringUtils.GetCreationDate(invoicingDetail.getCreationDate()));
             }
-            invoiceViewHolder.expectedQty.setText(invoicingDetail.getExpectedQty()+"");
-            invoiceViewHolder.actualQty.setText(invoicingDetail.getActualQty()+"");
+            invoiceViewHolder.expectedQty.setText(invoicingDetail.getExpectedQty() + "");
+            invoiceViewHolder.actualQty.setText(invoicingDetail.getActualQty() + "");
             invoiceViewHolder.standardUnitName.setText(invoicingDetail.getStandardUnitName());
         }
         return convertView;
@@ -75,18 +77,19 @@ public class NewInInvoiceAdpter extends BaseAdapter {
 
     /**
      * 更新指定位置的item
-     * @param mExpectedQty  预期数量
-     * @param ProductName   产品名称
-     * @param BatchNo       批次名称
+     *
+     * @param mExpectedQty 预期数量
+     * @param ProductName  产品名称
+     * @param BatchNo      批次名称
      */
-    public boolean update(String mExpectedQty,String ProductName,String BatchNo){
+    public boolean update(String mExpectedQty, String ProductName, String BatchNo) {
         if (invoiceList != null && invoiceList.size() > 0) {
             for (int i = 0; i < invoiceList.size(); i++) {
                 InvoicingDetail invoicingDetail = invoiceList.get(i);
                 String mProductName = invoicingDetail.getProductName();
                 String mBatchNO = invoicingDetail.getBatchNO();
                 if (ProductName.equals(mProductName) && BatchNo.equals(mBatchNO)) {
-                    invoicingDetail.setExpectedQty(invoicingDetail.getExpectedQty()+Integer.valueOf(mExpectedQty).intValue());
+                    invoicingDetail.setExpectedQty(invoicingDetail.getExpectedQty() + Integer.valueOf(mExpectedQty).intValue());
                 }
             }
         }
@@ -96,9 +99,10 @@ public class NewInInvoiceAdpter extends BaseAdapter {
 
     /**
      * 更新指定位置的item或者增加item
-     * @param invoicingDetail   产品名称
+     *
+     * @param invoicingDetail 产品名称
      */
-    public boolean AddOrUpdate(InvoicingDetail invoicingDetail){
+    public boolean AddOrUpdate(InvoicingDetail invoicingDetail) {
         String productName = invoicingDetail.getProductName();
         int ExpectedQty = invoicingDetail.getExpectedQty();   //预期数量
         if (invoiceList != null && invoiceList.size() > 0) {
@@ -112,7 +116,7 @@ public class NewInInvoiceAdpter extends BaseAdapter {
                     return true;
                 }
             }
-        } else  {
+        } else {
             invoiceList.add(invoicingDetail);
             notifyDataSetChanged();
             return true;
@@ -123,24 +127,26 @@ public class NewInInvoiceAdpter extends BaseAdapter {
 
     /**
      * 更新指定位置的item
-     * @param actualQty     实际数量
-     * @param ProductName   产品名称
-     * @param BatchNo       批次名称
+     *
+     * @param actualQty   实际数量
+     * @param ProductName 产品名称
+     * @param BatchNo     批次名称
      */
-    public void updateActualQty(int actualQty,String ProductName,String BatchNo){
+    public void updateActualQty(int actualQty, String ProductName, String BatchNo) {
         if (invoiceList != null && invoiceList.size() > 0) {
             for (int i = 0; i < invoiceList.size(); i++) {
                 InvoicingDetail invoicingDetail = invoiceList.get(i);
                 String mProductName = invoicingDetail.getProductName();
                 String mBatchNO = invoicingDetail.getBatchNO();
                 if (ProductName.equals(mProductName) && BatchNo.equals(mBatchNO)) {
-                    invoicingDetail.setActualQty(invoicingDetail.getActualQty()+actualQty);
+                    invoicingDetail.setActualQty(invoicingDetail.getActualQty() + actualQty);
                 }
             }
         }
         notifyDataSetChanged();
     }
-     class InvoiceViewHolder {
+
+    class InvoiceViewHolder {
         TextView productName;
         TextView batchNO;
         TextView expectedQty;

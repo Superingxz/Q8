@@ -44,6 +44,7 @@ import com.xologood.zxing.view.ViewfinderView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -105,13 +106,15 @@ public final class CaptureActivity extends Activity implements
 	private TextView mCapture_MsgText, mCapture_EwmText, mCapture_TxmText, mCapture_SgdText;
 	
 	private RelativeLayout mCapture_layout_ewm, mCapture_layout_txm, mCapture_layout_sgd;
-	
+
+	private TextView tv_count;
+
 	private List<Button> mBottomBTLists;
 	private List<TextView> mBottomTVLists;
+
 	private Boolean [] mBottomChosenLists;
-	
 	private Context mContext;
-	
+
 	enum IntentSource {
 		  NATIVE_APP_INTENT,
 		  PRODUCT_SEARCH_LINK,
@@ -120,7 +123,7 @@ public final class CaptureActivity extends Activity implements
 	}
 
 	private boolean isContinous = false;
-	private ArrayList<String> smm;
+	private List<String> smm;
 	private StringBuffer sb ;
 	public ViewfinderView getViewfinderView() {
 		return viewfinderView;
@@ -156,12 +159,14 @@ public final class CaptureActivity extends Activity implements
 						sb.append(mMsgNum + ",");
 						String result = sb.toString().substring(0, sb.length() - 1);
 						intent.putExtra("ewm_num", result);
-					} else {CameraManager.scanframe = 2;
-						chosenIVSrcAndTVColor(1);
-						unChosenIVSrcAndTVColor(0);
-						unChosenIVSrcAndTVColor(2);
-						onPause();
-						onResume();
+						smm =  Arrays.asList(result.split(","));
+						if (smm.size() > 0) {
+							tv_count.setVisibility(View.VISIBLE);
+							tv_count.setText("已经扫描" + smm.size() + "条");
+						} else {
+							tv_count.setVisibility(View.GONE);
+						}
+					} else {
 						intent.putExtra("ewm_num", mMsgNum);
 					}
 					intent.putExtra("ewm_type", msg.getData().getString("mMsgType"));
@@ -201,6 +206,13 @@ public final class CaptureActivity extends Activity implements
 					if (isContinous) {
 						sb.append(mMsgNum + ",");
 						String result = sb.toString().substring(0, sb.length() - 1);
+						smm =  Arrays.asList(result.split(","));
+						if (smm.size() > 0) {
+							tv_count.setVisibility(View.VISIBLE);
+							tv_count.setText("已经扫描" + smm.size() + "条");
+						} else {
+							tv_count.setVisibility(View.GONE);
+						}
 						intent.putExtra("ewm_num", result);
 					} else {
 						intent.putExtra("ewm_num", mMsgNum);
@@ -272,7 +284,9 @@ public final class CaptureActivity extends Activity implements
 		mCapture_back = (Button) findViewById(R.id.capture_back);
 		mCapture_picture = (Button) findViewById(R.id.capture_btn_picture);
 		mCapture_qrcode = (Button) findViewById(R.id.capture_btn_qrcode);
-		
+
+		tv_count = (TextView) findViewById(R.id.tv_count);
+
 		mCapture_back.setOnClickListener(this);
 		mCapture_picture.setOnClickListener(this);
 		mCapture_qrcode.setOnClickListener(this);

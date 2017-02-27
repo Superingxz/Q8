@@ -23,7 +23,7 @@ import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.InvoicingBeanAdapter;
-import com.xologood.q8pad.adapter.NewOutInvoiceAdapter;
+import com.xologood.q8pad.adapter.NewFastOutInvoiceAdapter;
 import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.InvoicingDetail;
@@ -79,7 +79,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
     private List<CommonSelectData> commonSelectDataInvoicingBeanList;
 
     private List<CommonSelectData> mCommonSelectDataList;
-    private NewOutInvoiceAdapter newOutInvoiceAdpter;
+
     private List<InvoicingDetail> mInvoicingDetailList;
     private Invoice mInvoice;
 
@@ -90,6 +90,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     private InvoicingBeanAdapter invoicingBeanAdapter;
     private List<InvoicingBean> queryInvoicingBeanList;
+    private NewFastOutInvoiceAdapter newFastOutInvoiceAdapter;
 
     @Override
     public int getLayoutId() {
@@ -109,8 +110,8 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
         mPresenter.InvoicingQuickInvList(SysKey, ComKey);
 
         mInvoicingDetailList = new ArrayList<>();
-        newOutInvoiceAdpter = new NewOutInvoiceAdapter(mInvoicingDetailList, this);
-        lv.setAdapter(newOutInvoiceAdpter);
+        newFastOutInvoiceAdapter = new NewFastOutInvoiceAdapter(mInvoicingDetailList, this);
+        lv.setAdapter(newFastOutInvoiceAdapter);
     }
 
     @Override
@@ -214,7 +215,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
         //设置出库明细信息
         mInvoicingDetailList.clear();
         mInvoicingDetailList.addAll(invoicingDetailList);
-        newOutInvoiceAdpter.notifyDataSetChanged();
+        newFastOutInvoiceAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.addInv)

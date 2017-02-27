@@ -15,7 +15,7 @@ import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
-import com.xologood.q8pad.adapter.NewInInvoiceAdpter;
+import com.xologood.q8pad.adapter.InvoicingDetailAdpter;
 import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.InvoicingDetail;
@@ -56,9 +56,9 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
     private String mUserId;
     private String mUserName;
 
-    private NewInInvoiceAdpter mNewInInvoiceAdpter;
     private List<InvoicingDetail> mNewInInvoiceList;
     private List<InvoicingDetail> invoicingDetailList;
+    private InvoicingDetailAdpter invoicingDetailAdpter;
 
     @Override
     public int getLayoutId() {
@@ -83,8 +83,8 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
         mInvId = intent.getStringExtra("invId");
         mPresenter.GetInvoicingDetail(mInvId);
 
-        mNewInInvoiceAdpter = new NewInInvoiceAdpter(mNewInInvoiceList, this);
-        lv.setAdapter(mNewInInvoiceAdpter);
+        invoicingDetailAdpter = new InvoicingDetailAdpter(mNewInInvoiceList, this);
+        lv.setAdapter(invoicingDetailAdpter);
 
 
     }
@@ -121,7 +121,7 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
         } else {
             mNewInInvoiceList.addAll(invoicingDetailList);
         }
-        mNewInInvoiceAdpter.notifyDataSetChanged();
+        invoicingDetailAdpter.notifyDataSetChanged();
     }
 
     @Override

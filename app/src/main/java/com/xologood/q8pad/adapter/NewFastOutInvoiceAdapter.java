@@ -19,13 +19,13 @@ import static com.xologood.q8pad.R.id.expectedQty;
  * Created by Administrator on 2017/1/8.
  */
 
-public class NewOutInvoiceAdapter extends BaseAdapter {
+public class NewFastOutInvoiceAdapter extends BaseAdapter {
 
     private List<InvoicingDetail> invoiceList;
     private LayoutInflater inflater;
     private Context context;
 
-    public NewOutInvoiceAdapter(List<InvoicingDetail> invoiceList, Context context) {
+    public NewFastOutInvoiceAdapter(List<InvoicingDetail> invoiceList, Context context) {
         this.invoiceList = invoiceList;
         this.context = context;
         this.inflater = LayoutInflater.from(context);
@@ -50,7 +50,7 @@ public class NewOutInvoiceAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         OutInvoiceViewHolder invoiceViewHolder = null;
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.item_out_invoice, parent, false);
+            convertView = inflater.inflate(R.layout.item_fast_out_invoice, parent, false);
             invoiceViewHolder = new OutInvoiceViewHolder();
             invoiceViewHolder.productId = (TextView) convertView.findViewById(R.id.productId);
             invoiceViewHolder.productName = (TextView) convertView.findViewById(R.id.productName);

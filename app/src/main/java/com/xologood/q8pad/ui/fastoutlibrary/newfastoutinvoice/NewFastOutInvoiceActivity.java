@@ -107,6 +107,8 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
     TextView scanNumber;
     @Bind(R.id.isContinous)
     CheckBox isContinous;
+    @Bind(R.id.btnAddProduceBatch)
+    Button btnAddProduceBatch;
 
     private String LoginName;
     private String SysKey;
@@ -162,7 +164,8 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
 
     private ProductListAdpater productAdapter;
     private List<Product> queryProductList;
-    private boolean IsCommitSuccess  = false;
+    private boolean IsCommitSuccess = false;
+
 
     @Override
     public int getLayoutId() {
@@ -247,7 +250,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                     queryCompanyList.removeAll(queryCompanyList);
                 }
                 queryCompanyList.addAll(mCompanyList);
-                companyAdapter = new CompanyListAdapter(queryCompanyList,mContext);
+                companyAdapter = new CompanyListAdapter(queryCompanyList, mContext);
                 View layout_layout_queryCompanyNameList = LayoutInflater.from(mContext).inflate(R.layout.layout_companylist, null);
                 final AlertDialog companyDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
                 companyDialog.setView(new EditText(mContext));
@@ -281,7 +284,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         companyDialog.dismiss();
-                        if (companyAdapter.getCount() > 0 ) {
+                        if (companyAdapter.getCount() > 0) {
                             Company company = queryCompanyList.get(position);
                             mComkey = company.getKeyValue();
                             mCompanyName = queryCompanyList.get(position).getCompanyName();
@@ -320,7 +323,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                     queryProductList.removeAll(queryProductList);
                 }
                 queryProductList.addAll(mProductList);
-                productAdapter = new ProductListAdpater(queryProductList,mContext);
+                productAdapter = new ProductListAdpater(queryProductList, mContext);
                 View layout_queryProductNameList = LayoutInflater.from(mContext).inflate(R.layout.layout_productlist, null);
                 final AlertDialog productDialog = new AlertDialog.Builder(mContext, R.style.Login_dialog).create();
                 productDialog.setView(new EditText(mContext));
@@ -355,9 +358,9 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
                         productDialog.dismiss();
                         //根据产品名称查找id
                         if (productAdapter.getCount() > 0 && mProductList.size() > 0) {
-                            mProductId = queryProductList.get(position).getId()+"";
+                            mProductId = queryProductList.get(position).getId() + "";
                             mProductName = queryProductList.get(position).getProductName();
-                            produceName.setFieldTextAndValue(mProductName,mProductId);
+                            produceName.setFieldTextAndValue(mProductName, mProductId);
                             if (!QpadJudgeUtils.isEmpty(mProductId)) {
                                 mPresenter.GetProductBatchByProductId(mProductId);
                             }
@@ -424,7 +427,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
             Intent intent = new Intent();
             intent.putExtra("isCommitSuccess", IsCommitSuccess);
-            setResult(NEWFASTOUTINVOICE_OK,intent);
+            setResult(NEWFASTOUTINVOICE_OK, intent);
             if (IsCommitSuccess) {
                 finish();
             }
@@ -434,7 +437,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
             List<String> continousSmm = new ArrayList<>();
             if (isContinous.isChecked()) {
                 String ewm_nums = data.getStringExtra("ewm_num");
-                continousSmm = GetContinousSmm(ewm_nums,smm,rbAdd.isChecked());
+                continousSmm = GetContinousSmm(ewm_nums, smm, rbAdd.isChecked());
                 smmAdapter.notifyDataSetChanged();
                 if (continousSmm.size() > 0) {
                     if (rbAdd.isChecked()) {
@@ -492,12 +495,13 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
 
     /**
      * 连续扫码，如果选择添加就从已有扫码列表里添加不重复的，否则删除
+     *
      * @param ewm_nums 拼凑起来的新的扫码
-     * @param smm  旧的扫码列表
+     * @param smm      旧的扫码列表
      * @param isAdd
      * @return
      */
-    private List<String> GetContinousSmm(String ewm_nums,List<String> smm,boolean isAdd) {
+    private List<String> GetContinousSmm(String ewm_nums, List<String> smm, boolean isAdd) {
         List<String> mIscontinousSmm = new ArrayList<>();//记录成功添加或者删除的条码
         String[] mSmm = ewm_nums.split(",");
         mSmm = condition(mSmm);//删除重复的
@@ -673,6 +677,14 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
 //        ToastUitl.showLong("成功扫码：" + invId + "");
     }
 
+
+    @OnClick(R.id.btnAddProduceBatch)
+    public void btnAddProduceBatch(View view){
+        btnAddProduceBatch.setVisibility(View.GONE);
+        addProduceBatch.setVisibility(View.VISIBLE);
+        saveBatch.setVisibility(View.VISIBLE);
+    }
+
     /**
      * 保存批次
      *
@@ -680,6 +692,10 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
      */
     @OnClick(R.id.saveBatch)
     public void setSaveBatch(View view) {
+        btnAddProduceBatch.setVisibility(View.VISIBLE);
+        addProduceBatch.setVisibility(View.INVISIBLE);
+        saveBatch.setVisibility(View.INVISIBLE);
+
         String addProductBatch = addProduceBatch.getFieldText();
         if (QpadJudgeUtils.isEmpty(mProductName)) {
             final NormalDialog IsEmpty_ProductName_Dialog = new NormalDialog(mContext);
@@ -917,7 +933,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         } else {
             Intent intent = new Intent(this, InvoicingDetailActivity.class);
             intent.putExtra("invId", mInvId + "");
-            startActivityForResult(intent,REQUEST_OK);
+            startActivityForResult(intent, REQUEST_OK);
         }
     }
 
@@ -986,13 +1002,14 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
 
     /**
      * 根据条件查询产品
+     *
      * @param productCode 产品编号
      * @param productName 产品名称
      * @param productList 产品列表
      * @return
      */
     private List<Product> QueryProductList(String productCode, String productName, List<Product> productList) {
-        List<Product> products= new ArrayList<>();
+        List<Product> products = new ArrayList<>();
         if (productList == null) {
             return null;
         } else if (productList.size() == 0) {
@@ -1026,6 +1043,8 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
     }
 
 
+
+
     /**
      * 计算扫码成功数目
      *
@@ -1045,6 +1064,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
 
     /**
      * 非连续扫码时拼接
+     *
      * @param smm
      * @return
      */
@@ -1058,6 +1078,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
 
     /**
      * 连续扫码时拼接
+     *
      * @param smm
      * @return
      */
@@ -1068,6 +1089,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         }
         return sb.toString();
     }
+
     public static String getInvNumber(int i, String userId) {
         DecimalFormat df = new DecimalFormat("000000");
         String str = df.format(Integer.parseInt(userId));
@@ -1085,6 +1107,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
 
     /**
      * 去除重复
+     *
      * @param mSmm
      * @return
      */
@@ -1106,4 +1129,5 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         return (String[]) result.toArray(new String[result.size()]);
 
     }
+
 }
