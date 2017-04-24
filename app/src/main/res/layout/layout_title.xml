@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.xologood.q8pad.view.TitileView
+<com.xologood.q8pad.view.TitleView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/actionBarSize"
     android:id="@+id/title_view">
-</com.xologood.q8pad.view.TitileView>
+</com.xologood.q8pad.view.TitleView>

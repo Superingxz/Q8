@@ -5,7 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#005dab"
-    android:padding="30dp">
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:paddingTop="30dp"
+    android:paddingBottom="10dp"
+    >
 
     <ImageView
         android:layout_width="180dp"
@@ -69,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#cee9ff"
-            android:text="是否保存密码" />
+            android:text="记住密码" />
     </LinearLayout>
 
     <LinearLayout
@@ -85,23 +89,46 @@
             android:layout_height="wrap_content"
             android:background="#e8f1f8"
             android:textColor="#005dab"
+            android:textSize="20sp"
             android:text="登录" />
     </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
         >
+
         <TextView
+            android:id="@+id/tvVersionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tvRights"
+            android:gravity="center"
+            android:textColor="#8ac9fd"
+            />
+
+        <TextView
+            android:id="@+id/tvSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#8ac9fd"
+            android:text="系统设置"
+            />
+
+        <TextView
+            android:id="@+id/tvRights"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:textColor="#8ac9fd"
             android:text="© 2017 鑫浪科技.All rights reserved"
-            />
+            android:layout_above="@+id/tvSettings"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
     </RelativeLayout>
 
 </LinearLayout>

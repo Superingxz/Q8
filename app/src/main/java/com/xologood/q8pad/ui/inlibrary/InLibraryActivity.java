@@ -8,7 +8,7 @@ import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.ui.inlibrary.newininvoice.NewInInvoiceActivity;
 import com.xologood.q8pad.ui.inlibrary.oldininvoice.OldInInvoiceActivity;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.view.TitleView;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -17,7 +17,7 @@ public class InLibraryActivity extends BaseActivity {
 
 
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
     @Bind(R.id.btnOrderIn)
     Button btnOrderIn;
     @Bind(R.id.btnNewOrder)

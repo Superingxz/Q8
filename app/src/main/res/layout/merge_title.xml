@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+     >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/actionbar_background"
+        >
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            />
+
+        <Button
+            android:id="@+id/btn_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:minWidth="40dip"
+            android:padding="10dp"
+            android:text="返回"
+            android:drawablePadding="10dp"
+            android:textColor="#fff"
+            android:background="@null"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
+            android:textSize="14sp"
+            android:drawableLeft="@mipmap/actionbar_back" />
+
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#fff"
+            android:padding="10dp"
+            android:background="@null"
+            />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/iv_right"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:textColor="#fff"
+            android:padding="10dp"
+            android:background="@null"
+            />
+
+
+    </RelativeLayout>
+
+</merge>

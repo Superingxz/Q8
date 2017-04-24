@@ -4,9 +4,14 @@ package com.xologood.q8pad;
  * Created by wei on 2016/12/22.
  */
 public class Config {
-    public static final String systemUrl = "http://120.25.102.209:8000";
-    public static final String userUrl = "http://120.25.102.209:8002";
-    public static final String mustPassParameter = "&recorderBase=2&versionBase=4.0.3.7&projectNameBase=千里码Q8云战略合作平台-PDA&sysKeyBase=150623155902966stlt";
+    public static final String systemUrl = "http://120.25.102.209:8000";//
+    public static final String userUrl = "http://120.25.102.209:8002";//
+    public static final String SPSYSTEMURL = "systemUrl";
+    public static final String SPUSERURL = "userUrl";
+
+    public static final String SYSTEMSETTINGPASSWORD = "xolo";//进入系统设置的密码
+    public static final String ISSAVE = "isSave";//
+
     public static final String COMKEY = "001";   //机构唯一标识
     public static final String COMNAME = "002";   //机构名称
     public static final String SYSKEY= "003";
@@ -20,10 +25,17 @@ public class Config {
     public static final String USERNAME = "103" ;    //昵称（审核人）
 
 
-
     public static final int REQUESTOK = 601;
     public static final String ISCHECK = "602";
     public static final String ISCONTINOUS = "603"; //是否连续扫描
+
+    public static final String CBININVOICE = "cbInInvoice"; //选择是否显示入库模块
+    public static final String CBOUTINVOICE = "cbOutInvoice";//选择是否显示出库模块
+    public static final String CBFASTOUTINVOICE = "cbFastOutInvoice";
+    public static final String CBREPLACE = "cbReplace";
+    public static final String CBABOLISH = "cbAbolish";
+    public static final String CBRETURNGOODS = "cbReturnGoods";
+
 
 
     /** 获取屏幕尺寸 */

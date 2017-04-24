@@ -14,6 +14,7 @@ import com.xologood.q8pad.bean.ProductBatch;
 import com.xologood.q8pad.bean.ProportionConversion;
 import com.xologood.q8pad.bean.ReturnGoodsResponse;
 import com.xologood.q8pad.bean.StandardUnit;
+import com.xologood.q8pad.bean.Version;
 import com.xologood.q8pad.bean.Warehouse;
 import com.xologood.q8pad.bean.bean;
 
@@ -506,6 +507,10 @@ public interface ApiService {
     Observable<BaseResponse<String>> InvoicingCheckBarCode(@Query("barcode") String barcode);
 
 
+    @GET(ApiConstants.CHECKVERSION)
+    Observable<BaseResponse<Version>> CheckVersion();
+
+
     /**
      * 下载文件
      * @param fileUrl
@@ -514,6 +519,8 @@ public interface ApiService {
     @Streaming
     @GET
     Observable<ResponseBody> downloadFileWithDynamicUrlSync(@Url String fileUrl);
+
+
 
 }
 

@@ -39,7 +39,7 @@ import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.ui.scan.ScanActivity;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.utils.StringUtils;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.view.TitleView;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -60,7 +60,7 @@ public class NewInInvoiceActivity extends BaseActivity<NewInInvoicePresenter, Ne
     private static final int SCAN = 100;
     private static final int REQUEST_OK = 101;
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
     @Bind(R.id.InvNumber)
     QpadEditText InvNumber;
     @Bind(R.id.InvTime)

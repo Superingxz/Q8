@@ -6,21 +6,36 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.text.Html;
 
+import com.mview.customdialog.view.DownloadAPPDialog;
+import com.mview.customdialog.view.MaterialDialog;
+import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
+import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.xologood.mvpframework.util.helper.RxSchedulers;
 import com.xologood.mvpframework.util.helper.RxSubscriber;
+import com.xologood.q8pad.Config;
+import com.xologood.q8pad.Qpadapplication;
+import com.xologood.q8pad.R;
+import com.xologood.q8pad.api.Api;
+import com.xologood.q8pad.api.DownloadAPI;
+import com.xologood.q8pad.api.HostType;
+import com.xologood.q8pad.bean.BaseResponse;
+import com.xologood.q8pad.bean.Version;
 import com.xologood.q8pad.download.DownloadModel;
+import com.xologood.q8pad.listener.DownloadProgressListener;
+import com.xologood.zxing.utils.T;
 
 import java.io.File;
 
 import okhttp3.ResponseBody;
+import rx.Subscriber;
 
 /**
  * 应用升级处理 工具类
  * Created by Administrator on 16-1-6.
  */
 public class QpadUpdateUtils {
-	
 	 /**
 	  *  获取版本号
 	  */
@@ -72,7 +87,95 @@ public class QpadUpdateUtils {
 	 * @param isshow 是否提示
 	 */
 	public static void CheckUpdate(final Context mContext, final boolean isshow) {
+		 String recorderBase = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.RECORDERBASE);
+		 String sysKeyBase = "150623155902966stlt";
+		Api.getLoginInInstance(HostType.USERURL, recorderBase, sysKeyBase).CheckVersion()
+																			 .compose(RxSchedulers.<BaseResponse<Version>>io_main())
+																			 .subscribe(new RxSubscriber<BaseResponse<Version>>(mContext,false) {
+																				 @Override
+																				 public void onStart() {
+																					 super.onStart();
+																					 if (isshow){
+																						 QpadProgressUtils.showProgress(mContext, "正在检查版本...");
+																					 }
+																				 }
+																				 @Override
+																				 protected void _onNext(final BaseResponse<Version> versionBaseResponse) {
+																					 if (!CompareVerSion(mContext, versionBaseResponse.getData().getM1())) {
+																						 final MaterialDialog dialog_upapp = new MaterialDialog(mContext);
 
+																						 dialog_upapp.title("新版本" + versionBaseResponse.getData().getM1())
+																								 .content(Html.fromHtml(versionBaseResponse.getData().getTitle().trim()).toString())//
+																								 .btnText("暂不更新", "现在更新")//
+																								 .show();
+																						 dialog_upapp.setCancelable(false);
+																						 dialog_upapp.setCanceledOnTouchOutside(false);
+																						 dialog_upapp.setOnBtnClickL(
+																								 new OnBtnClickL() {
+																									 @Override
+																									 public void onBtnClick() {
+																										 dialog_upapp.dismiss();
+																										 //关闭软件
+																										 Qpadapplication.finishActivity();
+																									 }
+																								 },
+																								 new OnBtnClickL() {
+																									 @Override
+																									 public void onBtnClick() {
+																										 String path = QpadStaticConfig.CACHE_PATH.SD_DOWNLOAD + "/"
+																												 + EncroptionUtils.encryptMD5ToString(versionBaseResponse.getData().getUrl()) + ".apk";
+																										 final File outputFile  = new File(path);
+
+																										 if (outputFile .exists()) {// 判断文件是否存在
+																											 outputFile .delete();// 删除文件
+																										 }
+																										 dialog_upapp.dismiss();
+																										 final DownloadAPPDialog downapp = new DownloadAPPDialog(mContext,  R.style.Login_dialog);
+																										 downapp.show();
+																										 downapp.setProgress(0);
+																										 // down(mContext, versionBaseResponse.getData().getUrl());
+																										 new DownloadAPI(versionBaseResponse.getData().getUrl(), new DownloadProgressListener() {
+																											 @Override
+																											 public void update(long bytesRead, long contentLength, boolean done) {
+																												 int progress = (int) (100 * contentLength / bytesRead);
+																												 downapp.setProgress(progress);
+																											 }
+																										 }).downloadAPK(versionBaseResponse.getData().getUrl(), outputFile , new Subscriber() {
+																											 @Override
+																											 public void onCompleted() {
+																												 if(downapp.isShowing()){
+																													 downapp.dismiss();
+																												 }
+																											//	 T.showShort(mContext, "下载完成正在安装!");
+																												 if (outputFile.exists()) {
+																													 installApk(mContext,outputFile);
+																												 }
+																											 }
+																											 @Override
+																											 public void onError(Throwable e) {
+																												 if(downapp.isShowing()){
+																													 downapp.dismiss();
+																												 }
+																											 }
+																											 @Override
+																											 public void onNext(Object o) {
+
+																											 }
+																										 });
+																									 }
+																								 }
+																						 );
+																					 } else {
+																						 if (isshow){
+																							 T.showShort(mContext, "已经是最新版本");
+																						 }
+																					 }
+																				 }
+																				 @Override
+																				 protected void _onError(String message) {
+
+																				 }
+																			 });
 	/*	AjaxParams params = new AjaxParams();
 		params.put("version_code", String.valueOf(getVersionCode(mContext)));
 		params.put("app_type", "android");
@@ -203,7 +306,9 @@ public class QpadUpdateUtils {
 				installApk(context, t);
 			}
 		});*/
-
+		final DownloadAPPDialog downapp = new DownloadAPPDialog(context,  R.style.Login_dialog);
+		downapp.show();
+		downapp.setProgress(0);
 		new DownloadModel().downloadFileWithDynamicUrlSync(url)
 					       .compose(RxSchedulers.<ResponseBody>io_main())
 				   		   .subscribe(new RxSubscriber<ResponseBody>(context,false) {
@@ -242,5 +347,4 @@ public class QpadUpdateUtils {
 		intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
 		context.startActivity(intent);
 	}
-
 }

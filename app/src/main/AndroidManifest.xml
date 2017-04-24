@@ -3,11 +3,11 @@
     package="com.xologood.q8pad">
 
     <supports-screens
-        android:smallScreens="true"
-        android:normalScreens="true"
+        android:anyDensity="true"
         android:largeScreens="true"
+        android:normalScreens="true"
         android:resizeable="true"
-        android:anyDensity="true" />
+        android:smallScreens="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -28,10 +28,11 @@
         <activity android:name=".ui.login.LoginInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- 系统设置 -->
+        <activity android:name=".ui.login.SystemSettingActicity"/>
 
         <!-- 主界面 -->
         <activity
@@ -48,6 +49,16 @@
         <activity
             android:name=".ui.inlibrary.oldininvoice.OldInInvoiceActivity"
             android:windowSoftInputMode="adjustPan" />
+        <!-- 入库扫码 -->
+        <activity
+            android:name=".ui.scan.ScanActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <!-- 入库结束 -->
+
+        <!-- 出入库明细页面 -->
+        <activity
+            android:name=".ui.invoicingdetail.InvoicingDetailActivity"
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 出库 -->
         <activity
@@ -62,22 +73,7 @@
             android:name=".ui.outlibrary.oldoutinvoice.OldOutInvoiceActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name="com.xologood.zxing.activity.CaptureActivity" />
-
-        <!-- 替换 -->
-        <activity
-            android:name=".ui.replace.ReplaceActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ui.inlibrary.testActivity" />
-
-        <!-- 扫码 -->
-        <activity
-            android:name=".ui.scan.ScanActivity"
-            android:windowSoftInputMode="adjustPan" />
-
-        <!-- 明细 -->
-        <activity
-            android:name=".ui.invoicingdetail.InvoicingDetailActivity"
-            android:windowSoftInputMode="adjustPan" />
+        <!-- 出库结束 -->
 
         <!-- 快捷出库 -->
         <activity
@@ -87,17 +83,24 @@
         <activity
             android:name=".ui.fastoutlibrary.newfastoutinvoice.NewFastOutInvoiceActivity"
             android:windowSoftInputMode="adjustPan" />
+        <!-- 快捷出库结束 -->
+
+        <!-- 替换条码 -->
+        <activity
+            android:name=".ui.replace.ReplaceActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ui.inlibrary.testActivity" />
+
+        <!-- 作废条码 -->
+        <activity
+            android:name=".ui.abolishcode.AbolishCodeActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ui.FirstUserDetail"></activity>
 
         <!-- 退货 -->
         <activity
             android:name=".ui.returngoods.ReturnGoodsActivity"
             android:windowSoftInputMode="adjustPan" />
-
-        <!-- 作废 -->
-        <activity
-            android:name=".ui.abolishcode.AbolishCodeActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ui.FirstUserDetail"></activity>
     </application>
 
 </manifest>

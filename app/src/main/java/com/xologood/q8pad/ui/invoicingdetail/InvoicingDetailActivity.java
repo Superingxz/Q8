@@ -20,7 +20,7 @@ import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.InvoicingDetail;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.view.TitleView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
         implements InvoicingDetailContract.View ,SwipeRefreshLayout.OnRefreshListener {
     public static final int INVOICINGDETAIL_OK = 105;
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
     @Bind(R.id.InvId)
     QpadEditText InvId;
     @Bind(R.id.ComName)

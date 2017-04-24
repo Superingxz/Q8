@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="backgrongd">#005dab</color>
+    <color name="backgrongd_1">#f6f6f6</color>
     <color name="actionbar_background">#005dab</color>
 
     <!-- 主界面底部颜色 -->

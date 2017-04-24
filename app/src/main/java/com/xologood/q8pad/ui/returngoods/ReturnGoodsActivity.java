@@ -26,7 +26,7 @@ import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.ReturnGoodsResponse;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.view.TitleView;
 import com.xologood.zxing.activity.CaptureActivity;
 
 import java.text.DecimalFormat;
@@ -41,7 +41,7 @@ import butterknife.OnClick;
 public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, ReturnGoodsModel>
         implements ReturnGoodsContract.View {
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
     @Bind(R.id.lv)
     ListView lv;
     @Bind(R.id.rbAdd)

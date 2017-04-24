@@ -17,6 +17,8 @@
 package com.xologood.q8pad.api;
 
 import com.xologood.q8pad.Config;
+import com.xologood.q8pad.Qpadapplication;
+import com.xologood.q8pad.utils.SharedPreferencesUtils;
 
 public class ApiConstants {
 
@@ -154,14 +156,33 @@ public class ApiConstants {
      */
     public static final String INVOICING_CHECKBARCODE="Invoicing/CheckBarCode";
 
+
+    /**
+     * 更新版本
+     */
+    public static final String  CHECKVERSION= "/CheckVersion/CheckAPPVersion";
+
+
     public static String getHost(int hostType) {
         String host;
         switch (hostType) {
             case HostType.USERURL:
-                host = Config.userUrl;
+                String sp = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SPUSERURL);
+                if(sp==null){
+                    host = Config.userUrl;
+                }else {
+                    host = sp;
+                }
+
                 break;
             case HostType.SYSTEMURL:
-                host = Config.systemUrl;
+                sp = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(),Config.SPSYSTEMURL);
+                if(sp==null){
+                    host = Config.systemUrl;
+                }else {
+                    host=sp;
+                }
+
                 break;
             case HostType.BEANHOST:
                 host = "http://litchiapi.jstv.com";    //测试

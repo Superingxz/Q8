@@ -1,5 +1,7 @@
 package com.xologood.q8pad.ui.login;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -9,16 +11,19 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.utils.QpadJudgeUtils;
 import com.xologood.mvpframework.base.BaseActivity;
+import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.bean.Account;
 import com.xologood.q8pad.ui.MainActivity;
+import com.xologood.q8pad.utils.AppUtils;
 import com.xologood.q8pad.utils.MD5;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.zxing.utils.T;
@@ -38,23 +43,51 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
     CheckBox cbStore;
     @Bind(R.id.btnLogin)
     Button btnLogin;
+    @Bind(R.id.tvVersionName)
+    TextView tvVersionName;
+    @Bind(R.id.tvSettings)
+    TextView tvSettings;
+    @Bind(R.id.tvRights)
+    TextView tvRights;
 
     private int backCount = 1;//返回次数
 
 
-
     @OnClick(R.id.btnLogin)
     public void btnLogin(View view) {
-       /* Log.i("superingxz", "btnLogin: 点击了登录！");
-        ToastUitl.showLong("点击了登录！");
-        mPresenter.getBean();*/
-
-        //测试
-        // testBean();
-
         login();
     }
 
+    @OnClick(R.id.tvSettings)
+    public void tvSettings(View view){
+        final EditText et = new EditText(mContext);
+        et.setSingleLine();
+        et.setHint("请输入系统设置密码");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("系统设置")
+//                .setMessage("请输入系统设置密码")
+                .setView(et)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String systemPassword = et.getText().toString().trim();
+                        if("".equals(systemPassword)){
+                            ToastUitl.showShort("密码不能为空");
+                            return;
+                        }else if (Config.SYSTEMSETTINGPASSWORD.equals(systemPassword)){
+                            Intent intent = new Intent(mContext,SystemSettingActicity.class);
+                            startActivity(intent);
+                        }else {
+                            ToastUitl.showShort("密码错误");
+                        }
+                    }
+                })
+                .setNegativeButton("取消",null)
+                .create()
+                .show();
+
+    }
 
     private void login() {
         String loginName = etUser.getText().toString().trim();
@@ -69,13 +102,12 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
 
     @Override
     public int getLayoutId() {
-
         return R.layout.activity_login;
     }
 
     @Override
     public void initView() {
-
+        tvVersionName.setText("当前版本：" + AppUtils.getVersionName(Qpadapplication.getAppContext()));
     }
 
     @Override
@@ -91,10 +123,12 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
         boolean isChecked = SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISCHECK);
         cbStore.setChecked(isChecked);
         if (!QpadJudgeUtils.isEmpty(LoginName) && !QpadJudgeUtils.isEmpty(PassWord)
-                &&cbStore.isChecked()) {
+                && cbStore.isChecked()) {
             etUser.setText(LoginName);
             etPassword.setText(PassWord);
         }
+
+
 
     }
 
@@ -127,7 +161,7 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
 
     @Override
     public void startProgressDialog(String msg) {
-        QpadProgressUtils.showProgress(this,msg);
+        QpadProgressUtils.showProgress(this, msg);
     }
 
     @Override
@@ -159,4 +193,5 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
             mHandler.sendEmptyMessageDelayed(0, 2000);
         }
     }
+
 }

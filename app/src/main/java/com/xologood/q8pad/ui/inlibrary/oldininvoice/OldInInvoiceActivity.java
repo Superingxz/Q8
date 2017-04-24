@@ -35,7 +35,7 @@ import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.ui.scan.ScanActivity;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.utils.StringUtils;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.view.TitleView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,11 +50,11 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
     private static final int SCAN = 100;
     private static final int REQUEST_OK = 101;
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
     @Bind(R.id.queryOrder)
     QpadEditText queryOrder;
-   @Bind(R.id.query)
-   Button query;
+    @Bind(R.id.query)
+    Button query;
     @Bind(R.id.invoiceInvlist)
     QpadEditText invoiceInvlist;
     @Bind(R.id.textView3)

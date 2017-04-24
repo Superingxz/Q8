@@ -17,7 +17,7 @@ import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.ReplaceAdapter;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.view.TitleView;
 import com.xologood.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class ReplaceActivity extends BaseActivity<ReplacePresenter, ReplaceModel
 
 
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
     @Bind(R.id.lvOld)
     ListView lvOld;
     @Bind(R.id.lvNew)
