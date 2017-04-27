@@ -568,6 +568,10 @@ public interface ApiService {
     Observable<BaseResponse<String>> InvoicingCheckBarCode(@Query("barcode") String barcode);
 
 
+    @GET(ApiConstants.CHECKVERSION)
+    Observable<BaseResponse<Version>> CheckVersion();
+
+
     /**
      * 检查版本更新
      * @return

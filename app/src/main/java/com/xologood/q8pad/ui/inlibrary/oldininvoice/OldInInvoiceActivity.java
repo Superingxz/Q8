@@ -35,7 +35,9 @@ import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.ui.scan.ScanActivity;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.utils.StringUtils;
+
 import com.xologood.q8pad.view.ScrollListView;
+
 import com.xologood.q8pad.view.TitleView;
 
 import java.util.ArrayList;

@@ -16,7 +16,9 @@ import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.ReplaceAdapter;
+
 import com.xologood.q8pad.ui.PadActivity;
+
 import com.xologood.q8pad.view.TitleView;
 import com.xologood.zxing.activity.CaptureActivity;
 

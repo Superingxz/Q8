@@ -3,6 +3,7 @@ package com.xologood.q8pad.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,7 +20,9 @@ import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.GridAdapter;
 import com.xologood.q8pad.bean.GridBean;
+
 import com.xologood.q8pad.ui.Logistics.LogisticsActivity;
+
 import com.xologood.q8pad.ui.abolishcode.AbolishCodeActivity;
 import com.xologood.q8pad.ui.fastoutlibrary.FastOutLibrary.FastOutLibraryActivity;
 import com.xologood.q8pad.ui.inlibrary.InLibraryActivity;
@@ -27,6 +30,9 @@ import com.xologood.q8pad.ui.login.LoginInActivity;
 import com.xologood.q8pad.ui.outlibrary.OutLibraryActivity;
 import com.xologood.q8pad.ui.replace.ReplaceActivity;
 import com.xologood.q8pad.ui.returngoods.ReturnGoodsActivity;
+
+import com.xologood.q8pad.utils.QpadUpdateUtils;
+
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
@@ -51,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] titles = new String[]
             {"入库", "出库", "快捷出库", "替换", "作废", "退货", "注销", "退出","测试"};
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         BaseApplication.addActivity(this);
         ButterKnife.bind(this);
         initView();
+        initHandler.postDelayed(initRunnable, 5000);
     }
 
     public int getLayoutId() {
@@ -113,9 +121,11 @@ public class MainActivity extends AppCompatActivity {
                     case "退货":
                         startActivity(new Intent(mContext, ReturnGoodsActivity.class));
                         break;
+                    
                     case "物流查询":
                         startActivity(new Intent(mContext, LogisticsActivity.class));
                         break;
+
                     case "注销":
                         logOff();
                         break;
@@ -171,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         gridBeens.add(new GridBean(R.mipmap.log_off,"注销",true));
         gridBeens.add(new GridBean(R.mipmap.exit,"退出",true));
 //        gridBeens.add(new GridBean(R.mipmap.ic_launcher,"测试",true));
+
     }
 
     public void logOff() {

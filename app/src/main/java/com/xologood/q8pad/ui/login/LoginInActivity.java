@@ -1,7 +1,9 @@
 package com.xologood.q8pad.ui.login;
 
+
 import android.Manifest;
 import android.annotation.TargetApi;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,8 +26,10 @@ import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.utils.QpadJudgeUtils;
 import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.mvpframework.util.ToastUitl;
+
 import com.xologood.mvpframework.util.helper.RxSchedulers;
 import com.xologood.mvpframework.util.helper.RxSubscriber;
+
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
@@ -71,6 +75,43 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
 
     @OnClick(R.id.btnLogin)
     public void btnLogin(View view) {
+
+        login();
+    }
+
+    @OnClick(R.id.tvSettings)
+    public void tvSettings(View view){
+        final EditText et = new EditText(mContext);
+        et.setSingleLine();
+        et.setHint("请输入系统设置密码");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("系统设置")
+//                .setMessage("请输入系统设置密码")
+                .setView(et)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String systemPassword = et.getText().toString().trim();
+                        if("".equals(systemPassword)){
+                            ToastUitl.showShort("密码不能为空");
+                            return;
+                        }else if (Config.SYSTEMSETTINGPASSWORD.equals(systemPassword)){
+                            Intent intent = new Intent(mContext,SystemSettingActicity.class);
+                            startActivity(intent);
+                        }else {
+                            ToastUitl.showShort("密码错误");
+                        }
+                    }
+                })
+                .setNegativeButton("取消",null)
+                .create()
+                .show();
+
+    }
+
+    private void login() {
+
         String loginName = etUser.getText().toString().trim();
         String passWord = etPassword.getText().toString().trim();
 
@@ -178,6 +219,7 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
     public void initView() {
         tvVersionName.setText("当前版本：" + AppUtils.getVersionName(Qpadapplication.getAppContext()));
 
+
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
             int checkPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -205,6 +247,7 @@ public class LoginInActivity extends BaseActivity<LoginPresenter, LoginModel> im
 //                Toast.makeText(mContext, "缺少" + permission + "会导致部分功能无法使用", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 
