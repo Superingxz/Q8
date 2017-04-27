@@ -3,4 +3,11 @@
     <string name="search">查询</string>
     <string name="commit">确定完成</string>
     <string name="save">保存</string>
+
+    <!--自动更新-->
+    <string name="update_app_model_prepare">准备下载</string>
+    <string name="update_app_model_progress">正在下载 %1$d%2$s</string>
+    <string name="update_app_model_success">下载成功(点击安装)</string>
+    <string name="update_app_model_error">下载失败(点击浏览器下载)</string>
+    <string name="downloading_apk">正在后台下载...</string>
 </resources>

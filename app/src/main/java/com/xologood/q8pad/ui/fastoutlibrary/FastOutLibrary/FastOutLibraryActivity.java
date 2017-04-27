@@ -31,7 +31,8 @@ import com.xologood.q8pad.ui.fastoutlibrary.newfastoutinvoice.NewFastOutInvoiceA
 import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.utils.StringUtils;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.view.ScrollListView;
+import com.xologood.q8pad.view.TitleView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     private static final int REQUEST_OK = 100;
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
     @Bind(R.id.qetQueryInv)
     QpadEditText qetQueryInv;
     @Bind(R.id.btQueryInv)
@@ -67,7 +68,7 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
     @Bind(R.id.checkUserName)
     TextView checkUserName;
     @Bind(R.id.lv)
-    ListView lv;
+    ScrollListView lv;
     @Bind(R.id.addProduce)
     Button addProduce;
     @Bind(R.id.commit)
@@ -172,11 +173,18 @@ public class FastOutLibraryActivity extends BaseActivity<FastOutPresenter, FastO
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == InvoicingDetailActivity.INVOICINGDETAIL_OK
-                ||resultCode == NewFastOutInvoiceActivity.NEWFASTOUTINVOICE_OK) {
+        if (resultCode == InvoicingDetailActivity.INVOICINGDETAIL_OK ||resultCode == NewFastOutInvoiceActivity.NEWFASTOUTINVOICE_OK) {
             IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
             if (IsCommitSuccess) {
-               finish();
+                invoiceInvlist.setFieldTextAndValue("");
+                warehouse.setText("");
+                invTime.setText("");
+                checkDate.setText("");
+                checkUserName.setText("");
+                consignee.setText("");
+                initView();
+
+//               finish();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

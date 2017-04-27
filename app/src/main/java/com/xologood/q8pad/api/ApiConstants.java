@@ -17,6 +17,8 @@
 package com.xologood.q8pad.api;
 
 import com.xologood.q8pad.Config;
+import com.xologood.q8pad.Qpadapplication;
+import com.xologood.q8pad.utils.SharedPreferencesUtils;
 
 public class ApiConstants {
 
@@ -33,6 +35,10 @@ public class ApiConstants {
      */
     //获取仓库列表
     public static final String WAREHOUSE_GETLIST = "/Warehouse/GetList";
+
+    //获取供应商列表
+    public static final String INVOICING_GETSUPPLIERLIST = "/Invoicing/GetSupplierList";
+
     //获取产品列表
     public static final String PRODUCT_GET_PRODUCT_LIST = "/Product/GetProductList";
     //根据产品id获取产品批次
@@ -45,7 +51,10 @@ public class ApiConstants {
     //保存入库主表
     public static final String INVOICING_INSERTINV = "/Invoicing/InsertInv";
     //保存入库主表2
-    public static final String INVOICING_INSERTINV2="/Invoicing/Invoicing";
+    public static final String INVOICING_INVOICING = "/Invoicing/Invoicing";
+
+    //宾氏-入库保存
+    public static final String INVOICING_INSERTINVSUPPLIER = "/Invoicing/InsertInvSupplier";
 
     //获取单位比例
     public static final String PROPORTION_GET_PROPORTIONCONVERSION = "/Proportion/GetProportionConversion";
@@ -102,12 +111,17 @@ public class ApiConstants {
     //确认提交
     //public static final String INVOICINT_COMPLETESAVE = "/Invoicing/CompleteSave";
 
-
+    //入库上传
     public static final String NEWSCANBARCODE_NEWORDINARY_IN_SCANBARCODE = "/NewScanBarCode/NewOrdinaryInScanBarCode";
 
+    //宾氏-入库上传
+    public static final String NEWSCANBARCODE_NEW_BIN_SHI_SCANBARCODE = "/NewScanBarCode/NewBinShiScanBarCode";
 
+    //出库上传
     public static final String NEWSCANBARCODE_NEWORDINARY_OUT_SCANBARCODE = "/NewScanBarCode/NewOrdinaryOutScanBarCode";
 
+    //宾氏-出库上传
+    public static final String NEWSCANBARCODE_NEW_BIN_SHI_OUT_SCANBARCODE = "/NewScanBarCode/NewBinShiOutScanBarCode";
 
     //替换功能
     public static final String INVOICING_REPLACECODE = "/Invoicing/ReplaceCode";
@@ -118,19 +132,14 @@ public class ApiConstants {
     //快捷出库之获取快捷出库单据明细
     public static final String FAST_OUT_INVOICING_INVDETAIL="/Invoicing/InvDetail";
 
-    //新建快捷出库
+    //快捷出库-上传条码
     public static final String NEWSCANBARCODE_NEWQUICKSCANBARCODE= "/NewScanBarCode/NewQuickScanBarCode";
 
     /**
      * 获取用户
      */
     public static final String USER_GET_FIRSTUSER_BY_COMKE="/User/GetFirstUserByComKey";
-    /**
-     * 获取Host
-     *
-     * @param hostType
-     * @return
-     */
+
 
     /**
      * sysKey=”160530104723186i5ya” 用下面这个退货接口：
@@ -154,14 +163,47 @@ public class ApiConstants {
      */
     public static final String INVOICING_CHECKBARCODE="Invoicing/CheckBarCode";
 
+
+    /**
+     * 更新版本
+     */
+    public static final String  CHECKVERSION= "/CheckVersion/CheckAPPVersion";
+
+    /**
+     * 产品物流信息
+     */
+    public static final String REPORT_GETPRODUCTDETAILBYBARCODE = "/Report/GetProductDetailByBarcode";
+
+    /**
+     * 产品物流列表
+     */
+    public static final String REPORT_INVBYBARCODELIST = "/Report/InvByBarCodeList";
+
+
+    /**
+     * 产品物流列表
+     */
+
     public static String getHost(int hostType) {
         String host;
         switch (hostType) {
             case HostType.USERURL:
-                host = Config.userUrl;
+                String sp = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SPUSERURL);
+                if(sp==null){
+                    host = Config.userUrl;
+                }else {
+                    host = sp;
+                }
+
                 break;
             case HostType.SYSTEMURL:
-                host = Config.systemUrl;
+                sp = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(),Config.SPSYSTEMURL);
+                if(sp==null){
+                    host = Config.systemUrl;
+                }else {
+                    host=sp;
+                }
+
                 break;
             case HostType.BEANHOST:
                 host = "http://litchiapi.jstv.com";    //测试

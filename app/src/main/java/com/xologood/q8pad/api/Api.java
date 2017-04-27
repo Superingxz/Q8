@@ -37,9 +37,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class Api {
     //读超时长，单位：毫秒
-    public static final int READ_TIME_OUT = 7676;
+    public static final int READ_TIME_OUT = 20000;
     //连接时长，单位：毫秒
-    public static final int CONNECT_TIME_OUT = 7676;
+    public static final int CONNECT_TIME_OUT = 20000;
     private static final String TAG = "Api";
     public Retrofit retrofit;
     public ApiService apiService;
@@ -78,6 +78,7 @@ public class Api {
      * (假如请求了服务器并在a时刻返回响应结果，则在max-age规定的秒数内，浏览器将不会发送对应的请求到服务器，数据由缓存直接返回)时则不会使用缓存而请求服务器
      */
     private static final String CACHE_CONTROL_AGE = "max-age=0";
+    private static String mHost;
 
     /**
      * =============================================================================================
@@ -91,8 +92,8 @@ public class Api {
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 100); //100Mb
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .readTimeout(300000, TimeUnit.MILLISECONDS)
-                .connectTimeout(7676, TimeUnit.MILLISECONDS)
+                .readTimeout(20000, TimeUnit.MILLISECONDS)
+                .connectTimeout(20000, TimeUnit.MILLISECONDS)
                 //  .addInterceptor(mInterceptor)
                 .addInterceptor(httpLoggingInterceptor)
                 .addInterceptor(interceptor)
@@ -103,48 +104,14 @@ public class Api {
 
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").serializeNulls().create();
 
+        mHost = ApiConstants.getHost(hostType);
         retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(ApiConstants.getHost(hostType))
+                .baseUrl(mHost)
                 .build();
         apiService = retrofit.create(ApiService.class);
-    }
-
-
-
-    //获取登录后ApiService单例
-    public static ApiService getLoginInInstance(int hostType, final String recorderBase, final String  sysKeyBase) {
-        Api retrofitManager = sRetrofitManager.get(hostType);
-        if (retrofitManager == null) {
-            retrofitManager = new Api(hostType, new Interceptor() {
-                @Override
-                public Response intercept(Chain chain) throws IOException {
-                    Request oldRequest = chain.request();
-                 //   Log.i(TAG, "intercept:旧host："+oldRequest.url().host()+"旧scheme："+oldRequest.url().scheme()+"旧url"+oldRequest.url());
-                    // 添加新的参数
-                    HttpUrl.Builder authorizedUrlBuilder = oldRequest.url()
-                            .newBuilder()
-                            .scheme(oldRequest.url().scheme())
-                            .host(oldRequest.url().host())
-                            .addQueryParameter("keyBase", Keybase.getKeyBase())
-                            .addQueryParameter("versionBase", AppUtils.getVersionName(Qpadapplication.getAppContext()))
-                            .addQueryParameter("projectNameBase", "千里码Q8云战略合作平台-APP")
-                            .addQueryParameter("recorderBase" ,recorderBase)
-                            .addQueryParameter("sysKeyBase" ,sysKeyBase);
-                    // 新的请求
-                    Request newRequest = oldRequest.newBuilder()
-                            .method(oldRequest.method(), oldRequest.body())
-                            .url(authorizedUrlBuilder.build())
-                            .build();
-                    Log.i(TAG, "intercept: 新url:  "+newRequest.url());
-                    return chain.proceed(newRequest);
-                }
-            });
-            sRetrofitManager.put(hostType, retrofitManager);
-        }
-        return retrofitManager.apiService;
     }
 
     /**
@@ -174,8 +141,8 @@ public class Api {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .readTimeout(READ_TIME_OUT, TimeUnit.MILLISECONDS)
                 .connectTimeout(CONNECT_TIME_OUT, TimeUnit.MILLISECONDS)
-              //  .addInterceptor(mRewriteCacheControlInterceptor)
-              //  .addNetworkInterceptor(mRewriteCacheControlInterceptor)
+                //  .addInterceptor(mRewriteCacheControlInterceptor)
+                //  .addNetworkInterceptor(mRewriteCacheControlInterceptor)
                 // .addInterceptor(headerInterceptor)
                 .addInterceptor(commoninterceptor)
                 .addInterceptor(logInterceptor)
@@ -183,13 +150,75 @@ public class Api {
                 .build();
 
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").serializeNulls().create();
+        mHost = ApiConstants.getHost(hostType);
         retrofit = new Retrofit.Builder()
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(ApiConstants.getHost(hostType))
-                .build();
-       apiService = retrofit.create(ApiService.class);
+                .baseUrl(mHost)
+                .build()    ;
+        apiService = retrofit.create(ApiService.class);
+    }
+
+
+
+    //获取登录后ApiService单例
+    public static ApiService getLoginInInstance(int hostType, final String recorderBase, final String  sysKeyBase) {
+        Api retrofitManager = sRetrofitManager.get(hostType);
+        if (retrofitManager == null) {
+            retrofitManager = new Api(hostType, new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request oldRequest = chain.request();
+                    //   Log.i(TAG, "intercept:旧host："+oldRequest.url().host()+"旧scheme："+oldRequest.url().scheme()+"旧url"+oldRequest.url());
+                    // 添加新的参数
+                    HttpUrl.Builder authorizedUrlBuilder = oldRequest.url()
+                            .newBuilder()
+                            .scheme(oldRequest.url().scheme())
+                            .host(oldRequest.url().host())
+                            .addQueryParameter("keyBase", Keybase.getKeyBase())
+                            .addQueryParameter("versionBase", AppUtils.getVersionName(Qpadapplication.getAppContext()))
+                            .addQueryParameter("projectNameBase", "千里码Q8云战略合作平台-APP")
+                            .addQueryParameter("recorderBase", recorderBase)
+                            .addQueryParameter("sysKeyBase", sysKeyBase);
+                    // 新的请求
+                    Request newRequest = oldRequest.newBuilder()
+                            .method(oldRequest.method(), oldRequest.body())
+                            .url(authorizedUrlBuilder.build())
+                            .build();
+                    Log.i(TAG, "intercept: 新url:  " + newRequest.url());
+                    return chain.proceed(newRequest);
+                }
+            });
+            sRetrofitManager.put(hostType, retrofitManager);
+        } else if (!ApiConstants.getHost(hostType).equals(mHost)) {
+            retrofitManager = new Api(hostType, new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request oldRequest = chain.request();
+                    //   Log.i(TAG, "intercept:旧host："+oldRequest.url().host()+"旧scheme："+oldRequest.url().scheme()+"旧url"+oldRequest.url());
+                    // 添加新的参数
+                    HttpUrl.Builder authorizedUrlBuilder = oldRequest.url()
+                            .newBuilder()
+                            .scheme(oldRequest.url().scheme())
+                            .host(oldRequest.url().host())
+                            .addQueryParameter("keyBase", Keybase.getKeyBase())
+                            .addQueryParameter("versionBase", AppUtils.getVersionName(Qpadapplication.getAppContext()))
+                            .addQueryParameter("projectNameBase", "千里码Q8云战略合作平台-APP")
+                            .addQueryParameter("recorderBase", recorderBase)
+                            .addQueryParameter("sysKeyBase", sysKeyBase);
+                    // 新的请求
+                    Request newRequest = oldRequest.newBuilder()
+                            .method(oldRequest.method(), oldRequest.body())
+                            .url(authorizedUrlBuilder.build())
+                            .build();
+                    Log.i(TAG, "intercept: 新url:  " + newRequest.url());
+                    return chain.proceed(newRequest);
+                }
+            });
+            sRetrofitManager.put(hostType, retrofitManager);
+        }
+        return retrofitManager.apiService;
     }
 
 
@@ -202,6 +231,9 @@ public class Api {
         if (retrofitManager == null) {
             retrofitManager = new Api(hostType);
             sRetrofitManager.put(hostType, retrofitManager);
+        } else if (!ApiConstants.getHost(hostType).equals(mHost)) {
+            retrofitManager = new Api(hostType);
+            sRetrofitManager.put(hostType,retrofitManager);
         }
         return retrofitManager.apiService;
     }

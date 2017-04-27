@@ -1,6 +1,8 @@
 package com.xologood.q8pad.utils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 
 import java.io.File;
@@ -104,4 +106,20 @@ public class DownLoadManager {
             return false;
         }
     }
+
+    /***
+     * 安装app
+     * @param context
+     * @param file
+     */
+    private static void installApk(Context context, File file) {
+        Intent intent = new Intent();
+        // intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // 执行动作
+        intent.setAction(Intent.ACTION_VIEW);
+        // 执行的数据类型 	编者按：此处应为android，否则造成安装不了
+        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        context.startActivity(intent);
+    }
+
 }

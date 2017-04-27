@@ -143,6 +143,7 @@ public interface NewOutInvoiceContract {
                                                                         String ComKey,
                                                                         String SysKey);
 
+        //出库上传
         Observable<BaseResponse<BarCodeLogList>> GetScanBarCodeList(String BarCodes,
                                                                     String InvId,
                                                                     String InvNumber,
@@ -167,6 +168,32 @@ public interface NewOutInvoiceContract {
                                                                     String ReceivingWarehouseName,
                                                                     String CheckedParty,
                                                                     String sysKeyBase);
+
+        //宾氏-出库上传
+        Observable<BaseResponse<BarCodeLogList>> GetScanBarCodeListBinShi(String BarCodes,
+                                                                          String InvId,
+                                                                          String InvNumber,
+                                                                          String InvType,
+                                                                          String InvGet,
+                                                                          String InvReMark,
+                                                                          String InvBy,
+                                                                          String InvByName,
+                                                                          String CodeType,
+                                                                          String InvState,
+                                                                          String InvDate,
+                                                                          String LastUpdateBy,
+                                                                          String LastUpdateByName,
+                                                                          String LastUpdateDate,
+                                                                          String ComKey,
+                                                                          String ComName,
+                                                                          String SysKey,
+                                                                          String CheckMemo,
+                                                                          String ReceivingComKey,
+                                                                          String ReceivingComName,
+                                                                          String ReceivingWarehouseId,
+                                                                          String ReceivingWarehouseName,
+                                                                          String CheckedParty,
+                                                                          String sysKeyBase);
     }
 
 
@@ -222,19 +249,11 @@ public interface NewOutInvoiceContract {
 
         /**
          * 保存入库/出库主表
-         *
-         * @param options
-         * @return
          */
         public abstract void insertInv(Map<String, String> options);
 
         /**
          * 获取单位比例
-         *
-         * @param id    产品id
-         * @param Bunit 单位id
-         * @param count 预计数量
-         * @return
          */
         public abstract void GetProportionConversion(String id, String Bunit, String count);
 
@@ -317,7 +336,33 @@ public interface NewOutInvoiceContract {
                                                  String SysKey
         );
 
+        //出库上传
         public abstract void GetScanBarCodeList(String BarCodes,
+                                                String InvId,
+                                                String InvNumber,
+                                                String InvType,
+                                                String InvGet,
+                                                String InvReMark,
+                                                String InvBy,
+                                                String InvByName,
+                                                String CodeType,
+                                                String InvState,
+                                                String InvDate,
+                                                String LastUpdateBy,
+                                                String LastUpdateByName,
+                                                String LastUpdateDate,
+                                                String ComKey,
+                                                String ComName,
+                                                String SysKey,
+                                                String CheckMemo,
+                                                String ReceivingComKey,
+                                                String ReceivingComName,
+                                                String ReceivingWarehouseId,
+                                                String ReceivingWarehouseName,
+                                                String CheckedParty,
+                                                String sysKeyBase);
+
+        public abstract void GetScanBarCodeListBinShi(String BarCodes,
                                                 String InvId,
                                                 String InvNumber,
                                                 String InvType,

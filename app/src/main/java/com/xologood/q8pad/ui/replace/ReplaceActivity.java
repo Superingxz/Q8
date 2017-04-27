@@ -12,12 +12,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
-import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.ReplaceAdapter;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.ui.PadActivity;
+import com.xologood.q8pad.view.TitleView;
 import com.xologood.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
@@ -26,11 +26,11 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class ReplaceActivity extends BaseActivity<ReplacePresenter, ReplaceModel> implements ReplaceContract.View {
+public class ReplaceActivity extends PadActivity<ReplacePresenter, ReplaceModel> implements ReplaceContract.View {
 
 
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
     @Bind(R.id.lvOld)
     ListView lvOld;
     @Bind(R.id.lvNew)
@@ -159,6 +159,49 @@ public class ReplaceActivity extends BaseActivity<ReplacePresenter, ReplaceModel
             count.setText("已扫描" + (oldSmm.size()+newSmm.size()) + "条");
 
         }
+    }
+
+    @Override
+    public void onResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
+    public void PdaBroadcastReceiver(String code) {
+        if (rbAdd.isChecked()) {
+            if(rbOld.isChecked()){
+                if (!oldSmm.contains(code)&&!newSmm.contains(code)){
+                    oldSmm.add(code);
+                    lvOldAdapter.notifyDataSetChanged();
+                    information.setText(code + "添加成功！");
+                }else {
+                    ToastUitl.showShort("改条码已在列表中");
+                }
+            }if(rbNew.isChecked()){
+                if (!oldSmm.contains(code)&&!newSmm.contains(code)){
+                    newSmm.add(code);
+                    lvNewAdapter.notifyDataSetChanged();
+                    information.setText(code + "添加成功！");
+                }else {
+                    ToastUitl.showShort("改条码已在列表中");
+                }
+            }else {
+                ToastUitl.showLong("请选择条码类型！");
+            }
+
+        } else if (rbDelete.isChecked()) {
+            if(oldSmm.contains(code)){
+                oldSmm.remove(code);
+                lvOldAdapter.notifyDataSetChanged();
+                information.setText(code + "删除成功！");
+            }else if(newSmm.contains(code)){
+                newSmm.remove(code);
+                lvNewAdapter.notifyDataSetChanged();
+                information.setText(code + "删除成功！");
+            }
+        }
+
+        count.setText("已扫描" + (oldSmm.size()+newSmm.size()) + "条");
     }
 
     @OnClick(R.id.replace)

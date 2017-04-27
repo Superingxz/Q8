@@ -15,6 +15,7 @@ import rx.functions.Action1;
  */
 
 public class FastOutPresenter extends FastOutContract.Presenter {
+
     @Override
     public void InvoicingQuickInvList(String Syskey, String Comkey) {
         mRxManager.add(mModel.InvoicingQuickInvList(Syskey,Comkey)

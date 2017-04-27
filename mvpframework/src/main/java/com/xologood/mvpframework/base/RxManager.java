@@ -17,7 +17,7 @@ public class RxManager {
 
     public RxBus mRxBus = RxBus.$();
     private Map<String, Observable<?>> mObservables = new HashMap<>();// 管理观察源
-    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();// 管理订阅者者
+    private CompositeSubscription mCompositeSubscription = new CompositeSubscription();// 管理订阅者
 
 
     public void on(String eventName, Action1<Object> action1) {

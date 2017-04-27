@@ -16,14 +16,14 @@ import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
 import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
 import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.utils.QpadJudgeUtils;
-import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.bean.BarCodeLog;
+import com.xologood.q8pad.ui.PadActivity;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.view.TitleView;
 import com.xologood.zxing.activity.CaptureActivity;
 
 import java.util.ArrayList;
@@ -34,10 +34,10 @@ import butterknife.OnClick;
 
 import static com.xologood.q8pad.R.id.et_editywm;
 
-public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishModel>
-        implements AbolishCodeContract.View {
+public class AbolishCodeActivity extends PadActivity<AbolishPresenter, AbolishModel>
+        implements AbolishCodeContract.View{
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
     @Bind(R.id.lv)
     ListView lv;
     @Bind(R.id.add)
@@ -132,6 +132,35 @@ public class AbolishCodeActivity extends BaseActivity<AbolishPresenter, AbolishM
             }
         }
     }
+
+    @Override
+    public void onResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
+    public void PdaBroadcastReceiver(String code) {
+        if (rbAdd.isChecked()) {
+            if (!smm.contains(code)) {
+                smm.add(0, code);
+                smmAdapter.notifyDataSetChanged();
+                information.setText(code + "添加成功！");
+            } else {
+                ToastUitl.showShort("此条码已经扫描，请重新扫码！");
+            }
+        } else if (rbDelete.isChecked() && smm.contains(code)) {
+            smm.remove(code);
+            smmAdapter.notifyDataSetChanged();
+            information.setText(code + "删除成功！");
+        }
+        if (smm.size() > 0) {
+            count.setVisibility(View.VISIBLE);
+            count.setText("已扫描" + smm.size() + "条");
+        } else {
+            count.setVisibility(View.GONE);
+        }
+    }
+
     /**
      * 连续扫码，如果选择添加就从已有扫码列表里添加不重复的，否则删除
      * @param ewm_nums 拼凑起来的新的扫码

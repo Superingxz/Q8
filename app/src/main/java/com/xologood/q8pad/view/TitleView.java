@@ -2,6 +2,7 @@ package com.xologood.q8pad.view;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,31 +14,41 @@ import com.xologood.q8pad.R;
 /**
  * Created by Administrator on 2016/10/26.
  */
-public class TitileView extends RelativeLayout {
-    TextView title, right_bt;
-    TextView back;
+public class TitleView extends RelativeLayout {
+    TextView tv_title, tv_right, tv_back;
+    ImageView iv_back;
     Context context;
-    ImageView iv;
+    String title,titleRight;
 
-    public TitileView(Context context) {
+    public TitleView(Context context) {
         super(context);
         inttView(context);
     }
 
-    public TitileView(Context context, AttributeSet attrs) {
+    public TitleView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TitleView);
+        if(typedArray.hasValue(R.styleable.TitleView_mtitle)){
+            title = typedArray.getString(R.styleable.TitleView_mtitle);
+        }
+        if(typedArray.hasValue(R.styleable.TitleView_titleRight)){
+            titleRight = typedArray.getString(R.styleable.TitleView_titleRight);
+        }
+        typedArray.recycle();
         inttView(context);
     }
 
 
     void inttView(Context context) {
-        inflate(context, R.layout.title_view, this);
-        right_bt = (TextView) findViewById(R.id.right_bt);
-        title = (TextView) findViewById(R.id.title_text);
-        back = (TextView) findViewById(R.id.back_text);
-        iv = (ImageView) findViewById(R.id.back_iv);
         this.context = context;
-        back.setOnClickListener(new OnClickListener() {
+        inflate(context, R.layout.title_view, this);
+        tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_back = (TextView) findViewById(R.id.tv_back);
+        iv_back = (ImageView) findViewById(R.id.iv_back);
+        tv_right = (TextView) findViewById(R.id.tv_right);
+        tv_title.setText(title);
+
+        tv_back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(lefebtIface!=null){
@@ -48,7 +59,7 @@ public class TitileView extends RelativeLayout {
 
             }
         });
-        iv.setOnClickListener(new OnClickListener() {
+        iv_back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 back();
@@ -57,7 +68,7 @@ public class TitileView extends RelativeLayout {
     }
 
     public void setTitle(String titletext) {
-        title.setText(titletext);
+        tv_title.setText(titletext);
     }
 
     public void back() {
@@ -65,14 +76,14 @@ public class TitileView extends RelativeLayout {
     }
 
     public void setRightText(String text, final RightBtIface rightBtIface) {
-        right_bt.setText(text);
-        right_bt.setOnClickListener(new OnClickListener() {
+        tv_right.setText(text);
+        tv_right.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 rightBtIface.onClick();
             }
         });
-        right_bt.setVisibility(View.VISIBLE);
+        tv_right.setVisibility(View.VISIBLE);
 
     }
 
@@ -88,15 +99,15 @@ public class TitileView extends RelativeLayout {
     }
 
     public void setLeftBackGone() {
-        back.setVisibility(View.GONE);
+        tv_back.setVisibility(View.GONE);
     }
 
     public void setLeftIvGone() {
-        iv.setVisibility(View.GONE);
+        iv_back.setVisibility(View.GONE);
     }
 
     public void setRgbtnVisible(int vis) {
-        right_bt.setVisibility(vis);
+        tv_right.setVisibility(vis);
     }
 
     public RightBtIface getRightBtIface() {

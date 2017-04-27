@@ -54,7 +54,7 @@ public class ReturnGoodsPresenter extends ReturnGoodsContract.Presenter {
 
     @Override
     public void ReturnGoods(String InvBy, String InvByName, String InvNumber, String InvDate, String InvReMark, String InvGet, String InvType, String CheckedParty, String InvState, String CodeType, String ReceivingComKey, String ReceivingComName, String SysKey, String ComKey, String LastUpdateDate, String LastUpdateBy, String LastUpdateByName, String CheckMemo, String BarCode) {
-        mRxManager.add(mModel.ReturnGoodsDefault(InvBy,
+        mRxManager.add(mModel.ReturnGoods(        InvBy,
                                                     InvByName,
                                                     InvNumber,
                                                     InvDate,

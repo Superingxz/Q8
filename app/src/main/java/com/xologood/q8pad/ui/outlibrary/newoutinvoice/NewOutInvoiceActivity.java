@@ -2,6 +2,7 @@ package com.xologood.q8pad.ui.outlibrary.newoutinvoice;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -22,7 +23,6 @@ import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.bean.common.CommonSelectData;
 import com.mview.medittext.utils.QpadJudgeUtils;
 import com.mview.medittext.view.QpadEditText;
-import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
@@ -33,11 +33,12 @@ import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.Company;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Warehouse;
+import com.xologood.q8pad.ui.PadActivity;
 import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.utils.StringUtils;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.view.TitleView;
 import com.xologood.zxing.activity.CaptureActivity;
 
 import java.text.DecimalFormat;
@@ -51,12 +52,12 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, NewOutInvoiceModel>
+public class NewOutInvoiceActivity extends PadActivity<NewOutInvoicePresenter, NewOutInvoiceModel>
         implements NewOutInvoiceContract.View {
     public static final int NEWOUTINVOICE_OK = 101;
     private static final int REQUEST_OK = 100;
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
     @Bind(R.id.InvNumber)
     QpadEditText InvNumber;
     @Bind(R.id.InvTime)
@@ -157,6 +158,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         return R.layout.activity_new_out_invoice;
     }
 
+
     @Override
     public void initView() {
         titleView.setTitle("新建订单出库");
@@ -207,7 +209,7 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
         }
 
 
-
+        Log.e("test", "mPresenter: "+mPresenter);
         mPresenter.GetAllCompList(ComKey, "2");
         mPresenter.GetWareHouseList(ComKey, IsUse);
         mPresenter.GetProductList(SysKey, IsUse);
@@ -384,6 +386,40 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             if (resultCode == InvoicingDetailActivity.RESULT_OK) {
                 IsCommitSuccess = data.getBooleanExtra("isCommitSuccess", false);
             }
+        }
+    }
+
+    @Override
+    public void onResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
+    public void PdaBroadcastReceiver(String code) {
+        if (rbAdd.isChecked()) {
+            if (!smm.contains(code)) {
+                smm.add(0, code);
+                smmAdapter.notifyDataSetChanged();
+                information.setText(code + "添加成功！");
+            } else {
+                ToastUitl.showShort("此条码已经扫描，请重新扫码！");
+            }
+        } else if (rbDelete.isChecked() && smm.contains(code)) {
+            smm.remove(code);
+            smmAdapter.notifyDataSetChanged();
+            information.setText(code + "删除成功！");
+        }
+        if (SuccessCount > 0) {
+            count.setVisibility(View.VISIBLE);
+            count.setText("已成功上传" + SuccessCount + "条");
+        } else {
+            count.setVisibility(View.GONE);
+        }
+        if (smm.size() > 0) {
+            scanNumber.setVisibility(View.VISIBLE);
+            scanNumber.setText("已扫描" + smm.size() + "条");
+        } else {
+            scanNumber.setVisibility(View.GONE);
         }
     }
 
@@ -670,31 +706,59 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
                     }
                 });
             } else if (smm != null && smm.size() > 0) {
-                mPresenter.GetScanBarCodeList(GetBarCodeString4List(smm),
-                        invId + "",
-                        InvNumber.getFieldText(),
-                        "2",
-                        "APP",
-                        "暂无",
-                        UserId,
-                        UserName,
-                        "false",
-                        "2",
-                        InvDate,
-                        UserId,
-                        UserName,
-                        InvDate,
-                        ComKey,
-                        ComName,
-                        SysKey,
-                        "暂无",
-                        mComkey,
-                        mCompanyName,
-                        mReceivingWarehouseId,
-                        mReceivingWarehouseName,
-                        "true",
-                        sysKeyBase
-                );
+                if("1703271033178204uh0".equals(SysKey)){
+                    mPresenter.GetScanBarCodeListBinShi(GetBarCodeString4List(smm),
+                            invId + "",
+                            InvNumber.getFieldText(),
+                            "2",
+                            "APP",
+                            "暂无",
+                            UserId,
+                            UserName,
+                            "false",
+                            "2",
+                            InvDate,
+                            UserId,
+                            UserName,
+                            InvDate,
+                            ComKey,
+                            ComName,
+                            SysKey,
+                            "暂无",
+                            mComkey,
+                            mCompanyName,
+                            mReceivingWarehouseId,
+                            mReceivingWarehouseName,
+                            "true",
+                            sysKeyBase
+                    );
+                }else {
+                    mPresenter.GetScanBarCodeList(GetBarCodeString4List(smm),
+                            invId + "",
+                            InvNumber.getFieldText(),
+                            "2",
+                            "APP",
+                            "暂无",
+                            UserId,
+                            UserName,
+                            "false",
+                            "2",
+                            InvDate,
+                            UserId,
+                            UserName,
+                            InvDate,
+                            ComKey,
+                            ComName,
+                            SysKey,
+                            "暂无",
+                            mComkey,
+                            mCompanyName,
+                            mReceivingWarehouseId,
+                            mReceivingWarehouseName,
+                            "true",
+                            sysKeyBase
+                    );
+                }
             } else if (smm == null || smm.size() == 0) {
                 final NormalDialog IsNotScan_Dialog = new NormalDialog(mContext);
                 QPadPromptDialogUtils.showOnePromptDialog(IsNotScan_Dialog, "条码列表为空，请先扫码！", new OnBtnClickL() {
@@ -706,31 +770,59 @@ public class NewOutInvoiceActivity extends BaseActivity<NewOutInvoicePresenter, 
             }
         } else {
             if (smm != null && smm.size() > 0) {
-                mPresenter.GetScanBarCodeList(GetBarCodeString4List(smm),
-                        invId + "",
-                        InvNumber.getFieldText(),
-                        "2",
-                        "APP",
-                        "暂无",
-                        UserId,
-                        UserName,
-                        "false",
-                        "2",
-                        InvDate,
-                        UserId,
-                        UserName,
-                        InvDate,
-                        ComKey,
-                        ComName,
-                        SysKey,
-                        "暂无",
-                        mComkey,
-                        mCompanyName,
-                        mReceivingWarehouseId,
-                        mReceivingWarehouseName,
-                        "true",
-                        sysKeyBase
-                );
+                if("1703271033178204uh0".equals(SysKey)){
+                    mPresenter.GetScanBarCodeListBinShi(GetBarCodeString4List(smm),
+                            invId + "",
+                            InvNumber.getFieldText(),
+                            "2",
+                            "APP",
+                            "暂无",
+                            UserId,
+                            UserName,
+                            "false",
+                            "2",
+                            InvDate,
+                            UserId,
+                            UserName,
+                            InvDate,
+                            ComKey,
+                            ComName,
+                            SysKey,
+                            "暂无",
+                            mComkey,
+                            mCompanyName,
+                            mReceivingWarehouseId,
+                            mReceivingWarehouseName,
+                            "true",
+                            sysKeyBase
+                    );
+                }else {
+                    mPresenter.GetScanBarCodeList(GetBarCodeString4List(smm),
+                            invId + "",
+                            InvNumber.getFieldText(),
+                            "2",
+                            "APP",
+                            "暂无",
+                            UserId,
+                            UserName,
+                            "false",
+                            "2",
+                            InvDate,
+                            UserId,
+                            UserName,
+                            InvDate,
+                            ComKey,
+                            ComName,
+                            SysKey,
+                            "暂无",
+                            mComkey,
+                            mCompanyName,
+                            mReceivingWarehouseId,
+                            mReceivingWarehouseName,
+                            "true",
+                            sysKeyBase
+                    );
+                }
             } else if (smm == null || smm.size() == 0) {
                 final NormalDialog IsNotScan_Dialog = new NormalDialog(mContext);
                 QPadPromptDialogUtils.showOnePromptDialog(IsNotScan_Dialog, "条码列表为空，请先扫码！", new OnBtnClickL() {

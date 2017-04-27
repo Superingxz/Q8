@@ -122,7 +122,7 @@ public class NewOutInvoiceModel implements NewOutInvoiceContract.Model{
 
 
     /**
-     *
+     * 出库上传
      * @param BarCodes                  全部条码 逗号分隔
      * @param InvId                     单号id
      * @param InvNumber                 单号
@@ -198,5 +198,37 @@ public class NewOutInvoiceModel implements NewOutInvoiceContract.Model{
                                                                                                         ReceivingWarehouseName,
                                                                                                         CheckedParty,
                                                                                                         sysKeyBase);
+    }
+
+/**
+ * 出库上传-BinShi
+ *
+ * */
+    @Override
+    public Observable<BaseResponse<BarCodeLogList>> GetScanBarCodeListBinShi(String BarCodes, String InvId, String InvNumber, String InvType, String InvGet, String InvReMark, String InvBy, String InvByName, String CodeType, String InvState, String InvDate, String LastUpdateBy, String LastUpdateByName, String LastUpdateDate, String ComKey, String ComName, String SysKey, String CheckMemo, String ReceivingComKey, String ReceivingComName, String ReceivingWarehouseId, String ReceivingWarehouseName, String CheckedParty, String sysKeyBase) {
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).GetScanBarCodeListBinShi(BarCodes,
+                InvId,
+                InvNumber,
+                InvType,
+                InvGet,
+                InvReMark,
+                InvBy,
+                InvByName,
+                CodeType,
+                InvState,
+                InvDate,
+                LastUpdateBy,
+                LastUpdateByName,
+                LastUpdateDate,
+                ComKey,
+                ComName,
+                SysKey,
+                CheckMemo,
+                ReceivingComKey,
+                ReceivingComName,
+                ReceivingWarehouseId,
+                ReceivingWarehouseName,
+                CheckedParty,
+                sysKeyBase);
     }
 }

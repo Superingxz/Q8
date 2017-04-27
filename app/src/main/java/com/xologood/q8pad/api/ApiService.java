@@ -12,8 +12,12 @@ import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProductBatch;
 import com.xologood.q8pad.bean.ProportionConversion;
+import com.xologood.q8pad.bean.ReportInfo;
+import com.xologood.q8pad.bean.ReportInv;
 import com.xologood.q8pad.bean.ReturnGoodsResponse;
 import com.xologood.q8pad.bean.StandardUnit;
+import com.xologood.q8pad.bean.SupplierBean;
+import com.xologood.q8pad.bean.Version;
 import com.xologood.q8pad.bean.Warehouse;
 import com.xologood.q8pad.bean.bean;
 
@@ -64,9 +68,17 @@ public interface ApiService {
     @GET(ApiConstants.INVOICING_INSERTINV)
     Observable<BaseResponse<InvoicingBean>> insertInv(@QueryMap Map<String, String> options);
 
-    @GET(ApiConstants.INVOICING_INSERTINV2)
-    Observable<BaseResponse<InvoicingBean>> insertInv2(@Query("SysKey") String SysKey,
-                                                       @Query("InvNumber") String InvNumber);
+    /**
+     * 保存入库/出库主表(查询单据的接口)
+     * @return
+     */
+    @GET(ApiConstants.INVOICING_INVOICING)
+    Observable<BaseResponse<InvoicingBean>> Invoicing(@Query("SysKey") String SysKey,
+                                                      @Query("InvNumber") String InvNumber);
+
+    //宾氏-入库保存
+    @GET(ApiConstants.INVOICING_INSERTINVSUPPLIER)
+    Observable<BaseResponse<InvoicingBean>> insertInvSupplier(@QueryMap Map<String, String> options);
 
     /**
      * 获取单位比例
@@ -77,8 +89,8 @@ public interface ApiService {
      */
     @GET(ApiConstants.PROPORTION_GET_PROPORTIONCONVERSION)
     Observable<BaseResponse<ProportionConversion>> GetProportionConversion(@Query("id") String id,
-                                                                          @Query("Bunit") String Bunit,
-                                                                          @Query("count") String count
+                                                                           @Query("Bunit") String Bunit,
+                                                                           @Query("count") String count
     );
 
     /**
@@ -90,8 +102,8 @@ public interface ApiService {
      */
     @GET(ApiConstants.PROPORTION_GET_PROPORTIONCONVERSION)
     Observable<BaseResponse<String>> GetProportionConversionString(@Query("id") String id,
-                                                                          @Query("Bunit") String Bunit,
-                                                                          @Query("count") String count
+                                                                   @Query("Bunit") String Bunit,
+                                                                   @Query("count") String count
     );
 
     /**
@@ -103,6 +115,13 @@ public interface ApiService {
      */
     @GET(ApiConstants.WAREHOUSE_GETLIST)
     Observable<BaseResponse<List<Warehouse>>> GetWareHouseList(@Query("ComKey") String ComKey, @Query("IsUse") String IsUse);
+
+    /**
+     * 获取供应商列表
+     * @return
+     */
+    @GET(ApiConstants.INVOICING_GETSUPPLIERLIST)
+    Observable<BaseResponse<List<SupplierBean>>> GetSupplierBeanList(@QueryMap Map<String, String> options);
 
     /**
      * 获取产品列表
@@ -143,9 +162,9 @@ public interface ApiService {
    @GET(ApiConstants.PRODUCT_INSERT_PRODUCT_BATCH)
     Observable<BaseResponse<String>> InsertProductBatch(@Query("BatchNO") String BatchNO,
                                                         @Query("Product") String ProductId,
-                                                        @Query("SysKey")  String SysKey,
+                                                        @Query("SysKey") String SysKey,
                                                         @Query("ProductDate") String ProductDate,
-                                                        @Query("CreationBy")  String CreationBy);
+                                                        @Query("CreationBy") String CreationBy);
 
 
     /**
@@ -170,7 +189,7 @@ public interface ApiService {
                                                                  @Query("ExpectedQty") String ExpectedQty,
                                                                  @Query("ComKey") String ComKey,
                                                                  @Query("SysKey") String SysKey
-                                                                  );
+    );
 
     /**
      * 增加入库明细
@@ -214,10 +233,7 @@ public interface ApiService {
                                                                     @Query("ExpectedQty") String ExpectedQty,
                                                                     @Query("ComKey") String ComKey,
                                                                     @Query("SysKey") String SysKey
-                                                                  );
-
-   // @GET(ApiConstants.INVOICING_INVMSG)
-   // Observable<>
+    );
 
 
     /**
@@ -227,7 +243,7 @@ public interface ApiService {
      * @return
      */
     @GET(ApiConstants.COMPANY_GET_ALLCOPLIST)
-    Observable<BaseResponse<List<Company>>> GetAllCompList(@Query("ComKey") String ComKey,@Query("CType") String CType);
+    Observable<BaseResponse<List<Company>>> GetAllCompList(@Query("ComKey") String ComKey, @Query("CType") String CType);
 
 
     /**
@@ -273,7 +289,9 @@ public interface ApiService {
                                                   @Query("userId") String userId,
                                                   @Query("userName") String userName);
 
-
+    /**
+     * 入库上传
+     */
     @POST(ApiConstants.NEWSCANBARCODE_NEWORDINARY_IN_SCANBARCODE)
     Observable<BaseResponse<BarCodeLogList>> GetScanBarCodeList(@Query("BarCodes") String BarCodes,
                                                                 @Query("InvId") String InvId,
@@ -281,12 +299,26 @@ public interface ApiService {
                                                                 @Query("ProductId") String ProductId,
                                                                 @Query("Batch") String Batch,
                                                                 @Query("ComKey") String ComKey,
-                                                                @Query("ComName" ) String ComName,
-                                                                @Query("SysKey" ) String SysKey,
+                                                                @Query("ComName") String ComName,
+                                                                @Query("SysKey") String SysKey,
                                                                 @Query("ReceivingWarehouseId") String ReceivingWarehouseId);
 
     /**
-     *
+     * 宾氏—入库上传
+     */
+    @POST(ApiConstants.NEWSCANBARCODE_NEW_BIN_SHI_SCANBARCODE)
+    Observable<BaseResponse<BarCodeLogList>> GetScanBarCodeListBinShi(@Query("BarCodes") String BarCodes,
+                                                                      @Query("InvId") String InvId,
+                                                                      @Query("InvDetailId") String InvDetailId,
+                                                                      @Query("ProductId") String ProductId,
+                                                                      @Query("Batch") String Batch,
+                                                                      @Query("ComKey") String ComKey,
+                                                                      @Query("ComName") String ComName,
+                                                                      @Query("SysKey") String SysKey,
+                                                                      @Query("ReceivingWarehouseId") String ReceivingWarehouseId);
+
+    /**
+     * 出库上传
      * @param BarCodes                  全部条码 逗号分隔
      * @param InvId                     单号id
      * @param InvNumber                 单号
@@ -341,6 +373,36 @@ public interface ApiService {
    );
 
     /**
+     *宾氏—出库上传
+     */
+    @POST(ApiConstants.NEWSCANBARCODE_NEW_BIN_SHI_OUT_SCANBARCODE)
+    Observable<BaseResponse<BarCodeLogList>> GetScanBarCodeListBinShi(@Query("BarCodes") String BarCodes,
+                                                                      @Query("InvId") String InvId,
+                                                                      @Query("InvNumber") String InvNumber,
+                                                                      @Query("InvType") String InvType,
+                                                                      @Query("InvGet") String InvGet,
+                                                                      @Query("InvReMark") String InvReMark,
+                                                                      @Query("InvBy") String InvBy,
+                                                                      @Query("InvByName") String InvByName,
+                                                                      @Query("CodeType") String CodeType,
+                                                                      @Query("InvState") String InvState,
+                                                                      @Query("InvDate") String InvDate,
+                                                                      @Query("LastUpdateBy") String LastUpdateBy,
+                                                                      @Query("LastUpdateByName") String LastUpdateByName,
+                                                                      @Query("LastUpdateDate") String LastUpdateDate,
+                                                                      @Query("ComKey") String ComKey,
+                                                                      @Query("ComName") String ComName,
+                                                                      @Query("SysKey") String SysKey,
+                                                                      @Query("CheckMemo") String CheckMemo,
+                                                                      @Query("ReceivingComKey") String ReceivingComKey,
+                                                                      @Query("ReceivingComName") String ReceivingComName,
+                                                                      @Query("ReceivingWarehouseId") String ReceivingWarehouseId,
+                                                                      @Query("ReceivingWarehouseName") String ReceivingWarehouseName,
+                                                                      @Query("CheckedParty") String CheckedParty,
+                                                                      @Query("sysKeyBase") String sysKeyBase
+    );
+
+    /**
      * 替换
      * @param code
      * @return
@@ -357,7 +419,7 @@ public interface ApiService {
      */
     @GET(ApiConstants.INVOICING_QUICKINVLIST)
     Observable<BaseResponse<List<InvoicingBean>>> InvoicingQuickInvList(@Query("Syskey") String Syskey,
-                                                                  @Query("Comkey") String Comkey
+                                                                        @Query("Comkey") String Comkey
     );
 
     /**
@@ -370,7 +432,7 @@ public interface ApiService {
                                                             @Query("sysKeyBase") String sysKeyBase);
 
     /**
-     * 新建快捷出库
+     * 快捷出库-上传条码
      * @param BarCodes          全部条码 逗号分隔
      * @param InvNumber         单号
      * @param InvType           类型 写死1
@@ -507,6 +569,25 @@ public interface ApiService {
 
 
     /**
+     * 检查版本更新
+     * @return
+     */
+    @GET(ApiConstants.CHECKVERSION)
+    Observable<BaseResponse<Version>> CheckVersion();
+
+    /**
+     * 产品物流
+     */
+    @GET(ApiConstants.REPORT_GETPRODUCTDETAILBYBARCODE)
+    Observable<BaseResponse<ReportInfo>> getProductDetailByBarcode(@Query("barCode") String barCode);
+
+    /**
+     * 产品物流列表
+     */
+    @GET(ApiConstants.REPORT_INVBYBARCODELIST)
+    Observable<BaseResponse<ReportInv>> invByBarCodeList(@Query("SBarCode") String sBarCode);
+
+    /**
      * 下载文件
      * @param fileUrl
      * @return
@@ -514,6 +595,8 @@ public interface ApiService {
     @Streaming
     @GET
     Observable<ResponseBody> downloadFileWithDynamicUrlSync(@Url String fileUrl);
+
+
 
 }
 

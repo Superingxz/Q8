@@ -34,6 +34,20 @@ public class ScanModel implements ScanContract.Model{
     }
 
     @Override
+    public Observable<BaseResponse<BarCodeLogList>> GetBarCodeLogListBinShi(String BarCodes, String InvId, String InvDetailId, String ProductId, String Batch, String ComKey, String ComName, String SysKey, String ReceivingWarehouseId) {
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).GetScanBarCodeListBinShi(BarCodes,
+                InvId,
+                InvDetailId,
+                ProductId,
+                Batch,
+                ComKey,
+                ComName,
+                SysKey,
+                ReceivingWarehouseId)
+                .compose(RxSchedulers.<BaseResponse<BarCodeLogList>>io_main());
+    }
+
+    @Override
     public Observable<BaseResponse<String>> getCheckBarCode(String barcode) {
         return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).InvoicingCheckBarCode(barcode)
                 .compose(RxSchedulers.<BaseResponse<String>>io_main());

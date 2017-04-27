@@ -8,7 +8,7 @@ import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.ui.outlibrary.newoutinvoice.NewOutInvoiceActivity;
 import com.xologood.q8pad.ui.outlibrary.oldoutinvoice.OldOutInvoiceActivity;
-import com.xologood.q8pad.view.TitileView;
+import com.xologood.q8pad.view.TitleView;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -20,7 +20,7 @@ public class OutLibraryActivity extends BaseActivity {
     @Bind(R.id.btnNewOrderOut)
     Button btnNewOrderOut;
     @Bind(R.id.title_view)
-    TitileView titleView;
+    TitleView titleView;
 
     @Override
     public int getLayoutId() {

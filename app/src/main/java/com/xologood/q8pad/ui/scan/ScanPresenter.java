@@ -41,9 +41,41 @@ public class ScanPresenter extends ScanContract.Presenter{
 
                                    @Override
                                    protected void _onError(String message) {
-
+                                       mView.stopProgressDialog();
                                    }
                                }));
+    }
+
+    @Override
+    public void GetBarCodeLogListBinShi(String BarCodes, String InvId, String InvDetailId, String ProductId, String Batch, String ComKey, String ComName, String SysKey, String ReceivingWarehouseId) {
+        mRxManager.add(mModel.GetBarCodeLogListBinShi(BarCodes,
+                InvId,
+                InvDetailId,
+                ProductId,
+                Batch,
+                ComKey,
+                ComName,
+                SysKey,
+                ReceivingWarehouseId)
+                .subscribe(new RxSubscriber<BaseResponse<BarCodeLogList>>(mContext,false) {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在上传...");
+                    }
+
+                    @Override
+                    protected void _onNext(BaseResponse<BarCodeLogList> barCodeLogListBaseResponse) {
+                        List<BarCodeLog> data = barCodeLogListBaseResponse.getData().getBarCodeLogList();
+                        mView.SetBarCodeList(data);
+                        mView.stopProgressDialog();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+                        mView.stopProgressDialog();
+                    }
+                }));
     }
 
     @Override

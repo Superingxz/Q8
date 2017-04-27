@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel> extends Activity {
     public boolean isNight;
-    public T mPresenter;
+    public T  mPresenter;
     public E mModel;
     public Context mContext;
     public int width;
@@ -39,14 +39,18 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         BaseApplication.addActivity(this);
         ButterKnife.bind(this);
         mContext = this;
+        initPM();
+        this.initView();
+        this.initListener();
+    }
+
+    protected void initPM(){
         mPresenter = TUtil.getT(this, 0);
         mModel = TUtil.getT(this, 1);
         if(mPresenter!=null){
             mPresenter.mContext=this;
         }
         if (this instanceof BaseView) mPresenter.setVM(this, mModel);
-        this.initView();
-        this.initListener();
     }
 
     @Override
