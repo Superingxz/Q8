@@ -356,6 +356,54 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
     }
 
     @Override
+    public void GetScanBarCodeListBinShi(String BarCodes, String InvId, String InvNumber, String InvType, String InvGet, String InvReMark, String InvBy, String InvByName, String CodeType, String InvState, String InvDate, String LastUpdateBy, String LastUpdateByName, String LastUpdateDate, String ComKey, String ComName, String SysKey, String CheckMemo, String ReceivingComKey, String ReceivingComName, String ReceivingWarehouseId, String ReceivingWarehouseName, String CheckedParty, String sysKeyBase) {
+        mRxManager.add(mModel.GetScanBarCodeListBinShi(BarCodes,
+                InvId,
+                InvNumber,
+                InvType,
+                InvGet,
+                InvReMark,
+                InvBy,
+                InvByName,
+                CodeType,
+                InvState,
+                InvDate,
+                LastUpdateBy,
+                LastUpdateByName,
+                LastUpdateDate,
+                ComKey,
+                ComName,
+                SysKey,
+                CheckMemo,
+                ReceivingComKey,
+                ReceivingComName,
+                ReceivingWarehouseId,
+                ReceivingWarehouseName,
+                CheckedParty,
+                sysKeyBase)
+                .compose(RxSchedulers.<BaseResponse<BarCodeLogList>>io_main())
+                .subscribe(new RxSubscriber<BaseResponse<BarCodeLogList>>(mContext,false) {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在上传...");
+                    }
+
+                    @Override
+                    protected void _onNext(BaseResponse<BarCodeLogList> barCodeLogListBaseResponse) {
+                        mView.setScanBarCodeList(barCodeLogListBaseResponse.getData().getBarCodeLogList());
+                        mView.stopProgressDialog();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+
+                    }
+                }));
+    }
+
+
+    @Override
     public void onStart() {
 
     }

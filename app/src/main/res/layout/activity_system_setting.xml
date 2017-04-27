@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgrongd_1"
+    android:background="@color/background_1"
     android:padding="10dp"
     android:orientation="vertical">
 
@@ -46,62 +46,85 @@
         android:layout_marginTop="20dp"
         android:textSize="18dp"
         android:textColor="@color/black"
-        android:text="请选择需要显示的功能模块："
-        android:id="@+id/textView7" />
+        android:text="请选择需要显示的功能模块："/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:background="@color/white"
         >
-        <CheckBox
-            android:id="@+id/cb_in_invoice"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="入库"
-            />
+            android:orientation="vertical">
+            <CheckBox
+                android:id="@+id/cb_in_invoice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="入库"
+                />
 
-        <CheckBox
-            android:id="@+id/cb_out_invoice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="出库"
-            />
+            <CheckBox
+                android:id="@+id/cb_out_invoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="出库"
+                />
 
-        <CheckBox
-            android:id="@+id/cb_fast_out_invoice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="快捷出库"
-            />
+            <CheckBox
+                android:id="@+id/cb_fast_out_invoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="快捷出库"
 
-        <CheckBox
-            android:id="@+id/cb_replace"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="替换"
-            />
+                />
+            <CheckBox
+                android:id="@+id/cb_replace"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="替换"
+                />
 
-        <CheckBox
-            android:id="@+id/cb_abolish"
-            android:layout_width="match_parent"
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="作废"
-            />
+            android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/cb_return_goods"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="退货"
-            />
+            <CheckBox
+                android:id="@+id/cb_abolish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="作废"
+                />
+
+            <CheckBox
+                android:id="@+id/cb_return_goods"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="退货"
+                />
+
+            <CheckBox
+                android:id="@+id/cb_logistics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="物流查询"
+                />
+        </LinearLayout>
+
+
+
     </LinearLayout>
 
 

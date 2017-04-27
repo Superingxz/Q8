@@ -10,15 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_ly"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_marginBottom="5dp"
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
             <com.mview.medittext.view.QpadEditText
                 android:id="@+id/InvId"
@@ -86,27 +88,27 @@
                 aaron:fieldTitle="开单时间："
                 aaron:fieldType="String" />
 
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/orderForm"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-                <ListView
+                <com.xologood.q8pad.view.ScrollListView
                     android:id="@+id/lv"
+                    android:background="@color/white"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@+id/commit"
-                    android:dividerHeight="3dp">
-                </ListView>
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
 
-                <Button
-                    android:id="@+id/commit"
-                    style="@style/ButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:text="确定完成"/>
-            </RelativeLayout>
+            <Button
+                android:id="@+id/commit"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="确定完成" />
         </LinearLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </ScrollView>
 </LinearLayout>

@@ -139,8 +139,9 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
 
     }
 
+
     /**
-     * 新建快捷出库
+     * 快捷出库-上传条码
      * @param BarCodes          全部条码 逗号分隔
      * @param InvNumber         单号
      * @param InvType           类型 写死1
@@ -205,8 +206,8 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
 
                                  @Override
                                  protected void _onNext(BaseResponse<BarCodeLogList> barCodeLogListBaseResponse) {
-                                     mView.SetBarCodeList(barCodeLogListBaseResponse.getData().getBarCodeLogList());
                                      mView.stopProgressDialog();
+                                     mView.SetBarCodeList(barCodeLogListBaseResponse.getData().getBarCodeLogList());
                                  }
 
                                  @Override

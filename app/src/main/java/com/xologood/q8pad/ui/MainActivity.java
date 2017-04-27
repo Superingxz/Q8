@@ -20,6 +20,9 @@ import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.GridAdapter;
 import com.xologood.q8pad.bean.GridBean;
+
+import com.xologood.q8pad.ui.Logistics.LogisticsActivity;
+
 import com.xologood.q8pad.ui.abolishcode.AbolishCodeActivity;
 import com.xologood.q8pad.ui.fastoutlibrary.FastOutLibrary.FastOutLibraryActivity;
 import com.xologood.q8pad.ui.inlibrary.InLibraryActivity;
@@ -27,7 +30,9 @@ import com.xologood.q8pad.ui.login.LoginInActivity;
 import com.xologood.q8pad.ui.outlibrary.OutLibraryActivity;
 import com.xologood.q8pad.ui.replace.ReplaceActivity;
 import com.xologood.q8pad.ui.returngoods.ReturnGoodsActivity;
+
 import com.xologood.q8pad.utils.QpadUpdateUtils;
+
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
@@ -47,22 +52,11 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridView;
 
     private int[] images = {R.mipmap.in_library, R.mipmap.out_library, R.mipmap.fast,
-            R.mipmap.replace, R.mipmap.abolish, R.mipmap.return_goods, R.mipmap.log_off, R.mipmap.exit};
+            R.mipmap.replace, R.mipmap.abolish, R.mipmap.return_goods, R.mipmap.log_off, R.mipmap.exit,R.mipmap.ic_launcher};
 
     private String[] titles = new String[]
-            {"入库", "出库", "快捷出库", "替换", "作废", "退货", "注销", "退出"};
+            {"入库", "出库", "快捷出库", "替换", "作废", "退货", "注销", "退出","测试"};
 
-    private Handler initHandler = new Handler();//检查更新
-    private InitRunnable initRunnable = new InitRunnable();
-    /**
-     * 检查更新run
-     */
-    private class InitRunnable implements Runnable {
-        public void run() {
-            QpadUpdateUtils.CheckUpdate(MainActivity.this, false);
-            initHandler.removeCallbacks(this);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,12 +121,20 @@ public class MainActivity extends AppCompatActivity {
                     case "退货":
                         startActivity(new Intent(mContext, ReturnGoodsActivity.class));
                         break;
+                    
+                    case "物流查询":
+                        startActivity(new Intent(mContext, LogisticsActivity.class));
+                        break;
+
                     case "注销":
                         logOff();
                         break;
                     case "退出":
                         exit();
                         break;
+/*                    case "测试":
+                        startActivity(new Intent(mContext, TestActivity.class));
+                        break;*/
                 }
             }
         });
@@ -164,16 +166,22 @@ public class MainActivity extends AppCompatActivity {
             if(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.CBRETURNGOODS)==true){
                 gridBeens.add(new GridBean(R.mipmap.return_goods,"退货",SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.CBRETURNGOODS)));
             }
+            if(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(),Config.CBLOGISTICS)==true){
+                gridBeens.add(new GridBean(R.mipmap.logistics,"物流查询",SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.CBLOGISTICS)));
+            }
         }else {
             gridBeens.add(new GridBean(R.mipmap.in_library,"入库",true));
             gridBeens.add(new GridBean(R.mipmap.out_library,"出库",true));
-            gridBeens.add(new GridBean(R.mipmap.fast,"快捷出库",true));
+//            gridBeens.add(new GridBean(R.mipmap.fast,"快捷出库",true));
             gridBeens.add(new GridBean(R.mipmap.replace,"替换",true));
             gridBeens.add(new GridBean(R.mipmap.abolish,"作废",true));
             gridBeens.add(new GridBean(R.mipmap.return_goods,"退货",true));
+            gridBeens.add(new GridBean(R.mipmap.logistics,"物流查询"));
         }
         gridBeens.add(new GridBean(R.mipmap.log_off,"注销",true));
         gridBeens.add(new GridBean(R.mipmap.exit,"退出",true));
+//        gridBeens.add(new GridBean(R.mipmap.ic_launcher,"测试",true));
+
     }
 
     public void logOff() {

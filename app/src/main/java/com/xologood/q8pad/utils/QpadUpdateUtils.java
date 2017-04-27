@@ -49,7 +49,7 @@ public class QpadUpdateUtils {
 		}
 		return versionName;
 	}
-	
+
     /**
      *  获取内部识别号
      */
@@ -80,7 +80,6 @@ public class QpadUpdateUtils {
 		return false;
 	}
 
-	
 	/**
 	 * 检查升级
 	 * @param mContext
@@ -101,10 +100,13 @@ public class QpadUpdateUtils {
 																				 }
 																				 @Override
 																				 protected void _onNext(final BaseResponse<Version> versionBaseResponse) {
-																					 if (!CompareVerSion(mContext, versionBaseResponse.getData().getM1())) {
+																					 String m1 = versionBaseResponse.getData().getM1();
+//																					 !CompareVerSion(mContext, m1)
+																					 int m2 = versionBaseResponse.getData().getM2();
+																					 int versionCode = getVersionCode(mContext);
+																					 if (versionCode <m2) {
 																						 final MaterialDialog dialog_upapp = new MaterialDialog(mContext);
-
-																						 dialog_upapp.title("新版本" + versionBaseResponse.getData().getM1())
+																						 dialog_upapp.title("新版本" + m1)
 																								 .content(Html.fromHtml(versionBaseResponse.getData().getTitle().trim()).toString())//
 																								 .btnText("暂不更新", "现在更新")//
 																								 .show();
@@ -122,8 +124,11 @@ public class QpadUpdateUtils {
 																								 new OnBtnClickL() {
 																									 @Override
 																									 public void onBtnClick() {
+//																										 String downloadUrl = versionBaseResponse.getData().getUrl();
+																										 String downloadUrl = "http://120.24.208.159/yueliang/app/haiwangapp/HWAGENT.20.apk";
+
 																										 String path = QpadStaticConfig.CACHE_PATH.SD_DOWNLOAD + "/"
-																												 + EncroptionUtils.encryptMD5ToString(versionBaseResponse.getData().getUrl()) + ".apk";
+																												 + EncroptionUtils.encryptMD5ToString(downloadUrl) + ".apk";
 																										 final File outputFile  = new File(path);
 
 																										 if (outputFile .exists()) {// 判断文件是否存在
@@ -133,14 +138,14 @@ public class QpadUpdateUtils {
 																										 final DownloadAPPDialog downapp = new DownloadAPPDialog(mContext,  R.style.Login_dialog);
 																										 downapp.show();
 																										 downapp.setProgress(0);
-																										 // down(mContext, versionBaseResponse.getData().getUrl());
-																										 new DownloadAPI(versionBaseResponse.getData().getUrl(), new DownloadProgressListener() {
+//																										 down(mContext, versionBaseResponse.getData().getUrl());
+																										 new DownloadAPI(downloadUrl, new DownloadProgressListener() {
 																											 @Override
 																											 public void update(long bytesRead, long contentLength, boolean done) {
 																												 int progress = (int) (100 * contentLength / bytesRead);
 																												 downapp.setProgress(progress);
 																											 }
-																										 }).downloadAPK(versionBaseResponse.getData().getUrl(), outputFile , new Subscriber() {
+																										 }).downloadAPK(downloadUrl, outputFile , new Subscriber() {
 																											 @Override
 																											 public void onCompleted() {
 																												 if(downapp.isShowing()){
@@ -340,7 +345,7 @@ public class QpadUpdateUtils {
 	 */
 	private static void installApk(Context context, File file) {
 		Intent intent = new Intent();
-		// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		// 执行动作
 		intent.setAction(Intent.ACTION_VIEW);
 		// 执行的数据类型 	编者按：此处应为android，否则造成安装不了

@@ -35,6 +35,9 @@ import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.ui.scan.ScanActivity;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.utils.StringUtils;
+
+import com.xologood.q8pad.view.ScrollListView;
+
 import com.xologood.q8pad.view.TitleView;
 
 import java.util.ArrayList;
@@ -72,7 +75,7 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
     @Bind(R.id.checkUserName)
     TextView checkUserName;
     @Bind(R.id.lv)
-    ListView lv;
+    ScrollListView lv;
     @Bind(R.id.orderForm)
     LinearLayout orderForm;
     @Bind(R.id.commit)
@@ -94,7 +97,7 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
     private int mInvId;
     private boolean IsSelect = false;//是否选择已有
     private List<InvoicingDetail> invoicingDetailList;
-    private boolean IsCommitSuccess  = false;//是否确认成功
+    private boolean IsCommitSuccess = false;//是否确认成功
 
     private InvoicingBeanAdapter invoicingBeanAdapter;
     private List<InvoicingBean> queryInvoicingBeanList;
@@ -135,7 +138,7 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
                 intent.putExtra("Batch", invoicingDetail.getBatch() + "");
                 intent.putExtra("ProductName", invoicingDetail.getProductName());
                 intent.putExtra("BatchNo", invoicingDetail.getBatchNO());
-                intent.putExtra("CreationDate",  StringUtils.GetCreationDate(invoicingDetail.getCreationDate()));
+                intent.putExtra("CreationDate", StringUtils.GetCreationDate(invoicingDetail.getCreationDate()));
                 intent.putExtra("StandardUnitName", invoicingDetail.getStandardUnitName());
                 int needScan = invoicingDetail.getExpectedQty() - invoicingDetail.getActualQty();
                 intent.putExtra("NeedToScan", String.valueOf(needScan));
@@ -209,8 +212,8 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
                         invoicingbeanDialog.dismiss();
                         InvoicingBean invoicingBean = queryInvoicingBeanList.get(position);
                         mInvId = invoicingBean.getInvId();
-                        invoiceInvlist.setFieldTextAndValue(invoicingBean.getInvNumber(), invoicingBean.getInvId()+"");
-                        mPresenter.GetInvoicingDetail(mInvId+"");
+                        invoiceInvlist.setFieldTextAndValue(invoicingBean.getInvNumber(), invoicingBean.getInvId() + "");
+                        mPresenter.GetInvoicingDetail(mInvId + "");
                     }
                 });
             }
@@ -374,13 +377,13 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
             return;
         }
         Intent intent = new Intent(OldInInvoiceActivity.this, InvoicingDetailActivity.class);
-        intent.putExtra("invId", mInvId+"");
-        startActivityForResult(intent,REQUEST_OK);
+        intent.putExtra("invId", mInvId + "");
+        startActivityForResult(intent, REQUEST_OK);
     }
 
     @Override
     public void startProgressDialog(String msg) {
-        QpadProgressUtils.showProgress(this,msg);
+        QpadProgressUtils.showProgress(this, msg);
     }
 
     @Override
@@ -390,6 +393,7 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
 
     /**
      * 根据InvNumber查询单据
+     *
      * @param InvNumber
      * @param mInvoicingBeans
      * @return
@@ -404,7 +408,7 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
         }
 
         for (int i = 0; i < mInvoicingBeans.size(); i++) {
-            if (StringUtils.ifIndexOf(mInvoicingBeans.get(i).getInvNumber(),InvNumber)) {
+            if (StringUtils.ifIndexOf(mInvoicingBeans.get(i).getInvNumber(), InvNumber)) {
                 InvoicingBeans.add(mInvoicingBeans.get(i));
             }
         }
@@ -413,6 +417,7 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
 
     /**
      * 预计数量和实际数量是否为0
+     *
      * @param mInvoicingDetailList
      * @return
      */
@@ -429,4 +434,6 @@ public class OldInInvoiceActivity extends BaseActivity<OldInInvoicePresenter, Ol
         }
         return false;
     }
+
+
 }

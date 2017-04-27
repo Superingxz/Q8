@@ -22,7 +22,6 @@ import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.bean.common.CommonSelectData;
 import com.mview.medittext.utils.QpadJudgeUtils;
 import com.mview.medittext.view.QpadEditText;
-import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
@@ -36,6 +35,7 @@ import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProductBatch;
 import com.xologood.q8pad.bean.Warehouse;
+import com.xologood.q8pad.ui.PadActivity;
 import com.xologood.q8pad.ui.invoicingdetail.InvoicingDetailActivity;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
@@ -55,7 +55,7 @@ import butterknife.OnClick;
 
 import static com.xologood.q8pad.R.id.productName;
 
-public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePresenter, NewFastOutInvoiceModel>
+public class NewFastOutInvoiceActivity extends PadActivity<NewFastOutInvoicePresenter, NewFastOutInvoiceModel>
         implements NewFastOutInvoiceContract.View {
     private static final int REQUEST_OK = 100;
     public static final int NEWFASTOUTINVOICE_OK = 102;
@@ -493,6 +493,42 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         }
     }
 
+    @Override
+    public void onResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
+    public void PdaBroadcastReceiver(String code) {
+        if (rbAdd.isChecked()) {
+            if (!smm.contains(code)) {
+                smm.add(code);
+                smmAdapter.notifyDataSetChanged();
+                information.setText(code + "添加成功！");
+            } else {
+                ToastUitl.showShort("此条码已经扫描，请重新扫码！");
+            }
+        } else if (rbDelete.isChecked() && smm.contains(code)) {
+            smm.remove(code);
+            smmAdapter.notifyDataSetChanged();
+            information.setText(code + "删除成功！");
+        }
+
+        if (SuccessCount > 0) {
+            count.setVisibility(View.VISIBLE);
+            count.setText("已成功扫描" + SuccessCount + "条");
+        } else {
+            count.setVisibility(View.GONE);
+        }
+
+        if (smm.size() > 0) {
+            scanNumber.setVisibility(View.VISIBLE);
+            scanNumber.setText("已扫描" + smm.size() + "条");
+        } else {
+            scanNumber.setVisibility(View.GONE);
+        }
+    }
+
     /**
      * 连续扫码，如果选择添加就从已有扫码列表里添加不重复的，否则删除
      *
@@ -584,15 +620,24 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         }
     }
 
+
+    /**
+     * 设置产品批次列表
+     *
+     * @param productBatchList
+     */
     @Override
     public void SetProductBatch(List<ProductBatch> productBatchList) {
         mProductBatchList = productBatchList;
         List<CommonSelectData> commonSelectProductBatchList = new ArrayList<>();
         if (productBatchList != null && productBatchList.size() > 0) {
             for (int i = 0; i < productBatchList.size(); i++) {
-                String id = productBatchList.get(i).getId() + "";
-                String batchNO = productBatchList.get(i).getBatchNO();
-                commonSelectProductBatchList.add(new CommonSelectData(batchNO, id));
+                ProductBatch productBatch = productBatchList.get(i);
+                String id = productBatch.getId() + "";
+                String batchNO = productBatch.getBatchNO();
+                CommonSelectData commonSelectData = new CommonSelectData(batchNO, id);
+                commonSelectData.setObj(productBatch);
+                commonSelectProductBatchList.add(commonSelectData);
             }
             produceBatch.setLists(commonSelectProductBatchList);
             produceBatch.setFieldTextAndValue(commonSelectProductBatchList.get(0));
@@ -622,6 +667,10 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
         ToastUitl.showLong(msg);
     }
 
+
+    /**
+     * 上传条码成功
+     */
     @Override
     public void SetBarCodeList(List<BarCodeLog> barCodeLogList) {
         mBarCodeLogList = barCodeLogList;
@@ -907,6 +956,7 @@ public class NewFastOutInvoiceActivity extends BaseActivity<NewFastOutInvoicePre
     }
 
 
+    //查询InvId成功
     @Override
     public void insertInv(InvoicingBean invoicingBean) {
         mInvId = invoicingBean.getInvId();

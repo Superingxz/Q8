@@ -35,14 +35,21 @@ public class SystemSettingActicity extends BaseActivity {
     CheckBox cbAbolish;
     @Bind(R.id.cb_return_goods)
     CheckBox cbReturnGoods;
+
+    @Bind(R.id.cb_logistics)
+    CheckBox cbLogistics;
+
+
     @Bind(R.id.save)
     Button save;
     @Bind(R.id.close)
     Button close;
 
+
     Boolean isOld = false;
     public String systemUrl;
     public String userUrl;
+
 
     @Override
     public int getLayoutId() {
@@ -55,15 +62,19 @@ public class SystemSettingActicity extends BaseActivity {
         etUserUrl.setText(Config.userUrl);
 
         isOld = SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.ISSAVE);
-        if(isOld==true){
+
+        if (isOld == true) {
+
             setStation();
         }
 
     }
 
     private void setStation() {
-        etSystemUrl.setText(SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(),Config.SPSYSTEMURL));
-        etUserUrl.setText(SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(),Config.SPUSERURL));
+
+        etSystemUrl.setText(SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SPSYSTEMURL));
+        etUserUrl.setText(SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SPUSERURL));
+
 
         cbInInvoice.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.CBININVOICE));
         cbOutInvoice.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.CBOUTINVOICE));
@@ -71,6 +82,9 @@ public class SystemSettingActicity extends BaseActivity {
         cbReplace.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.CBREPLACE));
         cbAbolish.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.CBABOLISH));
         cbReturnGoods.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(), Config.CBRETURNGOODS));
+
+        cbLogistics.setChecked(SharedPreferencesUtils.getBooleanData(Qpadapplication.getAppContext(),Config.CBLOGISTICS));
+
     }
 
     @Override
@@ -97,6 +111,9 @@ public class SystemSettingActicity extends BaseActivity {
         SharedPreferencesUtils.saveBooleanData(Qpadapplication.getAppContext(), Config.CBABOLISH, cbAbolish.isChecked());
         SharedPreferencesUtils.saveBooleanData(Qpadapplication.getAppContext(), Config.CBRETURNGOODS, cbReturnGoods.isChecked());
 
+        SharedPreferencesUtils.saveBooleanData(Qpadapplication.getAppContext(), Config.CBLOGISTICS, cbLogistics.isChecked());
+
+
         SharedPreferencesUtils.saveBooleanData(Qpadapplication.getAppContext(), Config.ISSAVE, true);
 
         ToastUitl.showShort("保存成功");
@@ -106,5 +123,6 @@ public class SystemSettingActicity extends BaseActivity {
     public void close(View view) {
         finish();
     }
+
 
 }

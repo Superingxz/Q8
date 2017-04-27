@@ -51,7 +51,7 @@ public class NewFastOutInvoiceModel implements NewFastOutInvoiceContract.Model{
         return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).GetProductBatchByProductId(ProductId);
     }
 
-
+    //快捷出库-上传条码
     @Override
     public Observable<BaseResponse<BarCodeLogList>> NewQuickScanBarCode(String BarCodes,
                                                                         String InvNumber,
@@ -117,13 +117,13 @@ public class NewFastOutInvoiceModel implements NewFastOutInvoiceContract.Model{
     }
 
     /**
-     * 保存入库主表2
+     * 保存入库主表2-查询
      * @param SysKey
      * @param InvNumber
      * @return
      */
     @Override
     public Observable<BaseResponse<InvoicingBean>> insertInv(String SysKey, String InvNumber) {
-        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).insertInv2(SysKey,InvNumber);
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).Invoicing(SysKey,InvNumber);
     }
 }

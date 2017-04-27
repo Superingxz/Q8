@@ -4,8 +4,9 @@ package com.xologood.q8pad;
  * Created by wei on 2016/12/22.
  */
 public class Config {
-    public static final String systemUrl = "http://120.25.102.209:8000";//
-    public static final String userUrl = "http://120.25.102.209:8002";//
+    public static final String systemUrl = "http://120.25.102.209:8000";
+    public static final String userUrl = "http://120.25.102.209:8002";
+
     public static final String SPSYSTEMURL = "systemUrl";
     public static final String SPUSERURL = "userUrl";
 
@@ -35,6 +36,7 @@ public class Config {
     public static final String CBREPLACE = "cbReplace";
     public static final String CBABOLISH = "cbAbolish";
     public static final String CBRETURNGOODS = "cbReturnGoods";
+    public static final String CBLOGISTICS = "cbLogistics";
 
 
 

@@ -28,6 +28,17 @@ public interface ScanContract {
                                                                    String ReceivingWarehouseId);
 
 
+        Observable<BaseResponse<BarCodeLogList>> GetBarCodeLogListBinShi(String BarCodes,
+                                                                         String InvId,
+                                                                         String InvDetailId,
+                                                                         String ProductId,
+                                                                         String Batch,
+                                                                         String ComKey,
+                                                                         String ComName,
+                                                                         String SysKey,
+                                                                         String ReceivingWarehouseId);
+
+
         Observable<BaseResponse<String>> getCheckBarCode(String barcode);
 
 
@@ -59,6 +70,16 @@ public interface ScanContract {
                                                  String ComName,
                                                  String SysKey,
                                                  String ReceivingWarehouseId);
+
+        public abstract void GetBarCodeLogListBinShi(String BarCodes,
+                                               String InvId,
+                                               String InvDetailId,
+                                               String ProductId,
+                                               String Batch,
+                                               String ComKey,
+                                               String ComName,
+                                               String SysKey,
+                                               String ReceivingWarehouseId);
 
         public abstract void getCheckBarCode(String barcode);
 

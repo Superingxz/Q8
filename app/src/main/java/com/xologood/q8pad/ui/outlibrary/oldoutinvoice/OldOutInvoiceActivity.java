@@ -36,6 +36,9 @@ import com.xologood.q8pad.ui.outlibrary.newoutinvoice.NewOutInvoiceActivity;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.utils.StringUtils;
+
+import com.xologood.q8pad.view.ScrollListView;
+
 import com.xologood.q8pad.view.TitleView;
 
 import java.util.ArrayList;
@@ -73,7 +76,7 @@ public class OldOutInvoiceActivity extends BaseActivity<OldOutInvoicePresenter, 
     @Bind(R.id.checkUserName)
     TextView checkUserName;
     @Bind(R.id.lv)
-    ListView lv;
+    ScrollListView lv;
     @Bind(R.id.orderForm)
     LinearLayout orderForm;
     @Bind(R.id.commit)

@@ -2,6 +2,7 @@ package com.xologood.q8pad.ui.scan;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +20,13 @@ import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
 import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
 import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.mview.medittext.utils.QpadJudgeUtils;
-import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.ScanBarCodeAdpater;
 import com.xologood.q8pad.bean.BarCodeLog;
+import com.xologood.q8pad.ui.PadActivity;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.zxing.activity.CaptureActivity;
@@ -36,7 +37,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> implements ScanContract.View {
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
+
+public class ScanActivity extends PadActivity<ScanPresenter, ScanModel> implements ScanContract.View {
     public static final int SUCCESS_SCAN = 100;
     @Bind(R.id.add)
     Button add;
@@ -203,6 +206,44 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
         }
     }
 
+    @Override
+    public void onResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
+    public void PdaBroadcastReceiver(String code) {
+        Log.e("test", "PdaBroadcastReceiver: "+code);
+
+        if (rbAdd.isChecked()) {
+            if (!smm.contains(code)) {
+                smm.add(0, code);
+                smmAdapter.notifyDataSetChanged();
+                scan_msg.setText(code + "添加成功！");
+            } else {
+                ToastUitl.showShort("此条码已经扫描，请重新扫码！");
+            }
+        } else if (rbDelete.isChecked() && smm.contains(code)) {
+            smm.remove(code);
+            smmAdapter.notifyDataSetChanged();
+            scan_msg.setText(code + "删除成功！");
+        }
+
+        if (SuccessCount > 0) {
+            scan_count.setVisibility(View.VISIBLE);
+            scan_count.setText("已成功上传" + SuccessCount + "条");
+        } else {
+            scan_count.setVisibility(View.GONE);
+        }
+
+        if (smm.size() > 0) {
+            scanNumber.setVisibility(View.VISIBLE);
+            scanNumber.setText("已扫描" + smm.size() + "条");
+        } else {
+            scanNumber.setVisibility(View.GONE);
+        }
+    }
+
     /**
      * 连续扫码，如果选择添加就从已有扫码列表里添加不重复的，否则删除
      * @param ewm_nums 拼凑起来的新的扫码
@@ -343,16 +384,28 @@ public class ScanActivity extends BaseActivity<ScanPresenter, ScanModel> impleme
     @OnClick(R.id.upload)
     public void setUpload(View view) {
         if (smm != null && smm.size() > 0) {
-            mPresenter.GetBarCodeLogList(GetBarCodeString4List(smm),
-                    mInvId,
-                    mInvDetailId,
-                    mProductId,
-                    mBatch,
-
-                    mComKey,
-                    mComName,
-                    mSysKey,
-                    mReceivingWarehouseId);
+            Log.e(TAG, "mPresenter: "+mPresenter);
+            if ("1703271033178204uh0".equals(mSysKey)) {
+                mPresenter.GetBarCodeLogListBinShi(GetBarCodeString4List(smm),
+                        mInvId,
+                        mInvDetailId,
+                        mProductId,
+                        mBatch,
+                        mComKey,
+                        mComName,
+                        mSysKey,
+                        mReceivingWarehouseId);
+            }else {
+                mPresenter.GetBarCodeLogList(GetBarCodeString4List(smm),
+                        mInvId,
+                        mInvDetailId,
+                        mProductId,
+                        mBatch,
+                        mComKey,
+                        mComName,
+                        mSysKey,
+                        mReceivingWarehouseId);
+            }
         } else {
             final NormalDialog IsNotScan_Dialog = new NormalDialog(mContext);
             QPadPromptDialogUtils.showOnePromptDialog(IsNotScan_Dialog, "条码列表为空，请先扫码！", new OnBtnClickL() {

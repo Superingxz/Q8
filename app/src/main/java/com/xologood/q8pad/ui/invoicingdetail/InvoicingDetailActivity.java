@@ -1,10 +1,8 @@
 package com.xologood.q8pad.ui.invoicingdetail;
 
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 
 import com.mview.customdialog.view.dialog.NormalDialog;
 import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
@@ -20,6 +18,9 @@ import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.InvoicingDetail;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
+
+import com.xologood.q8pad.view.ScrollListView;
+
 import com.xologood.q8pad.view.TitleView;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresenter, InvoicingDetailModel>
-        implements InvoicingDetailContract.View ,SwipeRefreshLayout.OnRefreshListener {
+        implements InvoicingDetailContract.View {
     public static final int INVOICINGDETAIL_OK = 105;
     @Bind(R.id.title_view)
     TitleView titleView;
@@ -46,11 +47,11 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
     @Bind(R.id.invTime)
     QpadEditText invTime;
     @Bind(R.id.lv)
-    ListView lv;
+    ScrollListView lv;
     @Bind(R.id.commit)
     Button commit;
-    @Bind(R.id.swipe_ly)
-    SwipeRefreshLayout swipeLy;
+/*    @Bind(R.id.swipe_ly)
+    SwipeRefreshLayout swipeLy;*/
 
     private String mInvId;
     private String mUserId;
@@ -86,6 +87,13 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
         invoicingDetailAdpter = new InvoicingDetailAdpter(mNewInInvoiceList, this);
         lv.setAdapter(invoicingDetailAdpter);
 
+/*        swipeLy.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresenter.GetInvoicingDetail(mInvId);
+                swipeLy.setRefreshing(false);//标记刷新结束
+            }
+        });*/
 
     }
 
@@ -101,14 +109,6 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
 
         String invIsStop = (String) invoicingBean.getInvIsStop();
         stateName.setFieldTextAndValue(invoice.getStateName());
-      /*  if (invIsStop == null) {
-            stateName.setFieldTextAndValue("单据进行中");
-        } else if (invIsStop == "1") {
-            stateName.setFieldTextAndValue("已废除");
-        } else if (invIsStop == "0") {
-            stateName.setFieldTextAndValue("已完成");
-        }
-*/
 
         InvId.setFieldTextAndValue(invoicingBean.getInvNumber());
         ComName.setFieldTextAndValue(invoicingBean.getComName());
@@ -164,12 +164,12 @@ public class InvoicingDetailActivity extends BaseActivity<InvoicingDetailPresent
         });
     }
 
-    @Override
+/*    @Override
     public void onRefresh() {
         mPresenter.GetInvoicingDetail(mInvId);
 
         swipeLy.setRefreshing(false);
-    }
+    }*/
 
     @Override
     public void startProgressDialog(String msg) {

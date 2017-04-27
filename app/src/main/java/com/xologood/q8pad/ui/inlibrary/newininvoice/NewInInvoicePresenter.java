@@ -6,12 +6,13 @@ import com.xologood.mvpframework.util.helper.RxSchedulers;
 import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Invoice;
-import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
+import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProductBatch;
 import com.xologood.q8pad.bean.ProportionConversion;
 import com.xologood.q8pad.bean.StandardUnit;
+import com.xologood.q8pad.bean.SupplierBean;
 import com.xologood.q8pad.bean.Warehouse;
 
 import java.util.List;
@@ -61,14 +62,15 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
         );
     }
 
+    //查询入库主表
     @Override
-    public void insertInv(String SysKey, String InvNumber) {
-        mRxManager.add(mModel.insertInv2(SysKey,InvNumber)
+    public void Invoicing(String SysKey, String InvNumber) {
+        mRxManager.add(mModel.Invoicing(SysKey,InvNumber)
                                .compose(RxSchedulers.<BaseResponse<InvoicingBean>>io_main())
                                .subscribe(new Action1<BaseResponse<InvoicingBean>>() {
                                    @Override
                                    public void call(BaseResponse<InvoicingBean> invoicingBeanBaseResponse) {
-                                       mView.insertInv2(invoicingBeanBaseResponse.getData());
+                                       mView.Invoicing(invoicingBeanBaseResponse.getData());
                                    }
                                }, new Action1<Throwable>() {
                                    @Override
@@ -79,6 +81,38 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                                }));
     }
 
+
+    /**
+     * 宾氏额外调用-保存入库主表
+     * @param options
+     */
+    @Override
+    public void insertInvSupplier(Map<String, String> options) {
+        mRxManager.add(mModel.insertInvSupplier(options)
+                .compose(RxSchedulers.<BaseResponse<InvoicingBean>>io_main())
+                .subscribe(new RxSubscriber<BaseResponse<InvoicingBean>>(mContext,false) {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在保存...");
+                    }
+
+                    @Override
+                    protected void _onNext(BaseResponse<InvoicingBean> invoicingBeanBaseResponse) {
+                        mView.insertInvSupplier(invoicingBeanBaseResponse.getData());
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+
+                    }
+                })
+        );
+    }
+
+    /**
+     * 获取单位比例
+     */
     @Override
     public void GetProportionConversion(String id, String Bunit, String count) {
         mRxManager.add(mModel.GetProportionConversion(id,Bunit,count)
@@ -130,6 +164,30 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
                     @Override
                     protected void _onNext(BaseResponse<List<Warehouse>> listBaseResponse) {
                         mView.SetWareHouseList(listBaseResponse.getData());
+                        mView.stopProgressDialog();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+
+                    }
+                })
+        );
+    }
+
+    @Override
+    public void GetSupplierList(Map<String, String> options) {
+        mRxManager.add(mModel.GetSupplierList(options)
+                .compose(RxSchedulers.<BaseResponse<List<SupplierBean>>>io_main())
+                .subscribe(new RxSubscriber<BaseResponse<List<SupplierBean>>>(mContext,false) {
+                    public void onStart() {
+                        super.onStart();
+                        mView.startProgressDialog("正在加载...");
+                    }
+
+                    @Override
+                    protected void _onNext(BaseResponse<List<SupplierBean>> listBaseResponse) {
+                        mView.SetSupplierList(listBaseResponse.getData());
                         mView.stopProgressDialog();
                     }
 
@@ -276,6 +334,7 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
         );
     }
 
+    //新增入库明细数据
     @Override
     public void InsertInvoiceDetail(String Id,
                                     String InvId,
@@ -309,6 +368,7 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
         );
     }
 
+    //更新修改入库明细数据
     @Override
     public void UpdateInvoiceDetail(String Id,
                                     String InvId,
@@ -343,6 +403,10 @@ public class NewInInvoicePresenter extends NewInInvoiceContract.Presenter {
         );
     }
 
+
+    /**
+     * 获取单据明细
+     */
     @Override
     public void GetInvoicingDetail(final String invId) {
         mRxManager.add(mModel.GetInvoicingDetail(invId)

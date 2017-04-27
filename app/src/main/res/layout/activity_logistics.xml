@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.xologood.q8pad.ui.Logistics.LogisticsActivity">
+
+    <com.xologood.q8pad.view.TitleView
+        android:id="@+id/title_view"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        app:mtitle="物流查询" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+<!--            <com.mview.medittext.view.QpadEditText
+                android:id="@+id/barCode"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_layout_off_bg"
+                android:paddingLeft="@dimen/common_padding5"
+                android:paddingRight="@dimen/common_padding5"
+                app:fieldEnabled="true"
+                app:fieldHint="请输入物流码或积分码"
+                app:fieldType="String" />-->
+
+            <EditText
+                android:id="@+id/barCode"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/edit_text_shape"
+                android:hint="请输入物流码或积分码"
+                android:inputType="number"
+                />
+
+            <Button
+                android:id="@+id/bt_search"
+                style="@style/ButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="查询" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/wheat"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:text="产品名称" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:text="产品批次" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:text="生产日期" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="类别" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="品牌" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@color/background_1"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/ProductName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                />
+
+            <TextView
+                android:id="@+id/BatchNo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5" />
+
+            <TextView
+                android:id="@+id/ProductDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5" />
+
+            <TextView
+                android:id="@+id/ProductTypeName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/BrandName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_noIndfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/official_info_grid_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="没有数据!" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lv_Report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            />
+
+        <!--<HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/wheat"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/InvDate"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:text="开单时间" />
+
+                    <TextView
+                        android:id="@+id/ReceivingComName"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="发往机构" />
+
+                    <TextView
+                        android:id="@+id/CompanyNo"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="机构编号" />
+
+                    <TextView
+                        android:id="@+id/Province"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="省份" />
+
+                    <TextView
+                        android:id="@+id/City"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="城市" />
+
+                    <TextView
+                        android:id="@+id/Area"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="区域" />
+
+                    <TextView
+                        android:id="@+id/ReceivingWarehouseName"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="仓库名称" />
+
+                    <TextView
+                        android:id="@+id/InvByName"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="开单人" />
+
+                    <TextView
+                        android:id="@+id/InvNumber"
+                        android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="单据编号" />
+
+                    <TextView
+                        android:id="@+id/TypeName"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="单据类型" />
+
+                    <TextView
+                        android:id="@+id/InvGet"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="单据来源" />
+
+                    <TextView
+                        android:id="@+id/InvByName2"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="创建人" />
+
+                    <TextView
+                        android:id="@+id/StateName"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="单据状态" />
+
+                    <TextView
+                        android:id="@+id/CheckUserName"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="审核人" />
+
+                    <TextView
+                        android:id="@+id/ReceivingPeople"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="签收人" />
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/lv_Report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
+        </HorizontalScrollView>-->
+
+        <LinearLayout
+            android:id="@+id/ll_noIndfo2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@mipmap/official_info_grid_bg"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="没有数据!" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

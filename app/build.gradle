@@ -22,9 +22,9 @@ android {
     defaultConfig {
         applicationId "com.xologood.q8pad"
         minSdkVersion 15
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0.0.0"
+        targetSdkVersion 22
+        versionCode 15
+        versionName "1.1.4"
         multiDexEnabled true
 
     }
@@ -38,10 +38,8 @@ android {
     productFlavors {
         android {}
         wandoujia {}
-        baidu {}
-        qihu360 {}
-        xiaomi{}
-        huawei{}
+        xiaomi {}
+        huawei {}
         productFlavors.all { flavor ->
             flavor.manifestPlaceholders = [CHANNEL_VALUE: name]
         }
@@ -59,13 +57,17 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':MEditText')
+    compile project(':mvpframework')
+    compile project(':ZxingLibrary')
     compile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.nineoldandroids:library:2.4.0'
-    compile project(':MEditText')
-    compile project(':mvpframework')
     compile 'com.kelin.scrollablepanel:library:1.0.0'
-    compile project(':ZxingLibrary')
+    compile 'com.squareup.okhttp:logging-interceptor:2.7.0'
+    compile files('libs/platform_sdk_v1.0.2.jar')
+    compile files('libs/scanSDK.jar')
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
 }

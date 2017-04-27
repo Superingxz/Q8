@@ -23,6 +23,7 @@ public class QPadPromptDialogUtils {
 	        .btnText("确认")
 	        .btnTextColor(Color.parseColor("#383838"))
 			.show();
+		OnePrompt_Dialog.setCanceledOnTouchOutside(false);
 		OnePrompt_Dialog.setOnBtnClickL(onBtnClick);
 	}
 	

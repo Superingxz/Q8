@@ -71,7 +71,7 @@ public class Version {
         this.SysKey = SysKey;
     }
 
-    public String getUrl() {
+    public String  getUrl() {
         return Url;
     }
 

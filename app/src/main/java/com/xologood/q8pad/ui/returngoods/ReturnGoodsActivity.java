@@ -2,6 +2,7 @@ package com.xologood.q8pad.ui.returngoods;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,7 +17,6 @@ import com.mview.customdialog.view.dialog.NormalDialog;
 import com.mview.customdialog.view.dialog.listener.OnBtnClickL;
 import com.mview.customdialog.view.dialog.use.QPadPromptDialogUtils;
 import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
-import com.xologood.mvpframework.base.BaseActivity;
 import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
 import com.xologood.q8pad.Qpadapplication;
@@ -24,6 +24,7 @@ import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.ScanBarCodeAdpater;
 import com.xologood.q8pad.bean.BarCodeLog;
 import com.xologood.q8pad.bean.ReturnGoodsResponse;
+import com.xologood.q8pad.ui.PadActivity;
 import com.xologood.q8pad.utils.QpadConfigUtils;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.view.TitleView;
@@ -38,7 +39,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, ReturnGoodsModel>
+
+public class ReturnGoodsActivity extends PadActivity<ReturnGoodsPresenter, ReturnGoodsModel>
         implements ReturnGoodsContract.View {
     @Bind(R.id.title_view)
     TitleView titleView;
@@ -104,6 +106,7 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
 
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -165,6 +168,42 @@ public class ReturnGoodsActivity extends BaseActivity<ReturnGoodsPresenter, Retu
                 scanNumber.setVisibility(View.GONE);
             }
 //            ToastUitl.showLong("扫码类型:" + ewm_type + "一维码或者二维码:" + ewm_num);
+        }
+    }
+
+    @Override
+    public void onResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    @Override
+    public void PdaBroadcastReceiver(String code) {
+        Log.e("test", "PdaBroadcastReceiver: "+code);
+        if (rbAdd.isChecked()) {
+            if (!smm.contains(code)) {
+                smm.add(0, code);
+                smmAdapter.notifyDataSetChanged();
+                information.setText(code + "添加成功！");
+            } else {
+                ToastUitl.showShort("此条码已经扫描，请重新扫码！");
+            }
+        } else if (rbDelete.isChecked() && smm.contains(code)) {
+            smm.remove(code);
+            smmAdapter.notifyDataSetChanged();
+            information.setText(code + "删除成功！");
+        }
+        if (SuccessCount > 0) {
+            count.setVisibility(View.VISIBLE);
+            count.setText("已成功上传" + SuccessCount + "条");
+        } else {
+            count.setVisibility(View.GONE);
+        }
+
+        if (smm.size() > 0) {
+            scanNumber.setVisibility(View.VISIBLE);
+            scanNumber.setText("已扫描" + smm.size() + "条");
+        } else {
+            scanNumber.setVisibility(View.GONE);
         }
     }
 

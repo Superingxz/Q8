@@ -8,184 +8,197 @@
     <com.xologood.q8pad.view.TitleView
         android:id="@+id/title_view"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"/>
+        android:layout_height="?android:attr/actionBarSize" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:layout_marginBottom="5dp"
-        android:orientation="vertical"
-        >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        >
+        android:layout_height="wrap_content">
 
-        <com.mview.medittext.view.QpadEditText
-            android:id="@+id/queryOrder"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="@dimen/common_layout_middle"
-            android:background="@drawable/btn_layout_off_bg"
-            android:paddingLeft="@dimen/common_padding5"
-            android:paddingRight="@dimen/common_padding5"
-            aaron:fieldEnabled="true"
-            aaron:fieldHint="查找的单号"
-            aaron:fieldType="String" >
-        </com.mview.medittext.view.QpadEditText>
-
-        <Button
-            android:id="@+id/query"
-            style="@style/ButtonStyle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="查询" />
-    </LinearLayout>
-
-    <com.mview.medittext.view.QpadEditText
-        android:id="@+id/invoiceInvlist"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/common_layout_middle"
-        android:background="@drawable/btn_layout_off_bg"
-        android:paddingLeft="@dimen/common_padding5"
-        android:paddingRight="@dimen/common_padding5"
-        aaron:fieldEnabled="true"
-        aaron:fieldHint="请选择入库单号"
-        aaron:fieldType="Dialog" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/TextViewStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="入库仓库："
-            android:id="@+id/textView3" />
-
-        <TextView
-            android:id="@+id/wareHouse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="入库仓库" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/TextViewStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="开单时间："
-            android:id="@+id/textView" />
-
-        <TextView
-            android:id="@+id/invDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="开单时间" />
-
-        </LinearLayout>
-
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/TextViewStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="审核时间：" />
-
-        <TextView
-            android:id="@+id/checkDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="审核时间" />
-    </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/TextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="收货人：" />
-
-            <TextView
-                android:id="@+id/consignee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/TextViewStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="审核人：" />
-
-            <TextView
-                android:id="@+id/checkUserName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="" />
-        </LinearLayout>
-
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/white" />
-    <LinearLayout
-        android:id="@+id/orderForm"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        >
-        <ListView
-            android:id="@+id/lv"
             android:background="@color/white"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:orientation="vertical"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:visibility="gone">
 
+                <com.mview.medittext.view.QpadEditText
+                    android:id="@+id/queryOrder"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/common_layout_middle"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_layout_off_bg"
+                    android:paddingLeft="@dimen/common_padding5"
+                    android:paddingRight="@dimen/common_padding5"
+                    aaron:fieldEnabled="true"
+                    aaron:fieldHint="查找的单号"
+                    aaron:fieldType="String"></com.mview.medittext.view.QpadEditText>
 
-    <Button
-        android:id="@+id/commit"
-        style="@style/ButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="确定完成"
-        />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/query"
+                    style="@style/ButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="查询" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <com.mview.medittext.view.QpadEditText
+                    android:id="@+id/invoiceInvlist"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/common_layout_middle"
+                    android:background="@drawable/btn_layout_off_bg"
+                    android:paddingLeft="@dimen/common_padding5"
+                    android:paddingRight="@dimen/common_padding5"
+                    aaron:fieldEnabled="true"
+                    aaron:fieldHint="请选择入库单号"
+                    aaron:fieldType="Dialog" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        style="@style/TextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="入库仓库：" />
+
+                    <TextView
+                        android:id="@+id/wareHouse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="入库仓库" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        style="@style/TextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开单时间：" />
+
+                    <TextView
+                        android:id="@+id/invDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="开单时间" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="审核时间：" />
+
+                    <TextView
+                        android:id="@+id/checkDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="审核时间" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="收货人：" />
+
+                    <TextView
+                        android:id="@+id/consignee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextViewStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="审核人：" />
+
+                    <TextView
+                        android:id="@+id/checkUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:id="@+id/orderForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <com.xologood.q8pad.view.ScrollListView
+                        android:id="@+id/lv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/commit"
+                    style="@style/ButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="确定完成" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

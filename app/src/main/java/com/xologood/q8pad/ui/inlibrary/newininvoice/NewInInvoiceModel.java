@@ -7,12 +7,13 @@ import com.xologood.q8pad.api.Api;
 import com.xologood.q8pad.api.HostType;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Invoice;
-import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
+import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProductBatch;
 import com.xologood.q8pad.bean.ProportionConversion;
 import com.xologood.q8pad.bean.StandardUnit;
+import com.xologood.q8pad.bean.SupplierBean;
 import com.xologood.q8pad.bean.Warehouse;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 
@@ -46,8 +47,18 @@ public class NewInInvoiceModel implements NewInInvoiceContract.Model {
      * @return
      */
     @Override
-    public Observable<BaseResponse<InvoicingBean>> insertInv2(String SysKey, String InvNumber) {
-        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).insertInv2(SysKey,InvNumber);
+    public Observable<BaseResponse<InvoicingBean>> Invoicing(String SysKey, String InvNumber) {
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).Invoicing(SysKey,InvNumber);
+    }
+
+    /**
+     * 宾氏-保存入库主表
+     * @param options
+     * @return
+     */
+    @Override
+    public Observable<BaseResponse<InvoicingBean>> insertInvSupplier(Map<String, String> options) {
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).insertInvSupplier(options);
     }
 
     @Override
@@ -63,6 +74,12 @@ public class NewInInvoiceModel implements NewInInvoiceContract.Model {
     @Override
     public Observable<BaseResponse<List<Warehouse>>> GetWareHouseList(String ComKey, String IsUse) {
         return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).GetWareHouseList(ComKey, IsUse);
+    }
+
+    //获取供应商
+    @Override
+    public Observable<BaseResponse<List<SupplierBean>>> GetSupplierList(Map<String, String> options) {
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).GetSupplierBeanList(options);
     }
 
     @Override
@@ -140,6 +157,11 @@ public class NewInInvoiceModel implements NewInInvoiceContract.Model {
                                                                                                        SysKey);
     }
 
+    /**
+     * 获取单据明细
+     * @param invId
+     * @return
+     */
     @Override
     public Observable<BaseResponse<Invoice>> GetInvoicingDetail(String invId) {
         return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).GetInvoicingDetail(invId)

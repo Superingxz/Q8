@@ -5,12 +5,13 @@ import com.xologood.mvpframework.base.BasePresenter;
 import com.xologood.mvpframework.base.BaseView;
 import com.xologood.q8pad.bean.BaseResponse;
 import com.xologood.q8pad.bean.Invoice;
-import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.InvoicingBean;
+import com.xologood.q8pad.bean.InvoicingDetailVo;
 import com.xologood.q8pad.bean.Product;
 import com.xologood.q8pad.bean.ProductBatch;
 import com.xologood.q8pad.bean.ProportionConversion;
 import com.xologood.q8pad.bean.StandardUnit;
+import com.xologood.q8pad.bean.SupplierBean;
 import com.xologood.q8pad.bean.Warehouse;
 
 import java.util.List;
@@ -34,13 +35,27 @@ public interface NewInInvoiceContract {
         Observable<BaseResponse<InvoicingBean>> insertInv(Map<String, String> options);
 
         /**
-         * 保存入库/出库主表2
+         * 查询入库/出库主表2
          *
          * @param SysKey
          * @param InvNumber
          * @return
          */
-        Observable<BaseResponse<InvoicingBean>> insertInv2(String SysKey, String InvNumber);
+        Observable<BaseResponse<InvoicingBean>> Invoicing(String SysKey, String InvNumber);
+
+        /**
+         * 宾氏-保存入库主表
+         CompleteBy 创建人
+         CompleteDate 创建时间
+         IsUse 是否使用
+         SysKey 系统key
+         InvId 创建完主单后返回的ID
+         SupplierId 供应商ID
+         SupplierName 供应商名称
+         * @param options
+         * @return
+         */
+        Observable<BaseResponse<InvoicingBean>> insertInvSupplier(Map<String, String> options);
 
         /**
          * 获取单位比例
@@ -56,6 +71,8 @@ public interface NewInInvoiceContract {
 
 
         Observable<BaseResponse<List<Warehouse>>> GetWareHouseList(String ComKey, String IsUse);
+
+        Observable<BaseResponse<List<SupplierBean>>> GetSupplierList(Map<String, String> options);
 
         Observable<BaseResponse<List<Product>>> GetProductList(String SysKey, String IsUse);
 
@@ -163,11 +180,16 @@ public interface NewInInvoiceContract {
         void insertInv(InvoicingBean invoicingBean);
 
         /**
-         * 保存入库主表回调
+         * 查询入库主表回调
          *
          * @param invoicingBean
          */
-        void insertInv2(InvoicingBean invoicingBean);
+        void Invoicing(InvoicingBean invoicingBean);
+
+        /**
+         * 宾氏-保存入库主表回调
+         */
+        void insertInvSupplier(InvoicingBean invoicingBean);
 
         /**
          * 获取到单位比例
@@ -182,6 +204,8 @@ public interface NewInInvoiceContract {
          * 初始化列表
          */
         void SetWareHouseList(List<Warehouse> warehouseList);
+
+        void SetSupplierList(List<SupplierBean> supplierList);
 
         void SetProductList(List<Product> productList);
 
@@ -242,13 +266,16 @@ public interface NewInInvoiceContract {
 
         /**
          * 保存入库/出库主表
-         *
-         * @param options
-         * @return
          */
         public abstract void insertInv(Map<String, String> options);
 
-        public abstract void insertInv(String SysKey,String InvNumber);
+        public abstract void Invoicing(String SysKey,String InvNumber);
+
+        /**
+         * 宾氏额外调用-保存入库/出库主表
+         */
+        public abstract void insertInvSupplier(Map<String, String> options);
+
         /**
          * 获取单位比例
          *
@@ -262,6 +289,8 @@ public interface NewInInvoiceContract {
         public abstract void GetProportionConversionString(String id, String Bunit, String count);
 
         public abstract void GetWareHouseList(String ComKey, String IsUse);
+
+        public abstract void GetSupplierList(Map<String, String> options);
 
         public abstract void GetProductList(String SysKey, String IsUse);
 

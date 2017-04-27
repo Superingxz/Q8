@@ -80,7 +80,7 @@ public interface NewFastOutInvoiceContract {
 
 
         /**
-         * 新建快捷出库
+         * 快捷出库-上传条码
          * @param BarCodes          全部条码 逗号分隔
          * @param InvNumber         单号
          * @param InvType           类型 写死1

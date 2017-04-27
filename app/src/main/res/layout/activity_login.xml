@@ -37,6 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:textColor="#cee9ff"
+            android:singleLine="true"
             android:hint="请输入用户名" />
 
     </LinearLayout>
@@ -59,6 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:textColor="#cee9ff"
+            android:singleLine="true"
             android:hint="请输入密码"
             android:inputType="textPassword" />
     </LinearLayout>
@@ -87,7 +89,7 @@
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#e8f1f8"
+            android:background="@drawable/btn_login"
             android:textColor="#005dab"
             android:textSize="20sp"
             android:text="登录" />

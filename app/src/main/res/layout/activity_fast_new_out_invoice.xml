@@ -15,8 +15,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        >
+        android:paddingRight="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,16 +54,16 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_weight="3"
                 android:layout_height="match_parent"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <com.mview.medittext.view.QpadEditText
                         android:id="@+id/qetQueryCompany"
@@ -126,27 +125,25 @@
                     android:orientation="horizontal">
 
                     <Button
-                        style="@style/ButtonStyle"
                         android:id="@+id/btnAddProduceBatch"
+                        style="@style/ButtonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="增加新产品批次"
-                        />
+                        android:text="增加新产品批次" />
 
                     <com.mview.medittext.view.QpadEditText
                         android:id="@+id/addProduceBatch"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="@dimen/common_layout_middle"
+                        android:layout_weight="1"
                         android:background="@drawable/btn_layout_off_bg"
                         android:paddingLeft="@dimen/common_padding5"
                         android:paddingRight="@dimen/common_padding5"
-                        aaron:fieldEnabled="true"
-                        aaron:fieldType="String"
                         android:visibility="invisible"
-                        />
+                        aaron:fieldEnabled="true"
+                        aaron:fieldType="String" />
 
                     <Button
                         android:id="@+id/saveBatch"
@@ -154,8 +151,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:text="保存"
-                        android:visibility="invisible"
-                        />
+                        android:visibility="invisible" />
                 </LinearLayout>
 
 
@@ -173,35 +169,33 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:orientation="horizontal">
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:text="已扫描条码列表"
-                        />
+                        android:text="已扫描条码列表" />
 
                     <TextView
                         android:id="@+id/scanNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
                         android:layout_alignParentRight="true"
-                        />
+                        android:layout_marginRight="5dp" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
                     <ListView
                         android:id="@+id/lv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_above="@+id/llAdd"
-                        android:background="@color/white"
-                        />
+                        android:background="@color/white" />
 
                     <LinearLayout
                         android:id="@+id/llAdd"
@@ -220,8 +214,8 @@
                         <EditText
                             android:id="@+id/et_editywm"
                             android:layout_width="0dp"
-                            android:layout_weight="1"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:hint="手动添加条码"
                             android:inputType="number"
                             android:textSize="15dp" />
@@ -256,15 +250,17 @@
                         android:layout_height="wrap_content"
                         android:text="删除" />
                 </RadioGroup>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/white" />
+
                 <CheckBox
                     android:id="@+id/isContinous"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="连续扫描"/>
+                    android:text="连续扫描" />
 
 
                 <View

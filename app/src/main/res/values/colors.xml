@@ -4,9 +4,11 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="backgrongd">#005dab</color>
-    <color name="backgrongd_1">#f6f6f6</color>
+    <color name="background">#005dab</color>
+    <color name="background_1">#f6f6f6</color>
     <color name="actionbar_background">#005dab</color>
+
+    <color name="green_btn">#3ac240</color>
 
     <!-- 主界面底部颜色 -->
     <color name="main_bottom_color_nomal">#FF929292</color>
