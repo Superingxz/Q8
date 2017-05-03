@@ -3,7 +3,6 @@ package com.xologood.q8pad.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,9 +19,7 @@ import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.GridAdapter;
 import com.xologood.q8pad.bean.GridBean;
-
 import com.xologood.q8pad.ui.Logistics.LogisticsActivity;
-
 import com.xologood.q8pad.ui.abolishcode.AbolishCodeActivity;
 import com.xologood.q8pad.ui.fastoutlibrary.FastOutLibrary.FastOutLibraryActivity;
 import com.xologood.q8pad.ui.inlibrary.InLibraryActivity;
@@ -30,9 +27,6 @@ import com.xologood.q8pad.ui.login.LoginInActivity;
 import com.xologood.q8pad.ui.outlibrary.OutLibraryActivity;
 import com.xologood.q8pad.ui.replace.ReplaceActivity;
 import com.xologood.q8pad.ui.returngoods.ReturnGoodsActivity;
-
-import com.xologood.q8pad.utils.QpadUpdateUtils;
-
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
@@ -66,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         BaseApplication.addActivity(this);
         ButterKnife.bind(this);
         initView();
-        initHandler.postDelayed(initRunnable, 5000);
+
     }
 
     public int getLayoutId() {
