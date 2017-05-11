@@ -48,10 +48,10 @@ public class NewOutInvoiceAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        NewOutInvoiceAdapter.OutInvoiceViewHolder invoiceViewHolder = null;
+        OutInvoiceViewHolder invoiceViewHolder = null;
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_out_invoice, parent, false);
-            invoiceViewHolder = new NewOutInvoiceAdapter.OutInvoiceViewHolder();
+            invoiceViewHolder = new OutInvoiceViewHolder();
             invoiceViewHolder.productId = (TextView) convertView.findViewById(R.id.productId);
             invoiceViewHolder.productName = (TextView) convertView.findViewById(R.id.productName);
             invoiceViewHolder.creationDate = (TextView) convertView.findViewById(R.id.creationDate);
@@ -60,7 +60,7 @@ public class NewOutInvoiceAdapter extends BaseAdapter {
             invoiceViewHolder.standardUnitName = (TextView) convertView.findViewById(R.id.standardUnitName);
             convertView.setTag(invoiceViewHolder);
         } else {
-            invoiceViewHolder = (NewOutInvoiceAdapter.OutInvoiceViewHolder) convertView.getTag();
+            invoiceViewHolder = (OutInvoiceViewHolder) convertView.getTag();
         }
         if (invoiceList != null && invoiceList.size() > 0) {
             InvoicingDetail invoicingDetail = invoiceList.get(position);

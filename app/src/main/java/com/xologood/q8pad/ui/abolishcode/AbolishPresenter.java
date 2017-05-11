@@ -28,7 +28,7 @@ public class AbolishPresenter extends AbolishCodeContract.Presenter {
 
                                    @Override
                                    protected void _onError(String message) {
-
+                                       mView.stopProgressDialog();
                                    }
                                })
         );

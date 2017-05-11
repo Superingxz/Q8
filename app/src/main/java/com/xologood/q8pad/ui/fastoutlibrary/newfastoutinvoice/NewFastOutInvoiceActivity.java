@@ -716,6 +716,7 @@ public class NewFastOutInvoiceActivity extends PadActivity<NewFastOutInvoicePres
                     }
                 }
             });
+            //查询主表信息，获取Invid
             mPresenter.insertInv(SysKey, InvNumber.getFieldText());
         }
     }

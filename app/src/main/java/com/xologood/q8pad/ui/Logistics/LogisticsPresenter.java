@@ -32,7 +32,7 @@ public class LogisticsPresenter extends LogisticsContract.Presenter {
 
                     @Override
                     protected void _onError(String message) {
-
+                        mView.stopProgressDialog();
                     }
                 })
         );
@@ -53,7 +53,7 @@ public class LogisticsPresenter extends LogisticsContract.Presenter {
 
                         @Override
                         protected void _onError(String message) {
-
+                            mView.stopProgressDialog();
                         }
                     })
         );

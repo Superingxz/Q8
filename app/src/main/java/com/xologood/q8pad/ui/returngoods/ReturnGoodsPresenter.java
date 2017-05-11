@@ -47,7 +47,7 @@ public class ReturnGoodsPresenter extends ReturnGoodsContract.Presenter {
 
                                 @Override
                                 protected void _onError(String message) {
-
+                                    mView.stopProgressDialog();
                                 }
                             }));
     }
@@ -89,7 +89,7 @@ public class ReturnGoodsPresenter extends ReturnGoodsContract.Presenter {
 
                                 @Override
                                 protected void _onError(String message) {
-
+                                    mView.stopProgressDialog();
                                 }
                             })
         );

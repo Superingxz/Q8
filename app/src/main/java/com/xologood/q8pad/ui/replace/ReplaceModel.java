@@ -18,7 +18,7 @@ public class ReplaceModel implements ReplaceContract.Model {
     private String sysKeyBase = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.SYSKEYBASE);
 
     @Override
-    public Observable<BaseResponse<String>> InvoicingReplaceCode(String code) {
-        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).InvoicingReplaceCode(code);
+    public Observable<BaseResponse<String>> InvoicingReplaceCode(String code,String CreationBy) {
+        return Api.getLoginInInstance(HostType.SYSTEMURL,recorderBase,sysKeyBase).InvoicingReplaceCode(code,CreationBy);
     }
 }

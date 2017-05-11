@@ -50,7 +50,7 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
 
                     @Override
                     protected void _onError(String message) {
-
+                        mView.stopProgressDialog();
                     }
                 })
         );
@@ -112,7 +112,7 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
 
                       @Override
                       protected void _onError(String message) {
-
+                          mView.stopProgressDialog();
                       }
                   }));
     }
@@ -167,11 +167,12 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
                                      String mConKey = ComKey;
                                      List<Company> data = listBaseResponse.getData();
                                      mView.SetAllCompList(data);
+                                     mView.stopProgressDialog();
                                  }
 
                                  @Override
                                  protected void _onError(String message) {
-
+                                     mView.stopProgressDialog();
                                  }
                              }));
     }
@@ -280,7 +281,7 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
     }
 
     /**
-     *
+     *出库上传
      * @param BarCodes                  全部条码 逗号分隔
      * @param InvId                     单号id
      * @param InvNumber                 单号
@@ -349,12 +350,13 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
 
                             @Override
                             protected void _onError(String message) {
-
+                                mView.stopProgressDialog();
                             }
                         }));
 
     }
 
+    //宾氏-出库上传
     @Override
     public void GetScanBarCodeListBinShi(String BarCodes, String InvId, String InvNumber, String InvType, String InvGet, String InvReMark, String InvBy, String InvByName, String CodeType, String InvState, String InvDate, String LastUpdateBy, String LastUpdateByName, String LastUpdateDate, String ComKey, String ComName, String SysKey, String CheckMemo, String ReceivingComKey, String ReceivingComName, String ReceivingWarehouseId, String ReceivingWarehouseName, String CheckedParty, String sysKeyBase) {
         mRxManager.add(mModel.GetScanBarCodeListBinShi(BarCodes,
@@ -397,7 +399,7 @@ public class NewOutInvoicePresenter extends NewOutInvoiceContract.Presenter {
 
                     @Override
                     protected void _onError(String message) {
-
+                        mView.stopProgressDialog();
                     }
                 }));
     }

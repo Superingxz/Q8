@@ -1,7 +1,6 @@
 package com.xologood.q8pad.ui.login;
 
 
-import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.mvpframework.util.helper.RxSubscriber;
 import com.xologood.q8pad.bean.Account;
 import com.xologood.q8pad.bean.BaseResponse;
@@ -31,7 +30,8 @@ public  class LoginPresenter extends LoginContract.Presenter {
 
             @Override
             protected void _onError(String message) {
-                ToastUitl.showLong(message);
+                mView.stopProgressDialog();
+//                ToastUitl.showLong(message);
             }
         }));
     }

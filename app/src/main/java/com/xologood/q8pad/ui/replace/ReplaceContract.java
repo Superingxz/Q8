@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface ReplaceContract {
     interface Model extends BaseModel {
-        Observable<BaseResponse<String>> InvoicingReplaceCode(String code);
+        Observable<BaseResponse<String>> InvoicingReplaceCode(String code, String CreationBy);
 
     }
 
@@ -32,7 +32,7 @@ public interface ReplaceContract {
     }
 
     abstract  class Presenter extends BasePresenter<Model,View> {
-        public abstract void InvoicingReplaceCode(String code);
+        public abstract void InvoicingReplaceCode(String code,String CreationBy);
 
         @Override
         public void onStart() {}

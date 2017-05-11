@@ -81,31 +81,6 @@ public interface NewFastOutInvoiceContract {
 
         /**
          * 快捷出库-上传条码
-         * @param BarCodes          全部条码 逗号分隔
-         * @param InvNumber         单号
-         * @param InvType           类型 写死1
-         * @param InvGet            获取类型 写”在线PDA”
-         * @param InvReMark         备注 写”暂无”
-         * @param InvBy             单据创建人id
-         * @param InvByName         单据创建人名称
-         * @param CodeType          条形码进出写死true
-         * @param InvState          单据状态 写死”2”
-         * @param InvDate           创建时间
-         * @param LastUpdaeBy       更新人id
-         * @param LastUpdateByName  更新人名字
-         * @param LastUpdateDate    最后更新时间
-         * @param ComKey             机构唯一标识
-         * @param ComName           机构名称
-         * @param SysKey            仓库id
-         * @param CheckMemo         仓库名称
-         * @param ReceivingComKey   机构key
-         * @param ReceivingComName  系统key
-         * @param ReceivingWarehouseId  仓库id
-         * @param ReceivingWarehouseName    仓库名称
-         * @param CheckedParty          签收管理  写死true
-         * @param sysKeyBase            系统key
-         * @param ProductId             产品id
-         * @param Batch                  批次id
          * @return
          */
         @GET(ApiConstants.NEWSCANBARCODE_NEWQUICKSCANBARCODE)
@@ -173,7 +148,7 @@ public interface NewFastOutInvoiceContract {
 
         void InsertProductBatchFailed(String msg);
 
-         void SetBarCodeList(List<BarCodeLog> barCodeLogList);
+        void SetBarCodeList(List<BarCodeLog> barCodeLogList);
 
         void SetInvid(int invId);
 

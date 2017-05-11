@@ -319,30 +319,6 @@ public interface ApiService {
 
     /**
      * 出库上传
-     * @param BarCodes                  全部条码 逗号分隔
-     * @param InvId                     单号id
-     * @param InvNumber                 单号
-     * @param InvType                   类型 写死2
-     * @param InvGet                    获取类型 写”在线PDA”
-     * @param InvReMark                 备注 写”暂无”
-     * @param InvBy                     单据创建人id
-     * @param InvByName                 单据创建人名称
-     * @param CodeType                  条形码进出 写死false
-     * @param InvState                  单据状态 写死”2”
-     * @param InvDate                   创建时间
-     * @param LastUpdateBy              更新人id
-     * @param LastUpdateByName          更新人名字
-     * @param LastUpdateDate            最后更新时间
-     * @param ComKey                    机构唯一标识
-     * @param ComName                   机构名称
-     * @param SysKey                    系统唯一标识
-     * @param CheckMemo                 审核备注 写”暂无”
-     * @param ReceivingComKey           机构key
-     * @param ReceivingComName          机构名称
-     * @param ReceivingWarehouseId      仓库id
-     * @param ReceivingWarehouseName    仓库名称
-     * @param CheckedParty              签收管理  写死true
-     * @param sysKeyBase                系统key
      * @return
      */
    @POST(ApiConstants.NEWSCANBARCODE_NEWORDINARY_OUT_SCANBARCODE)
@@ -408,7 +384,7 @@ public interface ApiService {
      * @return
      */
     @GET(ApiConstants.INVOICING_REPLACECODE)
-    Observable<BaseResponse<String>> InvoicingReplaceCode(@Query("code") String code);
+    Observable<BaseResponse<String>> InvoicingReplaceCode(@Query("code") String code, @Query("CreationBy") String CreationBy);
 
     //快捷出库
     /**
@@ -566,10 +542,6 @@ public interface ApiService {
      */
     @GET(ApiConstants.INVOICING_CHECKBARCODE)
     Observable<BaseResponse<String>> InvoicingCheckBarCode(@Query("barcode") String barcode);
-
-
-    @GET(ApiConstants.CHECKVERSION)
-    Observable<BaseResponse<Version>> CheckVersion();
 
 
     /**

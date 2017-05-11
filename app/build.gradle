@@ -23,10 +23,15 @@ android {
         applicationId "com.xologood.q8pad"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 15
-        versionName "1.1.4"
+        versionCode 17
+        versionName "1.1.6"
         multiDexEnabled true
 
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+        multiDexEnabled true;//解决方法数量超过65536个时无法编译的问题
     }
     buildTypes {
         release {
@@ -44,6 +49,7 @@ android {
             flavor.manifestPlaceholders = [CHANNEL_VALUE: name]
         }
     }
+
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def outputFile = output.outputFile
@@ -70,4 +76,9 @@ dependencies {
     compile files('libs/platform_sdk_v1.0.2.jar')
     compile files('libs/scanSDK.jar')
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.tencent.bugly:crashreport_upgrade:latest.release'
+    //其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
+    compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
 }

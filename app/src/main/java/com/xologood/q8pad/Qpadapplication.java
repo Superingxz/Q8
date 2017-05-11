@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.mview.medittext.utils.QpadJudgeUtils;
+import com.tencent.bugly.Bugly;
 import com.xologood.mvpframework.baseapp.BaseApplication;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
 
@@ -24,6 +25,8 @@ public class Qpadapplication extends BaseApplication {
         UserName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERNAME);
         UserId = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERID);
         LoginName = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.LOGINNAME);
+
+        Bugly.init(getApplicationContext(), "0e6f777e96", false);
     }
 
     public static final Qpadapplication getAppContext() {

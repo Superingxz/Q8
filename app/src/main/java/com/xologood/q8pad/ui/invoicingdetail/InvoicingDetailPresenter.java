@@ -30,7 +30,7 @@ public class InvoicingDetailPresenter extends InvoicingDetailContract.Presenter{
 
                                     @Override
                                     protected void _onError(String message) {
-
+                                        mView.stopProgressDialog();
                                     }
                                 }));
     }
@@ -54,7 +54,7 @@ public class InvoicingDetailPresenter extends InvoicingDetailContract.Presenter{
 
                                     @Override
                                     protected void _onError(String message) {
-
+                                        mView.stopProgressDialog();
                                     }
                                 }));
     }

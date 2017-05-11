@@ -10,8 +10,8 @@ import com.xologood.q8pad.bean.BaseResponse;
 
 public class ReplacePresenter extends ReplaceContract.Presenter {
     @Override
-    public void InvoicingReplaceCode(String code) {
-        mRxManager.add(mModel.InvoicingReplaceCode(code)
+    public void InvoicingReplaceCode(String code,String CreationBy) {
+        mRxManager.add(mModel.InvoicingReplaceCode(code,CreationBy)
                                .compose(RxSchedulers.<BaseResponse<String>>io_main())
                                .subscribe(new RxSubscriber<BaseResponse<String>>(mContext,false) {
                                    @Override
@@ -29,6 +29,7 @@ public class ReplacePresenter extends ReplaceContract.Presenter {
                                    @Override
                                    protected void _onError(String message) {
                                   //     ToastUitl.showLong(message);
+                                       mView.stopProgressDialog();
                                    }
                                }));
     }

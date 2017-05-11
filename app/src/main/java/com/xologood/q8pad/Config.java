@@ -6,7 +6,6 @@ package com.xologood.q8pad;
 public class Config {
     public static final String systemUrl = "http://120.25.102.209:8000";
     public static final String userUrl = "http://120.25.102.209:8002";
-
     public static final String SPSYSTEMURL = "systemUrl";
     public static final String SPUSERURL = "userUrl";
 

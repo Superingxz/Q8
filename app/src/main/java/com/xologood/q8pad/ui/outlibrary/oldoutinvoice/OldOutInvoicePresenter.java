@@ -38,7 +38,7 @@ public class OldOutInvoicePresenter extends OldOutInvoiceContract.Presenter {
 
                     @Override
                     protected void _onError(String message) {
-
+                        mView.stopProgressDialog();
                     }
                 })
         );
@@ -84,7 +84,7 @@ public class OldOutInvoicePresenter extends OldOutInvoiceContract.Presenter {
 
                                    @Override
                                    protected void _onError(String message) {
-
+                                       mView.stopProgressDialog();
                                    }
                                }));
     }

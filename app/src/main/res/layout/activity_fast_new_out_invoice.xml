@@ -202,6 +202,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
+                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <Button
@@ -214,8 +215,8 @@
                         <EditText
                             android:id="@+id/et_editywm"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_height="wrap_content"
                             android:hint="手动添加条码"
                             android:inputType="number"
                             android:textSize="15dp" />

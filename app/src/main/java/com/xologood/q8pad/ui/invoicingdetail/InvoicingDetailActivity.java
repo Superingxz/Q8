@@ -18,9 +18,7 @@ import com.xologood.q8pad.bean.Invoice;
 import com.xologood.q8pad.bean.InvoicingBean;
 import com.xologood.q8pad.bean.InvoicingDetail;
 import com.xologood.q8pad.utils.SharedPreferencesUtils;
-
 import com.xologood.q8pad.view.ScrollListView;
-
 import com.xologood.q8pad.view.TitleView;
 
 import java.util.ArrayList;

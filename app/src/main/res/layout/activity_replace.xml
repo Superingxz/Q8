@@ -34,16 +34,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="   旧条码"
+                android:text="旧条码"
                 android:textSize="18sp"
+                android:gravity="center"
                 android:id="@+id/textView11" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-->"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="   新条码"
+                android:gravity="center"
+                android:text="新条码"
                 android:textSize="18sp" />
         </LinearLayout>
 

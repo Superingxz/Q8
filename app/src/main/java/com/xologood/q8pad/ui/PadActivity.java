@@ -53,8 +53,8 @@ public abstract class PadActivity<T extends BasePresenter, E extends BaseModel> 
         if ("i6200S".equals(model))return true;
         if ("i6300A".equals(model))return true;
         if ("AUTOID9".equals(model))return true;
-        if ("(全新)A9-S8".equals(model))return true;
-        if ("(全新)a9-S8".equals(model))return true;
+//        if ("(全新)A9-S8".equals(model))return true;
+//        if ("(全新)a9-S8".equals(model))return true;
         Log.i("model","pda:"+model+"-----"+Build.FINGERPRINT );
         return false;
     }
@@ -115,8 +115,8 @@ public abstract class PadActivity<T extends BasePresenter, E extends BaseModel> 
     private void  Seuic(){
         mSeuicReceiver = new SeuicScanReceiver();
         IntentFilter filter = new IntentFilter();// 创建IntentFilter对象
-//        filter.addAction("a001");
-        filter.addAction("com.android.server.scannerservice.broadcast");
+        filter.addAction("a001");
+//        filter.addAction("com.android.server.scannerservice.broadcast");
         registerReceiver(mSeuicReceiver, filter);
     }
 

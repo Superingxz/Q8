@@ -35,7 +35,7 @@ public class FastOutPresenter extends FastOutContract.Presenter {
 
                                  @Override
                                  protected void _onError(String message) {
-
+                                     mView.stopProgressDialog();
                                  }
                              })
         );

@@ -19,6 +19,7 @@ import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.GridAdapter;
 import com.xologood.q8pad.bean.GridBean;
+import com.xologood.q8pad.test.TestActivity;
 import com.xologood.q8pad.ui.Logistics.LogisticsActivity;
 import com.xologood.q8pad.ui.abolishcode.AbolishCodeActivity;
 import com.xologood.q8pad.ui.fastoutlibrary.FastOutLibrary.FastOutLibraryActivity;
@@ -51,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private String[] titles = new String[]
             {"入库", "出库", "快捷出库", "替换", "作废", "退货", "注销", "退出","测试"};
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         BaseApplication.addActivity(this);
         ButterKnife.bind(this);
         initView();
-
     }
 
     public int getLayoutId() {
@@ -115,11 +114,9 @@ public class MainActivity extends AppCompatActivity {
                     case "退货":
                         startActivity(new Intent(mContext, ReturnGoodsActivity.class));
                         break;
-                    
                     case "物流查询":
                         startActivity(new Intent(mContext, LogisticsActivity.class));
                         break;
-
                     case "注销":
                         logOff();
                         break;
@@ -175,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
         gridBeens.add(new GridBean(R.mipmap.log_off,"注销",true));
         gridBeens.add(new GridBean(R.mipmap.exit,"退出",true));
 //        gridBeens.add(new GridBean(R.mipmap.ic_launcher,"测试",true));
-
     }
 
     public void logOff() {

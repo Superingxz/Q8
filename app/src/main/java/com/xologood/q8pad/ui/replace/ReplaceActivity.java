@@ -14,11 +14,11 @@ import android.widget.TextView;
 import com.mview.customdialog.view.dialog.use.QpadProgressUtils;
 import com.xologood.mvpframework.util.ToastUitl;
 import com.xologood.q8pad.Config;
+import com.xologood.q8pad.Qpadapplication;
 import com.xologood.q8pad.R;
 import com.xologood.q8pad.adapter.ReplaceAdapter;
-
 import com.xologood.q8pad.ui.PadActivity;
-
+import com.xologood.q8pad.utils.SharedPreferencesUtils;
 import com.xologood.q8pad.view.TitleView;
 import com.xologood.zxing.activity.CaptureActivity;
 
@@ -124,7 +124,6 @@ public class ReplaceActivity extends PadActivity<ReplacePresenter, ReplaceModel>
             String ewm_num = data.getStringExtra("ewm_num");
             String ewm_type = data.getStringExtra("ewm_type");
 
-
             if (rbAdd.isChecked()) {
                 if(rbOld.isChecked()){
                     if (!oldSmm.contains(ewm_num)&&!newSmm.contains(ewm_num)){
@@ -143,7 +142,7 @@ public class ReplaceActivity extends PadActivity<ReplacePresenter, ReplaceModel>
                         ToastUitl.showShort("改条码已在列表中");
                     }
                 }else {
-                    ToastUitl.showLong("请选择条码类型！");
+//                    ToastUitl.showLong("请选择条码类型！");
                 }
 
             } else if (rbDelete.isChecked()) {
@@ -188,7 +187,7 @@ public class ReplaceActivity extends PadActivity<ReplacePresenter, ReplaceModel>
                     ToastUitl.showShort("改条码已在列表中");
                 }
             }else {
-                ToastUitl.showLong("请选择条码类型！");
+//                ToastUitl.showLong("请选择条码类型！");
             }
 
         } else if (rbDelete.isChecked()) {
@@ -216,7 +215,8 @@ public class ReplaceActivity extends PadActivity<ReplacePresenter, ReplaceModel>
             code = GetReplaceBarCodeString(oldSmm, newSmm);
             Log.i("code", "GetReplaceBarCodeString4List: "+code);
 
-            mPresenter.InvoicingReplaceCode(code);
+            String UserId = SharedPreferencesUtils.getStringData(Qpadapplication.getAppContext(), Config.USERID);
+            mPresenter.InvoicingReplaceCode(code,UserId);
         }
 }
 

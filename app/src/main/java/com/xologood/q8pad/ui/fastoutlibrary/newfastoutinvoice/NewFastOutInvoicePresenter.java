@@ -132,7 +132,7 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
 
                     @Override
                     protected void _onError(String message) {
-
+                        mView.stopProgressDialog();
                     }
                 })
         );
@@ -206,13 +206,13 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
 
                                  @Override
                                  protected void _onNext(BaseResponse<BarCodeLogList> barCodeLogListBaseResponse) {
-                                     mView.stopProgressDialog();
                                      mView.SetBarCodeList(barCodeLogListBaseResponse.getData().getBarCodeLogList());
+                                     mView.stopProgressDialog();
                                  }
 
                                  @Override
                                  protected void _onError(String message) {
-
+                                     mView.stopProgressDialog();
                                  }
                              })
         );
@@ -249,7 +249,6 @@ public class  NewFastOutInvoicePresenter extends NewFastOutInvoiceContract.Prese
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-
 
                     }
                 }));
