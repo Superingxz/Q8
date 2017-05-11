@@ -2,6 +2,8 @@ package com.xologood.mvpframework.util.helper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.xologood.mvpframework.R;
 import com.xologood.mvpframework.baseapp.BaseApplication;
@@ -83,18 +85,28 @@ public abstract class RxSubscriber<T> extends Subscriber<T> {
         if (showDialog)
             LoadingDialog.cancelDialogForLoading();
         e.printStackTrace();
+        Log.e("log", "onError: "+e.toString());
         //网络
         if (!NetWorkUtils.isNetConnected(BaseApplication.getAppContext())) {
             _onError(BaseApplication.getAppContext().getString(R.string.no_net));
+            Toast.makeText(BaseApplication.getAppContext(),BaseApplication.getAppContext().getString(R.string.no_net),Toast.LENGTH_SHORT).show();
         }
         //服务器
         else if (e instanceof ServerException) {
             _onError(e.getMessage());
+            Toast.makeText(BaseApplication.getAppContext(),"服务器出错！",Toast.LENGTH_SHORT).show();
+        }
+        else if(e.toString().contains("SocketTimeoutException")){
+            _onError("连接服务器超时！");
+            Toast.makeText(BaseApplication.getAppContext(),"连接服务器超时！",Toast.LENGTH_SHORT).show();
         }
         //其它
         else {
-            _onError(BaseApplication.getAppContext().getString(R.string.net_error));
+//            _onError(BaseApplication.getAppContext().getString(R.string.net_error));
+            _onError(e.toString());
+            Toast.makeText(BaseApplication.getAppContext(),e.toString(),Toast.LENGTH_SHORT).show();
         }
+
     }
 
     protected abstract void _onNext(T t);
